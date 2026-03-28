@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation — Cerafica</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        .checkout-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: var(--space-2xl) var(--space-md);
+            text-align: center;
+        }
+        
+        .checkout-page__icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .checkout-page__icon--error {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .checkout-page__icon--loading {
+            border-color: var(--fg-muted);
+            color: var(--fg-muted);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .checkout-page__heading {
+            color: var(--cyan-glow);
+            font-size: clamp(24px, 4vw, 36px);
+            margin-bottom: var(--space-md);
+        }
+        
+        .checkout-page__heading--error {
+            color: #ff6b6b;
+        }
+        
+        .checkout-page__message {
+            color: var(--fg-secondary);
+            font-size: 18px;
+            margin-bottom: var(--space-sm);
+            max-width: 500px;
+        }
+        
+        .checkout-page__details {
+            color: var(--fg-muted);
+            font-size: 14px;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .checkout-page__order-id {
+            background: var(--bg-elevated);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--fg-secondary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .checkout-page__actions {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .checkout-page__contact {
+            color: var(--fg-muted);
+            font-size: 13px;
+            margin-top: var(--space-lg);
+        }
+        
+        .checkout-page__contact a {
+            color: var(--cyan-glow);
+        }
+    </style>
+</head>
+<body>
+    <main class="checkout-page" id="checkout-status">
+        <!-- Content will be populated by JavaScript -->
+        <div class="checkout-page__icon checkout-page__icon--loading">◌</div>
+        <h1 class="checkout-page__heading">PROCESSING...</h1>
+        <p class="checkout-page__message">Please wait while we confirm your order.</p>
+    </main>
+
+    <script>
+        // Clear cart from localStorage
+        function clearCart() {
+            try {
+                localStorage.removeItem('cerafica_cart');
+            } catch (e) {
+                console.error('Failed to clear cart:', e);
+            }
+        }
+
+        // Get URL parameters
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                sessionId: params.get('session_id'),
+                canceled: params.get('canceled') === 'true'
+            };
+        }
+
+        // Render success state
+        function renderSuccess(sessionId) {
+            const container = document.getElementById('checkout-status');
+            container.innerHTML = `
+                <div class="checkout-page__icon">✓</div>
+                <h1 class="checkout-page__heading">ORDER CONFIRMED</h1>
+                <p class="checkout-page__message">Thank you for your purchase! Your order has been received and is being prepared.</p>
+                ${sessionId ? `<div class="checkout-page__order-id">Order: ${sessionId.slice(-12)}</div>` : ''}
+                <p class="checkout-page__details">You'll receive a confirmation email with tracking details shortly.</p>
+                <div class="checkout-page__actions">
+                    <a href="../shop.html" class="btn btn--outline">CONTINUE SHOPPING</a>
+                    <a href="../index.html" class="btn btn--solid">BACK TO HOME</a>
+                </div>
+                <p class="checkout-page__contact">Questions? Email <a href="mailto:simon@cerafica.com">simon@cerafica.com</a></p>
+            `;
+        }
+
+        // Render canceled state
+        function renderCanceled() {
+            const container = document.getElementById('checkout-status');
+            container.innerHTML = `
+                <div class="checkout-page__icon checkout-page__icon--error">✕</div>
+                <h1 class="checkout-page__heading checkout-page__heading--error">CHECKOUT CANCELED</h1>
+                <p class="checkout-page__message">Your order was not completed. No charges were made.</p>
+                <p class="checkout-page__details">Your cart has been saved. You can try again whenever you're ready.</p>
+                <div class="checkout-page__actions">
+                    <a href="../shop.html" class="btn btn--outline">RETURN TO SHOP</a>
+                    <a href="../index.html" class="btn btn--solid">BACK TO HOME</a>
+                </div>
+            `;
+        }
+
+        // Render error state
+        function renderError(message) {
+            const container = document.getElementById('checkout-status');
+            container.innerHTML = `
+                <div class="checkout-page__icon checkout-page__icon--error">!</div>
+                <h1 class="checkout-page__heading checkout-page__heading--error">SOMETHING WENT WRONG</h1>
+                <p class="checkout-page__message">${message || 'We couldn\'t process your order. Please try again.'}</p>
+                <div class="checkout-page__actions">
+                    <a href="../shop.html" class="btn btn--outline">RETURN TO SHOP</a>
+                    <a href="mailto:simon@cerafica.com" class="btn btn--solid">EMAIL FOR HELP</a>
+                </div>
+            `;
+        }
+
+        // Main logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const { sessionId, canceled } = getUrlParams();
+
+            if (canceled) {
+                // User canceled on Stripe
+                renderCanceled();
+            } else if (sessionId) {
+                // Successful payment
+                clearCart();
+                renderSuccess(sessionId);
+                
+                // Dispatch event for analytics (if GA is loaded)
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'purchase', {
+                        transaction_id: sessionId,
+                        value: 0, // Would need to fetch from Stripe to get actual amount
+                        currency: 'USD'
+                    });
+                }
+            } else {
+                // Direct access without session
+                renderError('No order information found. If you completed a purchase, check your email for confirmation.');
+            }
+        });
+    </script>
+</body>
+</html>

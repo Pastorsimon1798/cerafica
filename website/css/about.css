@@ -1,0 +1,343 @@
+/* ========================================
+   About Page - Studio Dark Theme
+   ======================================== */
+
+/* Hero Section */
+.about-hero {
+    text-align: center;
+    padding-top: var(--space-section-top);
+    padding-bottom: var(--space-xl);
+    background: radial-gradient(ellipse at center, rgba(42, 26, 58, 0.3), transparent 70%);
+    position: relative;
+}
+
+/* HUD corners on about hero — top-left and bottom-right only */
+.about-hero::before,
+.about-hero::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+.about-hero::before {
+    top: var(--space-lg);
+    left: calc(50% - 120px);
+    box-shadow:
+        inset 1px 1px 0 0 rgba(30, 195, 210, 0.25),
+        inset -1px 0 0 0 transparent,
+        inset 0 -1px 0 0 transparent;
+}
+
+.about-hero::after {
+    bottom: var(--space-lg);
+    right: calc(50% - 120px);
+    box-shadow:
+        inset -1px -1px 0 0 rgba(30, 195, 210, 0.25),
+        inset 1px 0 0 0 transparent,
+        inset 0 1px 0 0 transparent;
+}
+
+.about-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.about-hero__name {
+    font-size: var(--font-size-hero-md);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-sm);
+    color: var(--fg-primary);
+}
+
+.about-hero__subtitle {
+    color: var(--fg-secondary);
+    font-size: clamp(14px, 2vw, 18px);
+}
+
+/* Statement Section */
+.about-statement {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+}
+
+.typewriter-wrap p {
+    margin-bottom: var(--space-md);
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--fg-secondary);
+}
+
+/* CTA Section */
+.about-cta {
+    padding: var(--space-xl) 0;
+    text-align: center;
+}
+
+.btn--lg {
+    padding: 16px 32px;
+    font-size: 16px;
+}
+
+/* Pillars Section */
+.about-pillars {
+    padding: var(--space-xl) 0;
+}
+
+.about-pillar {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: var(--space-md);
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.about-pillar:last-child {
+    border-bottom: none;
+}
+
+.about-pillar__number {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--cyan-glow);
+    line-height: 1;
+}
+
+.about-pillar__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--fg-primary);
+}
+
+.about-pillar__desc {
+    color: var(--fg-secondary);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Process Section */
+.about-process {
+    padding: var(--space-xl) 0;
+}
+
+.about-process__steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+}
+
+.about-process__step {
+    text-align: center;
+}
+
+.about-process__step-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--cyan-glow);
+    line-height: 1;
+    margin-bottom: var(--space-xs);
+}
+
+.about-process__step-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    color: var(--fg-primary);
+}
+
+.about-process__step-desc {
+    color: var(--fg-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Contact Section */
+.about-contact {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    border-top: 1px solid var(--border-subtle);
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.about-contact::before {
+    content: '> CONTACT';
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cyan-glow);
+    margin-bottom: var(--space-md);
+    opacity: 0.6;
+}
+
+.about-contact h2 {
+    margin-bottom: var(--space-md);
+}
+
+.about-contact p {
+    margin-bottom: var(--space-md);
+    color: var(--fg-secondary);
+}
+
+.about-contact__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    font-size: 16px;
+}
+
+.about-contact__links a {
+    color: var(--cyan-glow);
+    font-weight: 600;
+}
+
+.about-contact__separator {
+    color: var(--fg-muted);
+}
+
+/* FAQ Section */
+.about-faq {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.about-faq__list {
+    max-width: 720px;
+    margin-top: var(--space-lg);
+}
+
+.about-faq__item {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: var(--space-md) 0;
+}
+
+.about-faq__item:last-child {
+    border-bottom: none;
+}
+
+.about-faq__question {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fg-primary);
+    cursor: pointer;
+    padding: var(--space-sm) 0;
+    list-style: none;
+}
+
+.about-faq__question::-webkit-details-marker {
+    display: none;
+}
+
+.about-faq__question::before {
+    content: '[ + ] ';
+    color: var(--cyan-glow);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+
+.about-faq__item[open] .about-faq__question::before {
+    content: '[ - ] ';
+}
+
+.about-faq__answer {
+    color: var(--fg-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+    padding: var(--space-sm) 0 var(--space-md);
+}
+
+.about-faq__answer a {
+    color: var(--cyan-glow);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+    .about-hero {
+        padding-top: var(--space-section-top-mobile);
+        padding-bottom: var(--space-lg);
+    }
+
+    .about-hero {
+        padding-top: var(--space-section-top-mobile);
+        padding-bottom: var(--space-lg);
+    }
+
+    .about-statement {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    .typewriter-wrap p {
+        font-size: 16px;
+    }
+
+    .about-pillar {
+        grid-template-columns: 32px 1fr;
+        gap: var(--space-sm);
+        padding: var(--space-md) 0;
+    }
+
+    .about-pillar__number {
+        font-size: 32px;
+    }
+
+    .about-pillar__title {
+        font-size: 16px;
+    }
+
+    .about-pillar__desc {
+        font-size: 14px;
+    }
+
+    .about-process__steps {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+
+    .about-process__step-number {
+        font-size: 36px;
+    }
+
+    .about-contact__links {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .about-contact__separator {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-hero__name {
+        letter-spacing: 0.05em;
+    }
+
+    .about-statement {
+        padding: var(--space-md) var(--space-sm);
+    }
+
+    .typewriter-wrap p {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .about-pillar__number {
+        font-size: 28px;
+    }
+
+    .about-process__steps {
+        grid-template-columns: 1fr;
+    }
+}

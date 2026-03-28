@@ -1,0 +1,72 @@
+/* ========================================
+   Design Tokens - Studio Dark Theme
+   ======================================== */
+
+:root {
+    /* Brand colors */
+    --space-black: #0A0A12;
+    --bg-primary: #0A0A0A;
+    --bg-card: #151515;
+    --bg-elevated: #1A1A1A;
+    --border-subtle: #2A2A2A;
+    --border-hover: #3A3A3A;
+
+    /* Accent system */
+    --cyan-glow: #1EC3D2;
+    --cyan-dim: #0F829B;
+    --amber: #FFAA00;
+    --nebula-purple: #2A1A3A;
+    --nebula-teal: #0A2A2A;
+
+    /* Overlay */
+    --overlay-bg: rgba(0, 0, 0, 0.85);
+
+    /* Text */
+    --fg-primary: #E8E8E8;
+    --fg-secondary: #AAAAAA;  /* WCAG AA: contrast 6.3:1 on dark background */
+    --fg-muted: #888888;      /* WCAG AA: contrast 5.1:1 on dark background */
+
+    /* Typography */
+    --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+    --font-display: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 32px;
+    --space-xl: 64px;
+    --space-2xl: 128px;
+
+    /* Borders */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-pill: 20px;
+
+    /* Z-Index Scale */
+    --z-base: 1;
+    --z-content: 2;
+    --z-dropdown: 50;
+    --z-header: 100;
+    --z-mobile-toggle: 110;
+    --z-mobile-menu: 105;
+    --z-modal-overlay: 200;
+    --z-cart-overlay: 250;
+    --z-cart-drawer: 300;
+
+    /* Spacing */
+    --nav-height: 60px;
+    --space-section-top: calc(var(--space-xl) + var(--nav-height));
+    --space-section-top-mobile: calc(var(--space-lg) + var(--nav-height));
+
+    /* Hero Title Scale */
+    --font-size-hero-xl: clamp(48px, 10vw, 96px);
+    --font-size-hero-lg: clamp(42px, 8vw, 72px);
+    --font-size-hero-md: clamp(36px, 6vw, 56px);
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+}

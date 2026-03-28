@@ -1,0 +1,80 @@
+# Environment variables (contains API keys)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Instagram posting packs and reports (generated)
+instagram/posting-packs/
+instagram/reports/
+
+# Shared framed output (generated media)
+output/framed/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Browser sessions (contains auth cookies)
+instagram/data/browser_session/
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# Claude Code state
+.claude/
+
+# Photo assets (track READMEs only)
+inventory/available/*
+!inventory/available/README.md
+inventory/process/*
+!inventory/process/README.md
+inventory/sold/*
+!inventory/sold/README.md
+
+# Instagram test exports
+instagram/test_export/
+instagram/ab_test_photos/
+instagram/vision_exports/
+
+# Instagram logs
+instagram/logs/
+
+# Instagram archive media (351MB of old videos, not needed in git)
+instagram/data/archive/cerafica_media/
+
+# Product video backups (duplicates, not needed)
+website/images/products-backup/
+
+# Source videos (large, keep locally only)
+instagram/source/
+instagram/stages/01-input/output/*.MOV
+instagram/stages/01-input/output/*.mov
+
+# Script output (generated videos, duplicates of website)
+instagram/scripts/output/
+
+# Debug screenshots
+website/shop-screenshot.png
+website/images/Screenshot*
+
+# Local Netlify folder
+.netlify
+node_modules/
+.gstack/

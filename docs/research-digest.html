@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Digest — March 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1714;
+    --bg-warm: #211e19;
+    --bg-card: #2a2520;
+    --bg-card-hover: #332e28;
+    --fg: #e8e0d4;
+    --fg-dim: #a89e90;
+    --fg-muted: #706658;
+    --accent: #c4714e;
+    --accent-light: #d4896a;
+    --accent-glow: rgba(196, 113, 78, 0.15);
+    --green: #7fb069;
+    --green-dim: rgba(127, 176, 105, 0.15);
+    --blue: #6b9fc4;
+    --blue-dim: rgba(107, 159, 196, 0.15);
+    --gold: #c4a64e;
+    --gold-dim: rgba(196, 166, 78, 0.15);
+    --border: #3a352e;
+    --border-light: #4a443c;
+    --radius: 6px;
+    --radius-lg: 12px;
+    --shadow: 0 2px 20px rgba(0,0,0,0.3);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--fg-muted); }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Layout */
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 6rem 0 4rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--fg);
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--fg-dim);
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+
+  .hero-date {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* TOC Nav */
+  .toc {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 3rem 0 4rem;
+  }
+
+  .toc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--fg);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: block;
+  }
+
+  .toc-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .toc-number {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-card:nth-child(1) .toc-number { color: var(--accent); }
+  .toc-card:nth-child(2) .toc-number { color: var(--blue); }
+  .toc-card:nth-child(3) .toc-number { color: var(--green); }
+  .toc-card:nth-child(4) .toc-number { color: var(--gold); }
+
+  .toc-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .toc-desc {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    line-height: 1.4;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .section:nth-of-type(1) .section-num { color: var(--accent); }
+  .section:nth-of-type(2) .section-num { color: var(--blue); }
+  .section:nth-of-type(3) .section-num { color: var(--green); }
+  .section:nth-of-type(4) .section-num { color: var(--gold); }
+
+  /* Collapsible */
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .collapsible-header:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-light);
+  }
+
+  .collapsible-header.open {
+    border-radius: var(--radius) var(--radius) 0 0;
+    border-bottom-color: transparent;
+    background: var(--bg-card-hover);
+  }
+
+  .collapsible-header h3 {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .collapsible-arrow {
+    font-size: 0.7rem;
+    color: var(--fg-muted);
+    transition: transform 0.3s;
+  }
+
+  .collapsible-header.open .collapsible-arrow {
+    transform: rotate(180deg);
+  }
+
+  .collapsible-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    margin-bottom: 1rem;
+  }
+
+  .collapsible-body.open {
+    max-height: 10000px;
+  }
+
+  .collapsible-content {
+    padding: 1.25rem;
+  }
+
+  /* Typography within sections */
+  .section h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    color: var(--fg);
+  }
+
+  .section h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--fg);
+  }
+
+  .section p {
+    color: var(--fg-dim);
+    margin-bottom: 1rem;
+  }
+
+  .section strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  .section em {
+    color: var(--accent-light);
+    font-style: italic;
+  }
+
+  .section ul, .section ol {
+    color: var(--fg-dim);
+    margin: 0.75rem 0 1rem 1.25rem;
+  }
+
+  .section li {
+    margin-bottom: 0.4rem;
+  }
+
+  .section li::marker {
+    color: var(--fg-muted);
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  thead {
+    background: var(--bg-card-hover);
+  }
+
+  th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-dim);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Code blocks */
+  pre {
+    background: #0d0b09;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--fg-dim);
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85em;
+    background: rgba(255,255,255,0.06);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    color: var(--accent-light);
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Callout boxes */
+  .callout {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    margin: 1rem 0 1.5rem;
+    border-left: 3px solid;
+    font-size: 0.9rem;
+  }
+
+  .callout-accent {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--fg-dim);
+  }
+
+  .callout-green {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--fg-dim);
+  }
+
+  .callout-blue {
+    background: var(--blue-dim);
+    border-color: var(--blue);
+    color: var(--fg-dim);
+  }
+
+  .callout-gold {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--fg-dim);
+  }
+
+  .callout strong {
+    color: var(--fg);
+  }
+
+  /* Do/Don't */
+  .do-dont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .do-box, .dont-box {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+  }
+
+  .do-box {
+    background: var(--green-dim);
+    border: 1px solid rgba(127, 176, 105, 0.3);
+  }
+
+  .dont-box {
+    background: rgba(196, 78, 78, 0.1);
+    border: 1px solid rgba(196, 78, 78, 0.3);
+  }
+
+  .do-box h4 { color: var(--green); margin-top: 0; }
+  .dont-box h4 { color: #c44e4e; margin-top: 0; }
+
+  .do-box li, .dont-box li {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+
+  /* Script templates */
+  .script-block {
+    background: #0d0b09;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 1rem 0 1.5rem;
+    overflow: hidden;
+  }
+
+  .script-label {
+    padding: 0.5rem 1rem;
+    background: var(--bg-card-hover);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .script-body {
+    padding: 1rem 1.25rem;
+    font-size: 0.88rem;
+    color: var(--fg-dim);
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-family: var(--font-body);
+  }
+
+  /* Links */
+  a {
+    color: var(--accent-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  /* Keyboard shortcuts */
+  kbd {
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8em;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    color: var(--fg);
+    box-shadow: 0 1px 0 var(--border-light);
+  }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.75rem 0 1rem;
+  }
+
+  .checklist li {
+    padding: 0.3rem 0 0.3rem 1.75rem;
+    position: relative;
+    color: var(--fg-dim);
+    font-size: 0.9rem;
+  }
+
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border-light);
+    border-radius: 3px;
+  }
+
+  /* Warning signs table */
+  .warn-sign {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+
+  .warn-sign:last-child { border-bottom: none; }
+
+  .warn-icon {
+    font-size: 1.2rem;
+  }
+
+  .warn-action {
+    font-size: 0.78rem;
+    color: var(--accent-light);
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  footer {
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+  }
+
+  /* Back to top */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 100;
+    color: var(--fg-dim);
+    font-size: 0.8rem;
+  }
+
+  .back-top.visible { opacity: 1; }
+  .back-top:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .page { padding: 0 1rem; }
+    .hero { padding: 4rem 0 3rem; }
+    .hero h1 { font-size: 2rem; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .section-num { font-size: 2rem; }
+    .section-header h2 { font-size: 1.4rem; }
+    .do-dont { grid-template-columns: 1fr; }
+    .toc { grid-template-columns: 1fr; }
+    .table-wrap { margin-left: -1rem; margin-right: -1rem; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-eyebrow">Compiled March 18, 2026</div>
+    <h1>Research <em>Digest</em></h1>
+    <p class="hero-sub">Four topics, deep-dived in parallel. Everything you need in one place.</p>
+    <div class="hero-date">OCR &middot; Claude Code UI &middot; Neurodivergent Sales &middot; Instagram Automation</div>
+  </header>
+
+  <!-- Table of Contents -->
+  <nav class="toc">
+    <a class="toc-card" href="#ocr">
+      <div class="toc-number">01</div>
+      <div class="toc-title">DeepSeek OCR & Book Digitization</div>
+      <div class="toc-desc">Current state of OCR models for digitizing old pottery books</div>
+    </a>
+    <a class="toc-card" href="#claude-code">
+      <div class="toc-number">02</div>
+      <div class="toc-title">Claude Code UI/UX Guide</div>
+      <div class="toc-desc">Reading the terminal interface at a glance</div>
+    </a>
+    <a class="toc-card" href="#sales">
+      <div class="toc-number">03</div>
+      <div class="toc-title">Overcoming Sales Fear</div>
+      <div class="toc-desc">Neurodivergent-friendly strategies for selling pottery on Instagram</div>
+    </a>
+    <a class="toc-card" href="#dm-automation">
+      <div class="toc-number">04</div>
+      <div class="toc-title">Instagram DM Automation</div>
+      <div class="toc-desc">Safe automation without getting banned</div>
+    </a>
+  </nav>
+
+  <!-- ===================== SECTION 1: OCR ===================== -->
+  <section class="section" id="ocr">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>DeepSeek OCR & Book Digitization</h2>
+    </div>
+
+    <div class="callout callout-accent">
+      <strong>TL;DR:</strong> DeepSeek OCR launched October 2025, v2 dropped January 2026. It's open source, runs locally, and works well. For your pottery books, start with <strong>PaddleOCR-VL</strong> (free, local) or <strong>GPT-4o</strong> (cloud, ~$0.02/page). Photo quality matters more than model choice.
+    </div>
+
+    <h3>What Happened with DeepSeek OCR</h3>
+    <p>DeepSeek OCR was officially released <strong>October 17, 2025</strong>, with <strong>DeepSeek-OCR 2</strong> following on <strong>January 27, 2026</strong>. It's not vaporware — it's a fully functional, open-source model on GitHub (22,700+ stars, MIT License).</p>
+
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+      <h3>How to Use DeepSeek OCR</h3>
+      <span class="collapsible-arrow">&#9660;</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="collapsible-content">
+        <p><strong>Local (free):</strong></p>
+        <pre><code># Via Transformers
+from transformers import AutoModel, AutoTokenizer
+model_name = 'deepseek-ai/DeepSeek-OCR-2'
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+model = model.eval().cuda()
+result = model.chat(tokenizer, 'page.jpg', ocr_type='format')</code></pre>
+
+        <p><strong>Cloud APIs:</strong></p>
+        <ul>
+          <li><strong>Clarifai</strong> — API with OpenAI-compatible endpoint</li>
+          <li><strong>Google Cloud Vertex AI</strong> — Available as MaaS</li>
+          <li><strong>vLLM</strong> — Officially supported for efficient inference</li>
+          <li><strong>Ollama</strong> — Available as <code>deepseek-ocr</code> model</li>
+        </ul>
+
+        <p><strong>Bonus tool:</strong> <code>bookdatamaker</code> on PyPI — a CLI specifically for extracting text from books using DeepSeek-OCR.</p>
+      </div>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+      <h3>What Makes It Special — Architecture</h3>
+      <span class="collapsible-arrow">&#9660;</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="collapsible-content">
+        <p>DeepSeek OCR uses a novel <strong>"visual causal flow"</strong> approach. Instead of scanning left-to-right like traditional OCR, it reorders visual tokens based on <em>image semantics</em> — how humans actually read. This lets it use just <strong>1,120 visual tokens</strong> compared to 6,000+ for competitors like Qwen2.5-VL.</p>
+        <p><strong>Performance claims:</strong></p>
+        <ul>
+          <li>97% exact-match accuracy on Fox benchmark at 10x compression</li>
+          <li>200k pages/day on single NVIDIA A100 GPU</li>
+          <li>100+ languages supported</li>
+          <li>57-86% reduction in Character Error Rate after fine-tuning</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Top OCR Models for Book Digitization (2026)</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Best For</th>
+            <th>Cost</th>
+            <th>Hardware</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PaddleOCR-VL</strong></td>
+            <td>Scanned books, complex layouts</td>
+            <td>Free, open source</td>
+            <td>GPU recommended, CPU possible</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek-OCR 2</strong></td>
+            <td>Document understanding, tables</td>
+            <td>Free, open source</td>
+            <td>GPU required</td>
+          </tr>
+          <tr>
+            <td><strong>GOT-OCR2.0</strong></td>
+            <td>Math formulas, scientific content</td>
+            <td>Free, open source</td>
+            <td>GPU</td>
+          </tr>
+          <tr>
+            <td><strong>GLM-OCR</strong></td>
+            <td>Fast, accurate general OCR</td>
+            <td>Free, Apache 2.0</td>
+            <td>GPU</td>
+          </tr>
+          <tr>
+            <td><strong>Tesseract</strong></td>
+            <td>Simple text extraction</td>
+            <td>Free</td>
+            <td>CPU-only</td>
+          </tr>
+          <tr>
+            <td><strong>GPT-4o</strong></td>
+            <td>Best overall accuracy</td>
+            <td>~$0.02/page</td>
+            <td>Cloud API</td>
+          </tr>
+          <tr>
+            <td><strong>Gemini 2.5 Pro</strong></td>
+            <td>Multilingual, Chinese docs</td>
+            <td>Per-token pricing</td>
+            <td>Cloud API</td>
+          </tr>
+          <tr>
+            <td><strong>Nougat (Meta)</strong></td>
+            <td>Scientific papers, LaTeX</td>
+            <td>Free, open source</td>
+            <td>GPU</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Recommended Approach for Your Pottery Books</h3>
+
+    <div class="callout callout-green">
+      <strong>The biggest lever isn't the OCR model — it's photo quality.</strong> Two lights at 45-degree angles, flat pages, phone camera is fine. Scanning apps like vFlat or Adobe Scan handle auto-crop and perspective correction.
+    </div>
+
+    <h4>Option 1: Start Simple (Free, Local)</h4>
+    <p><strong>PaddleOCR-VL</strong> — 94.5% accuracy on OmniDocBench, handles complex layouts, runs locally.</p>
+    <pre><code>pip install paddlepaddle-gpu paddleocr
+from paddleocr import PaddleOCR
+ocr = PaddleOCR(use_angle_cls=True, lang='en')
+result = ocr.ocr('page.jpg', cls=True)</code></pre>
+
+    <h4>Option 2: Best Quality (Paid Cloud)</h4>
+    <p><strong>GPT-4o</strong> — Best accuracy, can preserve layout and mark image locations. ~$0.01-0.05/page.</p>
+
+    <h4>Option 3: Local Power User (Free, GPU Required)</h4>
+    <p><strong>DeepSeek-OCR 2</strong> — State-of-the-art open source. NVIDIA GPU with 8GB+ VRAM recommended.</p>
+
+    <h3>Scanning Tips</h3>
+    <ul>
+      <li><strong>Lighting:</strong> Two strong lights at 45-degree angles (left + right). Eliminates shadows.</li>
+      <li><strong>Camera:</strong> Smartphone 12-50MP is sufficient. Keep parallel to page.</li>
+      <li><strong>Book support:</strong> Book cradle or stand at 90-degree angle minimizes page curl.</li>
+      <li><strong>Apps:</strong> vFlat Scan (free, two pages at once), Adobe Scan, Microsoft Lens.</li>
+    </ul>
+
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+      <h3>Local vs Cloud Tradeoffs</h3>
+      <span class="collapsible-arrow">&#9660;</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="collapsible-content">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Local (Self-Hosted)</th><th>Cloud API</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Privacy</strong></td><td>Data never leaves machine</td><td>Data sent to third party</td></tr>
+              <tr><td><strong>Cost</strong></td><td>~$0.01/1K pages (electricity)</td><td>$1.50-30/1K pages</td></tr>
+              <tr><td><strong>Hardware</strong></td><td>$300-2000 GPU upfront</td><td>None needed</td></tr>
+              <tr><td><strong>Accuracy</strong></td><td>Good-very good</td><td>Often higher</td></tr>
+              <tr><td><strong>Setup</strong></td><td>Technical, requires maintenance</td><td>Easy (API calls)</td></tr>
+              <tr><td><strong>Rate limits</strong></td><td>None</td><td>Varies by provider</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://github.com/deepseek-ai/DeepSeek-OCR" target="_blank">DeepSeek-OCR GitHub Repository</a></li>
+      <li><a href="https://dev.to/czmilo/deepseek-ocr-2-complete-guide-to-running-fine-tuning-in-2026-3odb" target="_blank">DeepSeek-OCR 2 Complete Guide (DEV Community)</a></li>
+      <li><a href="https://www.codesota.com/ocr" target="_blank">Best OCR Models 2026: Benchmarks (CodeSOTA)</a></li>
+      <li><a href="https://modal.com/blog/8-top-open-source-ocr-models-compared" target="_blank">8 Top Open-Source OCR Models Compared (Modal)</a></li>
+      <li><a href="https://www.koncile.ai/en/ressources/paddleocr-analyse-avantages-alternatives-open-source" target="_blank">PaddleOCR vs Tesseract (Koncile)</a></li>
+      <li><a href="https://www.clarifai.com/blog/run-deepseek-ocr-with-an-api" target="_blank">Run DeepSeek-OCR via API (Clarifai)</a></li>
+      <li><a href="https://pypi.org/project/bookdatamaker/" target="_blank">Book Data Maker CLI Tool (PyPI)</a></li>
+      <li><a href="https://linnk.ai/research/document-digitization-2026/" target="_blank">Document Digitization in 2026 (Linnk AI)</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== SECTION 2: CLAUDE CODE ===================== -->
+  <section class="section" id="claude-code">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2>Claude Code UI/UX Guide</h2>
+    </div>
+
+    <div class="callout callout-blue">
+      <strong>TL;DR:</strong> The status line at the bottom is your dashboard. Spinner = thinking. Static = idle. <kbd>Ctrl+O</kbd> toggles verbose mode (often subtle/bugged). <kbd>Shift+Tab</kbd> cycles permission modes. <kbd>Esc</kbd> interrupts generation.
+    </div>
+
+    <h3>The Status Line (Bottom of Screen)</h3>
+    <p>This is your main dashboard. It shows:</p>
+    <ul>
+      <li><strong>Model</strong> — Opus / Sonnet / Haiku</li>
+      <li><strong>Directory</strong> — where you are</li>
+      <li><strong>Context bar</strong> (<code>&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;</code>) — token usage. Green &lt;50%, yellow 50-80%, red &gt;80%</li>
+      <li><strong>Cost</strong> — session spend (if configured)</li>
+      <li><strong>Git branch</strong> — current branch</li>
+    </ul>
+
+    <p><strong>Customize it:</strong> <code>/statusline show model, context %, git branch</code></p>
+
+    <h3>Activity States</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>What You See</th><th>What It Means</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Spinner cycling <code>&#x280B;&#x2819;&#x2839;&#x2838;</code></td>
+            <td>Claude is thinking/processing</td>
+          </tr>
+          <tr>
+            <td><code>[ToolName] description</code></td>
+            <td>Executing a tool (Read, Bash, Edit...)</td>
+          </tr>
+          <tr>
+            <td>Static text, no animation</td>
+            <td><strong>Idle</strong> — waiting for your input</td>
+          </tr>
+          <tr>
+            <td><code>Allow? (y/n/a/e/d &gt;)</code></td>
+            <td>Permission prompt — needs approval</td>
+          </tr>
+          <tr>
+            <td>Gray italic text</td>
+            <td>Extended thinking (when verbose mode works)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Permission Prompts</h3>
+    <p>The key legend when you see <code>Allow? (y/n/a/e/d &gt;)</code>:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Key</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><kbd>y</kbd></td><td>Allow once</td></tr>
+          <tr><td><kbd>n</kbd></td><td>Deny</td></tr>
+          <tr><td><kbd>a</kbd></td><td>Always allow (saves rule for session/project)</td></tr>
+          <tr><td><kbd>e</kbd></td><td>Edit before accepting</td></tr>
+          <tr><td><kbd>d</kbd></td><td>Show full diff</td></tr>
+          <tr><td><kbd>q</kbd></td><td>Quit</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Permission modes</strong> cycle with <kbd>Shift+Tab</kbd>: Normal &rarr; Auto-accept edits &rarr; Plan mode &rarr; Bypass</p>
+
+    <h3>Tool Call Display</h3>
+    <p>Tool calls show in a hierarchy:</p>
+    <pre><code>[Bash] npm install            &lt;- tool + what it's doing
+  Added 142 packages...      &lt;- output
+
+[Edit] src/utils.ts          &lt;- file being modified
+- const old = value;        &lt;- removed (red)
++ const old = newValue;     &lt;- added (green)</code></pre>
+
+    <h3>Essential Keyboard Shortcuts</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Shortcut</th><th>What It Does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><kbd>Esc</kbd></td><td>Interrupt generation mid-stream</td></tr>
+          <tr><td><kbd>Esc Esc</kbd></td><td>Open rewind menu</td></tr>
+          <tr><td><kbd>Ctrl+C</kbd></td><td>Cancel current operation</td></tr>
+          <tr><td><kbd>Ctrl+O</kbd></td><td>Toggle verbose mode</td></tr>
+          <tr><td><kbd>Ctrl+L</kbd></td><td>Clear screen</td></tr>
+          <tr><td><kbd>Tab</kbd></td><td>Toggle thinking mode / autocomplete</td></tr>
+          <tr><td><kbd>Shift+Tab</kbd></td><td>Cycle permission modes</td></tr>
+          <tr><td><kbd>\</kbd> + <kbd>Enter</kbd></td><td>New line without sending</td></tr>
+          <tr><td><kbd>Ctrl+F</kbd> (2x)</td><td>Kill all background agents</td></tr>
+          <tr><td><kbd>Ctrl+G</kbd></td><td>Open external editor</td></tr>
+          <tr><td><kbd>Ctrl+V</kbd></td><td>Paste image</td></tr>
+          <tr><td><kbd>Ctrl+R</kbd></td><td>Search command history</td></tr>
+          <tr><td><kbd>Ctrl+D</kbd></td><td>Exit Claude Code</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Verbose Mode (<kbd>Ctrl+O</kbd>)</h3>
+    <div class="callout callout-blue">
+      <strong>Known issue:</strong> Verbose mode is often <em>very subtle</em> and has been bugged in some v2.1.x versions (GitHub issues <a href="https://github.com/anthropics/claude-code/issues/22977" target="_blank">#22977</a>, <a href="https://github.com/anthropics/claude-code/issues/25980" target="_blank">#25980</a>). Even when working, the main visible difference is <strong>gray italic thinking text</strong> and slightly more detailed tool info. It's not a dramatic UI change.
+    </div>
+    <p>To verify it's on: run <code>/config</code> and check "Verbose output" shows <code>true</code>.</p>
+    <p>Alternative: add <code>{ "outputStyle": "verbose" }</code> to <code>~/.claude/settings.json</code> or start with <code>--verbose</code> flag.</p>
+
+    <h3>Reducing Motion</h3>
+    <p>If animations bother you, add to <code>~/.claude/settings.json</code>:</p>
+    <pre><code>{ "prefersReducedMotion": true }</code></pre>
+    <p>Suppresses shimmer and spinner cycling. Note: blinking dot may still animate (known issue #29323).</p>
+
+    <h3>Terminal Quirks</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Terminal</th><th>Issue</th><th>Workaround</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>tmux</td><td>Duller colors</td><td>Run directly in terminal</td></tr>
+          <tr><td>iTerm2 / Kitty</td><td>Best experience</td><td>OSC8 clickable links work</td></tr>
+          <tr><td>Terminal.app</td><td>Screen flashing</td><td>Use iTerm2 or Kitty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://code.claude.com/docs/en/statusline" target="_blank">Claude Code — Status Line Docs</a></li>
+      <li><a href="https://code.claude.com/docs/en/permissions" target="_blank">Claude Code — Permissions Docs</a></li>
+      <li><a href="https://code.claude.com/docs/en/keybindings" target="_blank">Claude Code — Keybindings Docs</a></li>
+      <li><a href="https://github.com/anthropics/claude-code/issues/22977" target="_blank">Issue #22977 — Verbose mode regression</a></li>
+      <li><a href="https://github.com/anthropics/claude-code/issues/25980" target="_blank">Issue #25980 — Verbose not displaying</a></li>
+      <li><a href="https://github.com/anthropics/claude-code/issues/769" target="_blank">Issue #769 — Screen flickering</a></li>
+      <li><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code Changelog</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== SECTION 3: SALES ===================== -->
+  <section class="section" id="sales">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2>Overcoming Sales Fear as a Neurodivergent Artist</h2>
+    </div>
+
+    <div class="callout callout-green">
+      <strong>Core insight:</strong> Sales systems were designed by and for neurotypical people. That's why they feel hard — not because something's wrong with you. Rejection Sensitive Dysphoria (RSD) is biological. Your brain processes rejection as physical pain. Knowing that creates distance: "That's my RSD talking," not "I'm inadequate."
+    </div>
+
+    <h3>Your Neurodivergent Traits Are Sales Superpowers</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Trait</th><th>How It Helps Sales</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Hyperfocus</strong></td><td>Deep product knowledge that builds authentic trust</td></tr>
+          <tr><td><strong>Pattern recognition</strong></td><td>Understanding customer needs others miss</td></tr>
+          <tr><td><strong>Creativity</strong></td><td>Novel ways to meet customer needs</td></tr>
+          <tr><td><strong>Authenticity</strong></td><td>Stands out from polished marketing BS</td></tr>
+          <tr><td><strong>Passion for craft</strong></td><td>Genuine excitement that sells naturally</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Energy Management</h3>
+    <ul>
+      <li><strong>Batch DMs:</strong> Check at set times (e.g., 10am, 3pm, 7pm). Turn off notifications outside those windows. Constant context-switching drains neurodivergent brains faster.</li>
+      <li><strong>3-Message Rule:</strong> Max 3 back-and-forths per conversation per day. If more depth needed, suggest continuing tomorrow.</li>
+      <li><strong>Track your patterns:</strong> After 2 weeks, you'll know "I can handle 3 DM conversations on Tuesday but only 1 on Friday." Plan accordingly.</li>
+      <li><strong>Schedule recovery time:</strong> After a Sunday shop update, plan Monday as studio-only day (no customer communication).</li>
+    </ul>
+
+    <h3>DM Scripts (Ready to Use)</h3>
+
+    <div class="script-block">
+      <div class="script-label">Responding to "Is this available?"</div>
+      <div class="script-body">Hi [name]!
+
+Yes, this piece is still available!
+
+[Optional: Add one brief detail — "This mug was thrown with [specific clay] and glazed with [glaze name], so it's dishwasher-safe and has that unique depth you can see in the photos."]
+
+If you'd like to claim it, I can send you a payment link. Just let me know if you have any questions first!
+
+Totally okay if you need time to decide — no pressure at all.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">Following Up After No Response</div>
+      <div class="script-body">Hi [name]!
+
+Just wanted to follow up on this piece — no pressure at all, but I wanted to make sure you got my message.
+
+If you're still interested, great! If not, totally understand either way.
+
+Let me know what works for you.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">Handling Price Questions</div>
+      <div class="script-body">Hi [name]!
+
+This piece is $[price].
+
+This price reflects:
+- [X] hours of handmade creation time
+- Material costs — specific clay/glaze
+- Firing costs — each piece goes through 2-3 kiln firings
+- Years of practice and development
+
+I know it's an investment — handmade ceramics are unique because each piece is one-of-a-kind. I pour a lot of care into every piece, and I want them to go to homes where they'll be truly treasured.
+
+Does this feel aligned with what you're looking for?</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">When You Need Time to Respond</div>
+      <div class="script-body">Thanks for your message, [name]!
+
+I want to give this proper thought, so I'm going to take a little time to respond. I'll get back to you by [tomorrow morning / this evening].
+
+Thanks for your patience!</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">Setting Communication Boundaries</div>
+      <div class="script-body">Hi [name]!
+
+I'm so excited you're interested in this piece!
+
+Just to set expectations — I typically check my DMs [once per day / in the evenings], so I might not respond immediately. I want to give you my full attention when I do reply, rather than rushing.
+
+If you need something urgently, you can also reach me at [email / shop link].
+
+Thanks for understanding — I want to make sure I can give you the best service!</div>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+      <h3>More Scripts: Objections & Edge Cases</h3>
+      <span class="collapsible-arrow">&#9660;</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="collapsible-content">
+        <div class="script-block">
+          <div class="script-label">"It's too expensive"</div>
+          <div class="script-body">I totally understand — it is an investment!
+
+Handmade ceramics are unique because each piece is one-of-a-kind and made to last for years (unlike mass-produced pieces). I pour a lot of care into every stage of creation, and I want my work to go to homes where it'll be truly treasured.
+
+That said, I completely respect if it's not the right fit for your budget right now. No worries at all!</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">"I need to think about it"</div>
+          <div class="script-body">Totally understand! It's important that you feel good about your purchase.
+
+No pressure at all — this piece will be here if you decide you'd like it. Feel free to DM me any questions that come up while you're thinking it over.
+
+Enjoy your day!</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">"Can you hold it for me?"</div>
+          <div class="script-body">I can hold it for you for [X days]!
+
+If that works for you, just confirm and I'll mark it as reserved. After that timeframe, I'd need to release it back to available.
+
+Does that feel fair?</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Instagram-Specific Tips</h3>
+    <ul>
+      <li><strong>Use Stories, not live video</strong> — Stories can be pre-recorded when you have energy. Live video requires real-time social processing (exhausting).</li>
+      <li><strong>Create a "DM FAQ" Story Highlight</strong> — Pricing range, shipping, payment methods, response time. Reduces repetitive questions before they become DMs.</li>
+      <li><strong>Comment-to-Claim system</strong> — Post pieces numbered. "Comment the number to claim, I'll DM you payment details." Public record, clear system, you process in batch.</li>
+      <li><strong>Pre-write shop update announcements</strong> — Write once when you have energy, copy-paste for each drop.</li>
+      <li><strong>Set boundaries in your bio</strong> — "DMs open. Responses within 24hrs. Shop updates: Sundays @ 4pm PST."</li>
+    </ul>
+
+    <h3>Gradual Exposure (Your Pace, No Timelines)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Timeline</th><th>Goal</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Weeks 1-2</strong></td>
+            <td>Low-stakes interaction</td>
+            <td>Reply to comments with emojis. Like other ceramicists' posts. Post a non-sales story question.</td>
+          </tr>
+          <tr>
+            <td><strong>Weeks 3-4</strong></td>
+            <td>Structured sales practice</td>
+            <td>Create DM FAQ highlight. Pre-write shop update template. Post ONE piece using comment-to-claim.</td>
+          </tr>
+          <tr>
+            <td><strong>Weeks 5-6</strong></td>
+            <td>Active sales DMs</td>
+            <td>Post 3-5 pieces. Use pre-written templates. Set response time expectations. Limit 3 DMs/day.</td>
+          </tr>
+          <tr>
+            <td><strong>Weeks 7-8</strong></td>
+            <td>Find sustainable level</td>
+            <td>Post full shop update. Handle DMs during designated window. Track energy, adjust volume.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>If a step triggers intense anxiety, go back one step. There's no deadline. Celebrate completing the <em>action</em>, not the sales outcome.</p>
+
+    <h3>Recommended Resources</h3>
+    <ul>
+      <li><strong>Leonie Dawson</strong> — Autistic+ADHD entrepreneur, $13M+ revenue. Writes specifically about neurodivergent entrepreneurship.</li>
+      <li><strong>Neurodivergent Insights</strong> (<a href="https://neurodivergentinsights.com" target="_blank">neurodivergentinsights.com</a>) — RSD guides, boundaries workbooks, anxiety resources.</li>
+      <li><strong>Diann Wingert</strong> — Coaching on rejection sensitivity in neurodivergent entrepreneurs.</li>
+      <li><strong>Book:</strong> <em>The Neurodiversity Edge</em> by Maureen Dunne, PhD — leveraging neurodivergent traits in business.</li>
+      <li><strong>Book:</strong> <em>Neurodiversity: Discovering the Extraordinary Gifts</em> by Thomas Armstrong.</li>
+    </ul>
+
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://www.openhandedwealth.com/blog/selling-as-service-how-my-mindset-around-sales-is-shifting" target="_blank">Selling as Service (openhanded wealth)</a></li>
+      <li><a href="https://neurodivergentinsights.com/rejection-sensitive-dysphoria/" target="_blank">Rejection Sensitive Dysphoria Guide</a></li>
+      <li><a href="https://www.adhdflowstate.com/how-to-sell-with-adhd/" target="_blank">How to Sell With ADHD and RSD</a></li>
+      <li><a href="https://www.drlanaferris.com/blogs/audhd-social-struggles-why-you-feel-alien-5-scripts-to" target="_blank">AuDHD Social Exhaustion Scripts</a></li>
+      <li><a href="https://syrenn.co/blog/thriving-in-sales-with-neurodivergent-traits" target="_blank">Thriving in Sales With Neurodivergent Traits</a></li>
+      <li><a href="https://newsletter.rampd.co/p/a-tactical-sales-guide-for-founders-with-non-neurotypical-brains" target="_blank">Tactical Sales Guide for Non-Neurotypical Brains</a></li>
+      <li><a href="https://leoniedawson.com/adhd-autism-and-entrepeneurship/" target="_blank">Leonie Dawson — ADHD, Autism & Entrepreneurship</a></li>
+      <li><a href="https://ceramicartsnetwork.org/ceramics-monthly/ceramics-monthly-article/Tips-and-Tools-Direct-Message-Sales-208655" target="_blank">DM Sales for Ceramics (Ceramics Monthly)</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== SECTION 4: DM AUTOMATION ===================== -->
+  <section class="section" id="dm-automation">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>Instagram DM Automation (Without Getting Banned)</h2>
+    </div>
+
+    <div class="callout callout-gold">
+      <strong>TL;DR:</strong> Instagram DM automation is <em>safe</em> when using Meta-approved tools (ManyChat, Inro, Spur) connected via OAuth. <strong>Never give your password to any tool.</strong> Start with native Quick Replies + FAQ buttons (free, zero risk), then add ManyChat free tier for comment-to-DM flows.
+    </div>
+
+    <h3>DO vs DON'T</h3>
+    <div class="do-dont">
+      <div class="do-box">
+        <h4>Safe (DO)</h4>
+        <ul>
+          <li>Use official API tools (OAuth login)</li>
+          <li>Respond within 24h to user-initiated interactions</li>
+          <li>Send up to 200 DMs/hour via official API</li>
+          <li>Use Quick Replies / Saved Replies</li>
+          <li>Automate comment-to-DM flows</li>
+          <li>Set up FAQ auto-responses</li>
+          <li>Use away messages outside business hours</li>
+        </ul>
+      </div>
+      <div class="dont-box">
+        <h4>Banned (DON'T)</h4>
+        <ul>
+          <li>Never give your Instagram password to any tool</li>
+          <li>No cold DM outreach (unsolicited)</li>
+          <li>No browser bots or Chrome extensions</li>
+          <li>No mass following/unfollowing automation</li>
+          <li>No scraping usernames for bulk DMs</li>
+          <li>Don't message based on passive actions (likes alone)</li>
+          <li>Avoid repetitive identical messages</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Rate Limits</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Safe Volume</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Manual (new account &lt;30 days)</td><td>50-150 DMs/day</td></tr>
+          <tr><td>Manual (established account)</td><td>100-150 DMs/day</td></tr>
+          <tr><td>Official API</td><td>200 DMs/hour hard cap (150-180 safe)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-gold">
+      <strong>The 24-Hour Messaging Window:</strong> You can only send automated DMs to users who engaged with you in the last 24 hours (they DM'd you, commented, replied to your Story, mentioned you, or clicked a Click-to-DM ad). Every time they reply, the clock resets.
+    </div>
+
+    <h3>Safe Tools (Ranked by Safety)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Best For</th><th>Safety</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>ManyChat</strong></td><td>Small businesses, visual flow builders</td><td>Meta-approved, ISO 27001, SOC 2. Free tier available.</td></tr>
+          <tr><td><strong>Inro</strong></td><td>GDPR/AI Act compliance</td><td>Meta-approved, encryption, EU safeguards</td></tr>
+          <tr><td><strong>Spur</strong></td><td>E-commerce, AI agents</td><td>Official Instagram partner</td></tr>
+          <tr><td><strong>ReplyRush</strong></td><td>Comment-to-DM automation</td><td>Official APIs, never asks for password</td></tr>
+          <tr><td><strong>InstantDM</strong></td><td>High-volume DMs</td><td>Meta partner, tested to 5K DMs/hr</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Native Features to Use First (Free)</h3>
+    <ul>
+      <li><strong>Saved Replies / Quick Replies</strong> — Settings &rarr; Business tools &rarr; Saved replies. Type <code>/ship</code> and it expands to your full shipping policy.</li>
+      <li><strong>Away Messages</strong> — Auto-replies when unavailable.</li>
+      <li><strong>FAQ Buttons</strong> — Up to 4 tappable buttons on your profile for instant answers.</li>
+      <li><strong>Comment Keywords</strong> — Set auto-DMs when people comment specific words (e.g., "PRICE" &rarr; auto-DM pricing).</li>
+    </ul>
+
+    <h3>Automation Examples for Your Pottery Business</h3>
+
+    <div class="script-block">
+      <div class="script-label">Comment-to-DM: Pricing</div>
+      <div class="script-body">Trigger: User comments "PRICE" on any post
+Message: "Hi! Thanks for interest in my work. Here's a quick guide:
+- Mugs: $45-65
+- Planters: $85-150
+- Dinner plates: $40-60 each
+
+Full catalog + purchase: [link]
+Custom work? I'm booking for June. Reply 'CUSTOM' for details."</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">Story Reply Auto-Response</div>
+      <div class="script-body">Trigger: User replies to a Story
+Message: "Hey! Thanks for responding to my story.
+Are you looking for:
+1) A specific piece I posted
+2) Custom work
+3) Just browsing?
+
+Reply with the number and I'll point you in the right direction!"</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">Comment-to-DM Sales Funnel</div>
+      <div class="script-body">1. Post: "This blue mug is available! Comment 'MUG' for details"
+2. User comments "MUG"
+3. Auto-DM: "It's $55 + $12 shipping. Ready to ship in 3 days.
+   Reply 'YES' to claim it (I'll send Venmo/PayPal link)"
+4. User replies "YES"
+5. Auto-DM: "Great! Payment: $67 to [your Venmo].
+   Once paid, I'll ship within 3 days and send tracking.
+   Your address? (or link to form)"</div>
+    </div>
+
+    <h3>Warning Signs</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Sign</th><th>What It Means</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>"Action Blocked" popup</td><td>Temporary restriction</td><td>Stop all automation 24-48 hours</td></tr>
+          <tr><td>"Try Again Later"</td><td>Rate limit exceeded</td><td>Pause DMs, wait 24 hours</td></tr>
+          <tr><td>"We Limit How Often"</td><td>Daily/hourly cap hit</td><td>Reduce volume by 50%</td></tr>
+          <tr><td>Delayed message delivery</td><td>Throttling</td><td>Slow down sending speed</td></tr>
+          <tr><td>Sudden reach drop 80%+</td><td>Possible shadowban</td><td>Stop automation 72 hours, go manual for 1 week</td></tr>
+          <tr><td>DMs not delivering</td><td>DM-specific block</td><td>Verify official tools only, appeal if needed</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Official API vs Unofficial Methods</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Official Graph API</th><th>Unofficial (bots, extensions)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Connection</strong></td><td>OAuth (Login with Instagram)</td><td>Your password</td></tr>
+          <tr><td><strong>Ban risk</strong></td><td>Zero (when used correctly)</td><td>Extremely high</td></tr>
+          <tr><td><strong>Rate limits</strong></td><td>200 DMs/hour, enforced automatically</td><td>None (until you get banned)</td></tr>
+          <tr><td><strong>Cold outreach</strong></td><td>Not allowed</td><td>Temporarily possible</td></tr>
+          <tr><td><strong>Cost</strong></td><td>Tool subscription ($0-45/mo)</td><td>Free or cheap</td></tr>
+          <tr><td><strong>Bottom line</strong></td><td>Safe, sustainable</td><td>Can lose your account overnight</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Implementation Plan</h3>
+    <ul class="checklist">
+      <li>Convert to Instagram Business/Creator account</li>
+      <li>Set up 5-10 Quick Replies in Instagram</li>
+      <li>Create FAQ buttons (3-4 common questions)</li>
+      <li>Write DM templates for common scenarios</li>
+      <li>Add business hours to bio</li>
+      <li>Sign up for ManyChat free tier</li>
+      <li>Connect via OAuth (NOT password)</li>
+      <li>Create 1 comment-to-DM automation ("PRICE" trigger)</li>
+      <li>Test with 10-20 DMs total</li>
+      <li>Monitor for warnings for 1 week</li>
+      <li>Expand to 2-3 more automations</li>
+      <li>Set up human handoff triggers</li>
+      <li>Scale to 30-50 automated DMs/day</li>
+    </ul>
+
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://www.spurnow.com/en/blogs/instagram-dm-automation-rules" target="_blank">Spur: Instagram DM Automation Rules 2026</a></li>
+      <li><a href="https://creatorflow.so/blog/avoid-instagram-bans-dm-automation/" target="_blank">CreatorFlow: 7 DM Automation Mistakes</a></li>
+      <li><a href="https://www.inro.social/blog/instagram-dm-automation-guide-2026" target="_blank">Inro: DM Automation Guide 2026</a></li>
+      <li><a href="https://instantdm.com/blog/instagram-rate-limit-2026-5000-dms-per-hour" target="_blank">InstantDM: Rate Limits 2026</a></li>
+      <li><a href="https://help.manychat.com/hc/en-us/articles/18624810395932" target="_blank">ManyChat: Is it Meta-Approved?</a></li>
+      <li><a href="https://dealism.ai/blog/is-manychat-safe-for-instagram-a-clear-objective-guide" target="_blank">Dealism: Is ManyChat Safe?</a></li>
+      <li><a href="https://www.replyrush.com/post/2025-guide-using-instagram-auto-dm-without-getting-banned" target="_blank">ReplyRush: Safe Auto DM Guide</a></li>
+      <li><a href="https://creatorflow.so/blog/instagram-api-rate-limits-explained/" target="_blank">CreatorFlow: API Rate Limits</a></li>
+      <li><a href="https://flowgent.ai/blog/instagram-dm-automation" target="_blank">FlowGent: DM Automation Comparison</a></li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <div class="page">
+    <p>Research compiled March 18, 2026 &middot; Ceramics Instagram Workspace</p>
+  </div>
+</footer>
+
+<button class="back-top" onclick="window.scrollTo({top:0})" id="backTop">&#8593;</button>
+
+<script>
+// Collapsible sections
+function toggleCollapsible(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// Back to top button
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backTop');
+  btn.classList.toggle('visible', window.scrollY > 600);
+});
+
+// Intersection Observer for fade-in animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.section').forEach(section => {
+  section.style.animationPlayState = 'paused';
+  observer.observe(section);
+});
+</script>
+
+</body>
+</html>

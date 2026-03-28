@@ -1,0 +1,61 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Update checkout config
+        run: |
+          SITE_NAME="cerafica-checkout"
+          FUNCTION_URL="https://${SITE_NAME}.netlify.app/.netlify/functions/create-checkout"
+          
+          cat > website/js/checkout-config.js << EOF
+          const CHECKOUT_CONFIG = {
+              local: 'http://localhost:8888/.netlify/functions/create-checkout',
+              production: '${FUNCTION_URL}',
+              getFunctionUrl: function() {
+                  const isLocal = window.location.hostname === 'localhost' || 
+                                 window.location.hostname === '127.0.0.1';
+                  return isLocal ? this.local : this.production;
+              }
+          };
+          if (typeof window !== 'undefined') {
+              window.CHECKOUT_CONFIG = CHECKOUT_CONFIG;
+          }
+          EOF
+
+      - name: Set Netlify environment variables
+        run: |
+          netlify link --id ${{ secrets.NETLIFY_SITE_ID }}
+          netlify env:set STRIPE_SECRET_KEY "${{ secrets.STRIPE_SECRET_KEY }}"
+          netlify env:set CERAFICA_DOMAIN "https://cerafica-checkout.netlify.app"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+      - name: Deploy to Netlify
+        run: netlify deploy --prod --dir=website --functions=netlify/functions
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

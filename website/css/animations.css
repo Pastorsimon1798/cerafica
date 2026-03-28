@@ -1,0 +1,237 @@
+/* ========================================
+   Animations - Motion & Transitions
+   ======================================== */
+
+/* Typewriter Effect — JS-driven, CSS provides base styles */
+.typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--cyan-glow);
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+/* Initial state before JS kicks in */
+.typewriter.typewriting {
+    width: 0;
+}
+
+@keyframes blink-caret {
+    from,
+    to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: var(--cyan-glow);
+    }
+}
+
+/* Fade In Animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s var(--ease-out),
+                transform 0.6s var(--ease-out);
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-in-delay-1 {
+    transition-delay: 0.1s;
+}
+
+.fade-in-delay-2 {
+    transition-delay: 0.2s;
+}
+
+.fade-in-delay-3 {
+    transition-delay: 0.3s;
+}
+
+/* Glow Hover Effect */
+.glow-hover {
+    transition: box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.glow-hover:hover {
+    box-shadow: 0 0 20px rgba(30, 195, 210, 0.15);
+}
+
+/* Slide In Right */
+.slide-in-right {
+    transform: translateX(100%);
+    transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.slide-in-right.active {
+    transform: translateX(0);
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Float Animation */
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Spin Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Shimmer Loading Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(
+        90deg,
+        var(--bg-card) 0%,
+        var(--bg-elevated) 50%,
+        var(--bg-card) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s var(--ease-out) forwards;
+}
+
+/* Scale In */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.scale-in {
+    animation: scaleIn 0.3s var(--ease-out) forwards;
+}
+
+/* Bounce */
+@keyframes bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.bounce {
+    animation: bounce 0.5s ease-in-out;
+}
+
+/* ========================================
+   Reduced Motion Support
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .typewriter {
+        animation: none;
+        border-right: none;
+        width: auto;
+    }
+
+    .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+        transition: none;
+    }
+
+    .slide-in-right {
+        transform: translateX(0);
+        transition: none;
+    }
+
+    .glow-hover:hover {
+        box-shadow: none;
+    }
+
+    /* Terminal aesthetic: disable scan lines, status pulse, card corners */
+    body::before {
+        display: none;
+    }
+
+    .nav__status-dot {
+        animation: none;
+    }
+
+    .card::before,
+    .card::after {
+        display: none;
+    }
+
+    .hero::before {
+        display: none;
+    }
+}

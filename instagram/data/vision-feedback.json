@@ -1,0 +1,175 @@
+{
+  "version": "1.0",
+  "created_at": "2026-03-14T00:00:00",
+  "schema_description": "Human-in-the-loop feedback database for ceramic vision learning. All prediction types are tracked with per-field scoring.",
+  "feedback_entries": [
+    {
+      "id": "feedback_001",
+      "timestamp": "2026-03-13T10:00:00",
+      "media_filename": "IMG_4759.JPG",
+      "media_path": "/path/to/IMG_4759.JPG",
+      "ai_prediction": {
+        "piece_type": "jar",
+        "glaze_type": "Teadust",
+        "surface_qualities": ["speckled"],
+        "color_appearance": "brown with darker speckles",
+        "technique": "wheel-thrown",
+        "clay_type": null
+      },
+      "human_correction": {
+        "piece_type": "bud_vase",
+        "glaze_type": "Malcom's Shino + Luster Shino",
+        "surface_qualities": ["crackle", "crawling", "luster"],
+        "color_appearance": "green with bronze metallic luster",
+        "technique": "wheel-thrown",
+        "clay_type": "b_mix"
+      },
+      "field_scores": {
+        "piece_type": 1,
+        "glaze_type": 0,
+        "surface_qualities": 1,
+        "color_appearance": 2,
+        "technique": 3,
+        "clay_type": 3
+      },
+      "overall_score": 1.7,
+      "confidence": "certain",
+      "notes": "Classic Shino vs Teadust confusion. Texture (crackle, crawling) is key - Shino is TEXTURED, Teadust is SMOOTH."
+    },
+    {
+      "id": "feedback_002",
+      "timestamp": "2026-03-14T11:00:00",
+      "media_filename": "IMG_4782.JPG",
+      "media_path": "/path/to/IMG_4782.JPG",
+      "ai_prediction": {
+        "piece_type": "bowl",
+        "glaze_type": "Celadon",
+        "surface_qualities": ["gloss"],
+        "color_appearance": "green",
+        "technique": "wheel-thrown",
+        "clay_type": "stoneware"
+      },
+      "human_correction": {
+        "piece_type": "bowl",
+        "glaze_type": "Celadon",
+        "surface_qualities": ["gloss"],
+        "color_appearance": "green",
+        "technique": "wheel-thrown",
+        "clay_type": "stoneware"
+      },
+      "field_scores": {
+        "piece_type": 3,
+        "glaze_type": 3,
+        "surface_qualities": 3,
+        "color_appearance": 3,
+        "technique": 3,
+        "clay_type": 3
+      },
+      "overall_score": 3.0,
+      "confidence": "certain",
+      "notes": "Perfect prediction - marked as correct."
+    },
+    {
+      "id": "feedback_003",
+      "timestamp": "2026-03-14T12:00:00",
+      "media_filename": "IMG_4818.JPG",
+      "media_path": "/path/to/IMG_4818.JPG",
+      "ai_prediction": {
+        "piece_type": "piece",
+        "glaze_type": null,
+        "surface_qualities": [],
+        "color_appearance": null,
+        "technique": null,
+        "clay_type": "stoneware",
+        "firing_state": "greenware"
+      },
+      "human_correction": {
+        "piece_type": "piece",
+        "content_type": "studio",
+        "glaze_type": null,
+        "surface_qualities": [],
+        "color_appearance": null,
+        "technique": null,
+        "clay_type": "stoneware",
+        "firing_state": "bisque"
+      },
+      "field_scores": {
+        "piece_type": 3,
+        "glaze_type": 3,
+        "surface_qualities": 3,
+        "color_appearance": 3,
+        "technique": 3,
+        "clay_type": 3
+      },
+      "overall_score": 3.0,
+      "confidence": "certain",
+      "notes": "Studio shot with 10 pieces. Firing state correction: bisque not greenware."
+    },
+    {
+      "id": "feedback_004",
+      "timestamp": "2026-03-14T13:00:00",
+      "media_filename": "IMG_4898.JPG",
+      "media_path": "/path/to/IMG_4898.JPG",
+      "ai_prediction": {
+        "piece_type": "bud_vase",
+        "glaze_type": "Honey Luster over Jensen Blue",
+        "surface_qualities": ["gloss", "luster"],
+        "color_appearance": "blue with metallic highlights",
+        "technique": "wheel-thrown",
+        "clay_type": "stoneware"
+      },
+      "human_correction": {
+        "piece_type": "bud_vase",
+        "glaze_type": "Tom Coleman Clear over Honey Luster over Jensen Blue",
+        "surface_qualities": ["gloss", "luster"],
+        "color_appearance": "blue with metallic highlights",
+        "technique": "wheel-thrown",
+        "clay_type": "death_valley"
+      },
+      "field_scores": {
+        "piece_type": 3,
+        "glaze_type": 2,
+        "surface_qualities": 3,
+        "color_appearance": 3,
+        "technique": 3,
+        "clay_type": 1
+      },
+      "overall_score": 2.5,
+      "confidence": "certain",
+      "notes": "3-layer glaze combo: Tom Coleman Clear over Honey Luster over Jensen Blue. Clay is Death Valley (iron speckling visible at foot)."
+    },
+    {
+      "id": "feedback_005",
+      "timestamp": "2026-03-14T14:00:00",
+      "media_filename": "IMG_4901.JPG",
+      "media_path": "/path/to/IMG_4901.JPG",
+      "ai_prediction": {
+        "piece_type": "bowl",
+        "glaze_type": "Chun Blue over Malcom's Shino",
+        "surface_qualities": ["variegation", "breaking"],
+        "color_appearance": "blue-green with brown breaking",
+        "technique": "wheel-thrown",
+        "clay_type": "death_valley"
+      },
+      "human_correction": {
+        "piece_type": "bowl",
+        "glaze_type": "Tom Coleman Clear over Chun Blue over Malcom's Shino",
+        "surface_qualities": ["variegation", "breaking"],
+        "color_appearance": "blue-green with brown breaking",
+        "technique": "wheel-thrown",
+        "clay_type": "death_valley"
+      },
+      "field_scores": {
+        "piece_type": 3,
+        "glaze_type": 2,
+        "surface_qualities": 3,
+        "color_appearance": 3,
+        "technique": 3,
+        "clay_type": 3
+      },
+      "overall_score": 2.8,
+      "confidence": "certain",
+      "notes": "Same 3-layer combo as IMG_4898: Tom Coleman Clear over Chun Blue over Malcom's Shino. AI detected 2 layers."
+    }
+  ]
+}

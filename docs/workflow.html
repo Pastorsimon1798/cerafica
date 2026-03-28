@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cerafica Posting Pipeline</title>
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --border: #2a2a2e;
+    --text: #e4e4e7;
+    --text2: #a1a1aa;
+    --text3: #71717a;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --planet: #f59e0b;
+    --planet2: #fbbf24;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --blue: #3b82f6;
+    --teal: #14b8a6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .header h1 span { color: var(--accent2); }
+  .header p { color: var(--text2); font-size: 1.1rem; }
+
+  /* Section */
+  .section { margin-bottom: 3rem; }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-title .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.5rem 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .flow-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .flow-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--accent2);
+    margin-top: 14px;
+    flex-shrink: 0;
+  }
+  .flow-dot.planet {
+    background: var(--planet);
+    border-color: var(--planet2);
+  }
+  .flow-dot.success { background: var(--success); border-color: #4ade80; }
+  .flow-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    min-height: 20px;
+  }
+  .flow-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    flex: 1;
+    margin-bottom: 0.75rem;
+  }
+  .flow-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .flow-card h3 .tag {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+  .tag-manual { background: #1e3a5f; color: var(--blue); }
+  .tag-auto { background: #1a3329; color: var(--success); }
+  .tag-ai { background: #3b1f5e; color: #c084fc; }
+  .tag-db { background: #3b2f1f; color: var(--planet); }
+  .flow-card p { color: var(--text2); font-size: 0.9rem; }
+  .flow-card .detail {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text3);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .flow-card .detail code {
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--accent2);
+  }
+
+  /* Planet mapping table */
+  .planet-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+  }
+  .planet-table th {
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--text2);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .planet-table td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .planet-table tr:hover td { background: var(--surface); }
+  .planet-name {
+    font-weight: 600;
+    color: var(--planet2);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .filename {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--text3);
+    font-size: 0.82rem;
+  }
+
+  /* Decision box */
+  .decision {
+    background: var(--surface);
+    border: 1px dashed var(--accent);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .decision h3 {
+    color: var(--accent2);
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+  .decision-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .decision-card {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .decision-card h4 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .decision-card p {
+    font-size: 0.82rem;
+    color: var(--text2);
+    margin-bottom: 0.5rem;
+  }
+  .decision-card code {
+    display: block;
+    background: var(--bg);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: var(--accent2);
+    margin-top: 0.5rem;
+  }
+
+  /* Code block */
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+    color: var(--text2);
+  }
+  pre code { color: var(--text2); }
+  pre .comment { color: var(--text3); }
+  pre .cmd { color: var(--accent2); }
+  pre .flag { color: var(--planet2); }
+
+  /* Info box */
+  .info {
+    background: #1a1f3a;
+    border: 1px solid #2d3561;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+    color: #93a3e8;
+  }
+  .info strong { color: var(--accent2); }
+
+  /* Warning box */
+  .warn {
+    background: #2a1f0a;
+    border: 1px solid #4a3510;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+    color: #e8c87a;
+  }
+
+  /* Match explanation */
+  .match-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: var(--text2);
+    overflow-x: auto;
+  }
+  .match-diagram .arrow { color: var(--text3); }
+  .match-diagram .hit { color: var(--planet2); font-weight: 600; }
+  .match-diagram .miss { color: var(--danger); text-decoration: line-through; }
+
+  /* Two-column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+    .decision-grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .card h4 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .card p, .card li {
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+  .card ul { padding-left: 1.2rem; }
+  .card li { margin-bottom: 0.3rem; }
+
+  /* Output tree */
+  .tree {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text2);
+    margin: 1rem 0;
+  }
+  .tree .dir { color: var(--accent2); }
+  .tree .file { color: var(--text3); }
+  .tree .highlight { color: var(--planet2); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+    color: var(--text3);
+    font-size: 0.82rem;
+  }
+
+  /* Caption example */
+  .caption-example {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+  .caption-example .before, .caption-example .after {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .caption-example .before {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+  }
+  .caption-example .after {
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    color: #86efac;
+  }
+  .caption-example .label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .caption-example .before .label { color: var(--danger); }
+  .caption-example .after .label { color: var(--success); }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .tag-list .tag {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--surface2);
+    color: var(--text3);
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Cerafica <span>Posting Pipeline</span></h1>
+    <p>From camera capture to published Instagram post — the complete system</p>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SECTION 1: THE FULL PIPELINE   -->
+  <!-- ============================== -->
+  <div class="section">
+    <div class="section-title"><span class="num">1</span> The Full Pipeline</div>
+
+    <div class="flow">
+      <!-- Step 1 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Capture <span class="tag tag-manual">you</span></h3>
+          <p>Take a photo or video of your work. Add it to the <strong>"To Post"</strong> album in the macOS Photos app, or drop framed files into <code>output/framed/</code>.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Run <code>./post</code> <span class="tag tag-auto">script</span></h3>
+          <p>This triggers the entire pipeline. One command generates everything.</p>
+          <div class="detail">
+            <span class="cmd">./post</span> &nbsp;&nbsp;all framed videos<br>
+            <span class="cmd">./post</span> <span class="flag">3</span> &nbsp;&nbsp;just 3 videos<br>
+            <span class="cmd">./post</span> <span class="flag">--no-ai</span> &nbsp;&nbsp;skip AI (fast, generic)
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Export from Photos app <span class="tag tag-auto">AppleScript</span></h3>
+          <p>In default mode, the script exports the original file from "To Post" via AppleScript. In <code>--from-output</code> mode (the default for <code>./post</code>), it reads directly from <code>output/framed/</code>.</p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>AI Vision Analysis <span class="tag tag-ai">Ollama / OpenRouter</span></h3>
+          <p>The photo or video frames are sent to an AI vision model (Kimi K2.5 locally, or Gemini Flash via OpenRouter). It detects: piece type, colors, glaze, technique, mood, surface qualities, firing state.</p>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot planet"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Worldbuilding Lookup <span class="tag tag-db">feedback.db</span></h3>
+          <p>The filename is checked against the <code>series_pieces</code> table. If it matches a known photo or contains a planet name, the full planetary lore is loaded — surface geology, orbital data, formation history, inhabitants.</p>
+          <div class="detail">
+            See <a href="#matching" style="color:var(--planet2)">Section 3</a> for the exact matching logic
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Caption Generation <span class="tag tag-ai">AI writing model</span></h3>
+          <p>The analysis + worldbuilding + voice rules + brand identity + geological vocabulary are all injected into an AI writing prompt. The AI generates 3 caption options. The best one is selected.</p>
+          <div class="detail">
+            Worldbuilding pieces get planetary explorer voice.<br>
+            Regular pieces get potter voice with few-shot examples.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Validation <span class="tag tag-auto">built-in</span></h3>
+          <p>Caption is checked against: banned AI words, em-dash count (max 1), length (300-500 chars sweet spot), question presence, and food/fabric metaphors (for worldbuilding pieces).</p>
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Schedule Calculation <span class="tag tag-auto">algorithm</span></h3>
+          <p>Optimal posting times are calculated based on engagement research. Posts are spread across the week with minimum 30-minute gaps. Priority slots: Tue-Thu 8AM, Mon/Fri 9AM.</p>
+        </div>
+      </div>
+
+      <!-- Step 9 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot success"></div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Posting Pack <span class="tag tag-auto">output folder</span></h3>
+          <p>A folder opens in Finder. Each subfolder contains the media file, a <code>caption.txt</code> to copy-paste, and a <code>README.txt</code> with schedule time and instructions.</p>
+          <div class="detail">
+            Location: <code>output/posting-pack-YYYY-MM-DD/</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 10 -->
+      <div class="flow-step">
+        <div class="flow-rail">
+          <div class="flow-dot"></div>
+        </div>
+        <div class="flow-card">
+          <h3>Manual Upload <span class="tag tag-manual">you</span></h3>
+          <p>Open Meta Business Suite. For each folder: drag in the media, paste the caption, set the schedule time. Click Schedule. Done.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SECTION 2: TWO MODES           -->
+  <!-- ============================== -->
+  <div class="section">
+    <div class="section-title"><span class="num">2</span> Two Modes of Operation</div>
+
+    <div class="decision-grid">
+      <div class="decision-card">
+        <h4>Default Mode (from Photos app)</h4>
+        <p>Full pipeline including framing. For new photos that haven't been framed yet.</p>
+        <code>python scripts/auto-post.py</code>
+        <div style="margin-top:0.5rem; font-size:0.8rem; color:var(--text3)">
+          Photos app &rarr; Export &rarr; Frame &rarr; Analyze &rarr; Caption &rarr; Pack
+        </div>
+      </div>
+      <div class="decision-card">
+        <h4>From-Output Mode (pre-framed)</h4>
+        <p>Skips Photos app and framing. For already-framed videos and photos. This is what <code>./post</code> uses.</p>
+        <code>./post 3</code>
+        <div style="margin-top:0.5rem; font-size:0.8rem; color:var(--text3)">
+          output/framed/ &rarr; Analyze &rarr; Caption &rarr; Pack
+        </div>
+      </div>
+    </div>
+
+    <div class="info" style="margin-top:1rem">
+      <strong>Where to put files for from-output mode:</strong><br>
+      Videos: <code>output/framed/video/</code> (e.g., <code>Ceruleix-2_rotating.mp4</code>)<br>
+      Photos: <code>output/framed/YYYY-MM-DD/</code> (e.g., <code>IMG_4908_planetary.jpg</code>)
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SECTION 3: WORLDBUILDING MATCH -->
+  <!-- ============================== -->
+  <div class="section" id="matching">
+    <div class="section-title"><span class="num" style="background:var(--planet)">3</span> How Files Get Matched to Planets</div>
+
+    <p style="color:var(--text2); margin-bottom:1rem">
+      The connection between a physical photo/video and its planetary identity lives in a single SQLite database:
+      <code style="color:var(--planet2)">human-door/feedback.db</code> &rarr; <code>series_pieces</code> table.
+    </p>
+
+    <p style="color:var(--text2); margin-bottom:1rem">
+      Someone (you, or the worldbuilding pipeline) <strong>manually registered</strong> each photo filename alongside its planet name and lore. The database row is the source of truth — the filename doesn't encode the planet in any way.
+    </p>
+
+    <h4 style="margin:1.5rem 0 0.75rem; font-size:0.95rem">The Complete Registry</h4>
+
+    <table class="planet-table">
+      <thead>
+        <tr>
+          <th>Planet</th>
+          <th>Photo Filename</th>
+          <th>Video Filename</th>
+          <th>Series</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="planet-name">Ceruleix-2</td>
+          <td class="filename">IMG_4908.JPG</td>
+          <td class="filename">Ceruleix-2_rotating.mp4</td>
+          <td rowspan="9">Glaze Exploration Series</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Cromix-0</td>
+          <td class="filename">IMG_4938.JPG</td>
+          <td class="filename">Cromix-0_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Ignix-5</td>
+          <td class="filename">IMG_4921.JPG</td>
+          <td class="filename">Ignix-5_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Pyr-os-8</td>
+          <td class="filename">IMG_4917.JPG</td>
+          <td class="filename">Pyr-os-8_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Krel-ex-3</td>
+          <td class="filename">IMG_4919.JPG</td>
+          <td class="filename">Krel-ex-3_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Pallth-7</td>
+          <td class="filename">IMG_4759.JPG</td>
+          <td class="filename">Pallth-7_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Azurix-4</td>
+          <td class="filename">IMG_4898.JPG</td>
+          <td class="filename">Azurix-4_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Nex-un-3</td>
+          <td class="filename">IMG_4920.JPG</td>
+          <td class="filename">Nex-un-3_rotating.mp4</td>
+        </tr>
+        <tr>
+          <td class="planet-name">Mariix-0</td>
+          <td class="filename">IMG_4940.JPG</td>
+          <td class="filename">Mariix-0_rotating.mp4</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin:1.5rem 0 0.75rem; font-size:0.95rem">How the Matching Algorithm Works</h4>
+
+    <p style="color:var(--text2); margin-bottom:1rem">
+      When a file enters the pipeline, <code>lookup_worldbuilding(filename)</code> runs two checks against the database:
+    </p>
+
+    <div class="match-diagram">
+<span class="comment"># Input: "Ceruleix-2_rotating.mp4"</span>
+
+<span class="comment"># Strategy 1: Planet-name extraction</span>
+<span class="comment"># Regex: ^([A-Z][a-zA-Z]+(?:-[a-z]+)*-\d+)</span>
+<span class="comment"># Matches: "Ceruleix-2" from "Ceruleix-2_rotating"</span>
+filename = "Ceruleix-2_rotating.mp4"
+  <span class="arrow">&rarr;</span> stem = "Ceruleix-2_rotating"
+  <span class="arrow">&rarr;</span> regex extracts <span class="hit">"Ceruleix-2"</span>
+  <span class="arrow">&rarr;</span> SQL: WHERE planet_name = <span class="hit">'Ceruleix-2'</span>
+  <span class="arrow">&rarr;</span> <span class="hit">MATCH FOUND</span>
+
+<span class="comment"># Input: "IMG_4908.JPG"</span>
+
+<span class="comment"># Strategy 1: Planet-name extraction</span>
+filename = "IMG_4908.JPG"
+  <span class="arrow">&rarr;</span> stem = "IMG_4908"
+  <span class="arrow">&rarr;</span> regex: <span class="miss">no match</span> (starts with "IMG", not a capital letter + word)
+
+<span class="comment"># Strategy 2: Photo filename match</span>
+  <span class="arrow">&rarr;</span> SQL: WHERE LOWER(photo) = <span class="hit">'img_4908.jpg'</span>
+  <span class="arrow">&rarr;</span> <span class="hit">MATCH FOUND</span> &rarr; planet_name = "Ceruleix-2"
+
+<span class="comment"># Input: "random_photo.jpg"</span>
+
+filename = "random_photo.jpg"
+  <span class="arrow">&rarr;</span> Strategy 1: <span class="miss">no match</span>
+  <span class="arrow">&rarr;</span> Strategy 2: <span class="miss">no match</span>
+  <span class="arrow">&rarr;</span> <span class="miss">NO MATCH</span> &rarr; worldbuilding = None (regular pottery caption)
+    </div>
+
+    <div class="warn">
+      <strong>The filename doesn't inherently contain the planet name.</strong> The connection is the database row. The planet-name regex is just a convenience for video files that were named after their planet (like <code>Ceruleix-2_rotating.mp4</code>). Original camera photos like <code>IMG_4908.JPG</code> rely entirely on the database lookup.
+    </div>
+
+    <h4 style="margin:1.5rem 0 0.75rem; font-size:0.95rem">What Gets Loaded When a Match is Found</h4>
+
+    <div class="two-col">
+      <div class="card">
+        <h4>WorldbuildingData</h4>
+        <ul>
+          <li><strong>planet_name</strong> — e.g., "Ceruleix-2"</li>
+          <li><strong>series_name</strong> — "Glaze Exploration Series"</li>
+          <li><strong>series_description</strong> — "Each vessel is a planet..."</li>
+          <li><strong>surface_geology</strong> — geological description</li>
+          <li><strong>orbital_data</strong> — atmosphere, temp, scent</li>
+          <li><strong>formation_history</strong> — captain's log lore</li>
+          <li><strong>inhabitants</strong> — what it feels like there</li>
+          <li><strong>generated_caption</strong> — previously generated caption</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>What Changes in the AI Prompt</h4>
+        <ul>
+          <li><strong>PLANETARY WORLDBUILDING</strong> block injected with all lore</li>
+          <li><strong>GEOLOGICAL VOCABULARY</strong> block with color/surface translations</li>
+          <li><strong>Voice shifts</strong> to planetary explorer language</li>
+          <li><strong>Few-shot examples removed</strong> (replaced by lore)</li>
+          <li><strong>Banned words expanded</strong> — food/fabric metaphors flagged</li>
+          <li><strong>CTA changes</strong> — "Would you explore this world?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SECTION 4: CAPTION DIFFERENCE   -->
+  <!-- ============================== -->
+  <div class="section">
+    <div class="section-title"><span class="num" style="background:var(--planet)">4</span> What Changes: Before vs After</div>
+
+    <div class="caption-example">
+      <div class="before">
+        <div class="label">Before (generic pottery voice)</div>
+        Behind the scenes in today's studio session. Working on this new piece with some beautiful blue tones. Love how the colors come to life in the bright sun!
+      </div>
+      <div class="after">
+        <div class="label">After (planetary worldbuilding voice)</div>
+        The cobalt-blue canyons of Ceruleix-2 run warm with ancient biological amber, a geological record written in slow-motion. Would you explore this patient world?
+      </div>
+    </div>
+
+    <p style="color:var(--text2); font-size:0.88rem; margin-bottom:0.5rem">
+      The caption generator now injects <strong>5 enrichment blocks</strong> into the AI prompt when worldbuilding data is available:
+    </p>
+
+    <div class="tag-list">
+      <span class="tag">PLANETARY WORLDBUILDING (full lore)</span>
+      <span class="tag">GEOLOGICAL VOCABULARY (color translations)</span>
+      <span class="tag">BRAND VOICE (full voice-rules.md)</span>
+      <span class="tag">BRAND IDENTITY (CERAFICA etymology, pillars)</span>
+      <span class="tag">FOOD/FABRIC BAN (geological terms only)</span>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SECTION 5: OUTPUT              -->
+  <!-- ============================== -->
+  <div class="section">
+    <div class="section-title"><span class="num">5</span> What Comes Out</div>
+
+    <div class="tree">
+<span class="dir">output/posting-pack-2026-03-20/</span>
+├── <span class="dir">01-Tue-Mar-25-08AM/</span>
+│   ├── <span class="highlight">Ceruleix-2_rotating.mp4</span> &nbsp;&nbsp;<span class="comment"># the media file</span>
+│   ├── <span class="file">caption.txt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># copy-paste into Instagram</span>
+│   └── <span class="file">README.txt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># schedule time + instructions</span>
+├── <span class="dir">02-Wed-Mar-26-08AM/</span>
+│   ├── <span class="highlight">Cromix-0_rotating.mp4</span>
+│   ├── <span class="file">caption.txt</span>
+│   └── <span class="file">README.txt</span>
+└── <span class="dir">03-Thu-Mar-27-08AM/</span>
+    ├── <span class="highlight">Ignix-5_rotating.mp4</span>
+    ├── <span class="file">caption.txt</span>
+    └── <span class="file">README.txt</span>
+    </div>
+
+    <p style="color:var(--text2); font-size:0.88rem">
+      The <code>./post</code> script opens this folder in Finder when it's done. Each subfolder is one post, ready to drag into Meta Business Suite.
+    </p>
+  </div>
+
+  <!-- ============================== -->
+  <!-- SECTION 6: KEY FILES           -->
+  <!-- ============================== -->
+  <div class="section">
+    <div class="section-title"><span class="num">6</span> Key Files</div>
+
+    <table class="planet-table">
+      <thead>
+        <tr><th>File</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">post</td>
+          <td>Shell script — the entry point. Calls <code>auto-post.py --from-output --reel</code> and opens the pack.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">scripts/auto-post.py</td>
+          <td>Main orchestrator. Exports media, runs analysis, generates captions, creates posting pack, moves to "Posted" album.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">scripts/lib/caption_generator.py</td>
+          <td>AI vision analysis, worldbuilding lookup, caption generation, hashtag selection, validation. The big one.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">scripts/lib/geology_vocabulary.py</td>
+          <td>Color/surface → geological translation dictionary. "Denim" becomes "cobalt-iron oxidation under specific atmospheric pressure."</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">scripts/lib/frame_generator.py</td>
+          <td>Generates sci-fi planetary frames around pottery photos (space background, HUD overlay, zoom panels).</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">scripts/lib/photo_export.py</td>
+          <td>AppleScript interface to macOS Photos app. Exports, moves between albums, gets media info.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">scripts/lib/instagram_scheduler.py</td>
+          <td>Calculates optimal posting times based on engagement research.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">human-door/feedback.db</td>
+          <td>SQLite database. Contains <code>series_pieces</code> (planet registry) and <code>series</code> (series metadata). Source of truth for worldbuilding.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">brand-vault/voice-rules.md</td>
+          <td>Banned words, human voice markers, potter language table, engagement triggers, DM sales template, top performing captions.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">brand-vault/identity.md</td>
+          <td>CERAFICA etymology, brand pillars, @cerafica_design handle, Clay on First studio info, sales channels.</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:0.82rem">shared/hashtag-library.md</td>
+          <td>3-tier hashtag strategy (glaze-specific, technique, local). 3-5 targeted tags, not 30 generic ones.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Generated from the ceramics-instagram codebase &middot; March 2026
+  </div>
+
+</div>
+</body>
+</html>
