@@ -965,6 +965,67 @@ def load_brand_identity() -> str:
     return ""
 
 
+# Brand configuration (brand.yaml) — cached after first load
+_brand_config_cache: Optional[dict] = None
+
+
+def load_brand_config() -> dict:
+    """Load brand.yaml configuration. Returns empty dict if not found.
+
+    This is the machine-readable config that drives the pipeline.
+    Falls back gracefully — all code should work without brand.yaml.
+    """
+    global _brand_config_cache
+    if _brand_config_cache is not None:
+        return _brand_config_cache
+
+    config_path = get_workspace_root() / "brand.yaml"
+    if not config_path.exists():
+        _brand_config_cache = {}
+        return _brand_config_cache
+
+    try:
+        import yaml
+        with open(config_path, encoding="utf-8") as f:
+            _brand_config_cache = yaml.safe_load(f) or {}
+    except ImportError:
+        # YAML not installed — parse minimally or return empty
+        _brand_config_cache = {}
+    except Exception:
+        _brand_config_cache = {}
+
+    return _brand_config_cache
+
+
+def get_brand_name() -> str:
+    """Get brand name from config, with fallback."""
+    config = load_brand_config()
+    return config.get("brand", {}).get("name", "")
+
+
+def get_product_domain() -> str:
+    """Get product domain (e.g., 'ceramics', 'jewelry') from config."""
+    config = load_brand_config()
+    return config.get("product", {}).get("domain", "")
+
+
+def get_domain_pack_path() -> Path:
+    """Get the path to the active domain pack directory."""
+    config = load_brand_config()
+    pack_path = config.get("product", {}).get("domain_pack", "packs/_template")
+    return get_workspace_root() / pack_path
+
+
+def get_vision_prompt_path() -> Path:
+    """Get path to the vision prompt template."""
+    config = load_brand_config()
+    prompt_path = config.get("vision", {}).get("prompt_template", "")
+    if prompt_path:
+        return get_workspace_root() / prompt_path
+    # Fallback: try domain pack default
+    return get_domain_pack_path() / "vision_prompt.md"
+
+
 def extract_few_shot_examples(voice_rules: str) -> str:
     """Extract the Top Performing Captions section from voice-rules.md for few-shot prompting."""
     if not voice_rules:
@@ -1896,6 +1957,31 @@ def _build_chemistry_section() -> str:
 _COLOR_SECTIONS = _build_color_sections()
 _CHEMISTRY_SECTION = _build_chemistry_section()
 
+
+def _load_vision_prompt_from_pack() -> Optional[str]:
+    """Try to load vision prompt from the domain pack configured in brand.yaml."""
+    try:
+        prompt_path = get_vision_prompt_path()
+        if prompt_path.exists():
+            text = prompt_path.read_text(encoding="utf-8")
+            # Strip markdown header lines (lines starting with #)
+            lines = text.split('\n')
+            content_lines = [l for l in lines if not l.startswith('# ')]
+            return '\n'.join(content_lines).strip()
+    except Exception:
+        pass
+    return None
+
+
+def get_vision_prompt() -> str:
+    """Get the vision prompt template, preferring domain pack over inline fallback."""
+    pack_prompt = _load_vision_prompt_from_pack()
+    if pack_prompt:
+        return pack_prompt
+    return VISION_PROMPT_TEMPLATE
+
+
+# Inline fallback — used when no domain pack is configured or found
 VISION_PROMPT_TEMPLATE = """Analyze this ceramic pottery photo and provide a structured analysis.
 {idea_seed_section}
 
@@ -2720,7 +2806,7 @@ This is ONE lens among many - still explore all possibilities in your hypotheses
     # Build vision prompt with few-shot examples from feedback
     few_shot_examples = build_few_shot_examples()
     examples_section = format_few_shot_examples(few_shot_examples)
-    prompt = VISION_PROMPT_TEMPLATE.format(idea_seed_section=idea_seed_section, color_sections=_COLOR_SECTIONS, chemistry_section=_CHEMISTRY_SECTION) + examples_section
+    prompt = get_vision_prompt().format(idea_seed_section=idea_seed_section, color_sections=_COLOR_SECTIONS, chemistry_section=_CHEMISTRY_SECTION) + examples_section
 
     # Cloud models need /api/chat endpoint with messages format
     is_cloud_model = model.endswith(":cloud")
@@ -2912,7 +2998,8 @@ def generate_caption_with_ollama(
         if brand_identity_block:
             enrichment_sections += f"\n\n{brand_identity_block}"
 
-        prompt = f"""You are a creative copywriter for a pottery Instagram account.
+        _domain_label = get_product_domain() or "pottery"
+        prompt = f"""You are a creative copywriter for a {_domain_label} Instagram account.
 
 PIECE DETAILS:
 - Type: {analysis.piece_type}
@@ -2972,7 +3059,8 @@ CAPTIONS:
         if brand_identity_block:
             enrichment_sections += f"\n\n{brand_identity_block}"
 
-        prompt = f"""You are a creative copywriter for a pottery Instagram account.
+        _domain_label = get_product_domain() or "pottery"
+        prompt = f"""You are a creative copywriter for a {_domain_label} Instagram account.
 
 PIECE DETAILS:
 - Type: {analysis.piece_type}
@@ -3079,7 +3167,7 @@ This is ONE lens among many - still explore all possibilities in your hypotheses
     # Build vision prompt with few-shot examples from feedback
     few_shot_examples = build_few_shot_examples()
     examples_section = format_few_shot_examples(few_shot_examples)
-    prompt = VISION_PROMPT_TEMPLATE.format(idea_seed_section=idea_seed_section, color_sections=_COLOR_SECTIONS, chemistry_section=_CHEMISTRY_SECTION) + examples_section
+    prompt = get_vision_prompt().format(idea_seed_section=idea_seed_section, color_sections=_COLOR_SECTIONS, chemistry_section=_CHEMISTRY_SECTION) + examples_section
 
     # Use configurable vision model via OpenRouter
     config = get_ai_config()
@@ -3944,7 +4032,8 @@ def generate_caption_with_openrouter(
         if brand_identity_block:
             enrichment_sections += f"\n\n{brand_identity_block}"
 
-        prompt = f"""You are a creative copywriter for a pottery Instagram account.
+        _domain_label = get_product_domain() or "pottery"
+        prompt = f"""You are a creative copywriter for a {_domain_label} Instagram account.
 
 PIECE DETAILS:
 - Type: {analysis.piece_type}
@@ -4004,7 +4093,8 @@ CAPTIONS:
         if brand_identity_block:
             enrichment_sections += f"\n\n{brand_identity_block}"
 
-        prompt = f"""You are a creative copywriter for a pottery Instagram account.
+        _domain_label = get_product_domain() or "pottery"
+        prompt = f"""You are a creative copywriter for a {_domain_label} Instagram account.
 
 PIECE DETAILS:
 - Type: {analysis.piece_type}

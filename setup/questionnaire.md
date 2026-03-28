@@ -1,4 +1,4 @@
-# Ceramics Instagram Setup
+# Creator Instagram Setup
 
 Answer these questions to configure your workspace. Your answers populate the brand vault and content references.
 
@@ -7,11 +7,21 @@ Answer these questions to configure your workspace. Your answers populate the br
 1. **What's your Instagram handle?**
    - `{{INSTAGRAM_HANDLE}}`
 
-2. **Describe your ceramics in 3 words** (your aesthetic)
+2. **Describe your work in 3 words** (your aesthetic)
    - `{{AESTHETIC_KEYWORDS}}`
 
-3. **What makes your work different from other ceramicists?**
+3. **What makes your work different?**
    - `{{UNIQUE_POSITIONING}}`
+
+## Product Domain
+
+14. **What do you make/sell?** (select one or describe)
+    - [ ] Ceramics/pottery
+    - [ ] Jewelry/accessories
+    - [ ] Art/prints
+    - [ ] Vintage/curated
+    - [ ] Fashion/clothing
+    - [ ] Other: `{{PRODUCT_DOMAIN}}`
 
 4. **Who is your ideal buyer/follower?**
    - `{{TARGET_AUDIENCE}}`
@@ -73,7 +83,9 @@ Answer these questions to configure your workspace. Your answers populate the br
 ## After Completion
 
 Once you've answered these questions:
-1. This workspace generates `brand-vault/identity.md`
-2. Voice rules are created in `brand-vault/voice-rules.md`
-3. Hashtag library is populated in `shared/hashtag-library.md`
-4. You're ready to start the weekly pipeline at `stages/01-input/`
+1. `brand.yaml` is generated with your machine-readable config
+2. `brand/identity.md` is populated with your brand identity
+3. `brand/voice-rules.md` is created from your voice examples
+4. `shared/hashtag-library.md` is populated with your niche hashtags
+5. Your domain pack is configured in `packs/` (or the generic template is used)
+6. You're ready to start the weekly pipeline at `instagram/stages/01-input/`

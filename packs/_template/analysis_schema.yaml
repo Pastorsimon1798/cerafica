@@ -1,0 +1,27 @@
+# Template Domain Pack — Analysis Schema
+# Defines the base fields for PhotoAnalysis.
+# Copy this file to your domain pack and add domain-specific fields.
+
+domain_fields:
+  product_type:
+    type: string
+    description: "Product classification for your domain"
+    # Add your product types here, e.g.:
+    # values: [ring, necklace, bracelet, earrings]
+
+  materials:
+    type: string
+    nullable: true
+    description: "What the product is made of"
+
+  technique:
+    type: string
+    nullable: true
+    description: "How the product was made"
+
+# Process shot detection: define what indicates work-in-progress for your domain
+# Example for jewelry: content_type "process" or "workspace"
+process_indicators:
+  content_types:
+    - process
+    - workspace

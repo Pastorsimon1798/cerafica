@@ -1,0 +1,26 @@
+[
+  {
+    "id": "001",
+    "name": "Product Name",
+    "price": 50,
+    "category": "category-1",
+    "description": "A short description of this product that captures its essence.",
+    "materials": "Primary material, secondary material",
+    "dimensions_cm": "H 10 cm x W 7.5 cm",
+    "dimensions_in": "H 4\" x W 3\"",
+    "available": true,
+    "image": "product-001.jpg",
+    "stripe_payment_link": ""
+  },
+  {
+    "id": "002",
+    "name": "Another Product",
+    "price": 75,
+    "category": "category-2",
+    "description": "Each product gets its own entry with pricing and availability.",
+    "materials": "Material description",
+    "available": true,
+    "image": "product-002.jpg",
+    "stripe_payment_link": ""
+  }
+]

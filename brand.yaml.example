@@ -1,0 +1,71 @@
+# Creator Kit — Brand Configuration
+# Fill this out to configure your content pipeline, website, and automation.
+# This is the machine-readable companion to brand/identity.md and brand/voice-rules.md
+
+brand:
+  name: "Your Brand Name"
+  handle: "@your_handle"
+  domain: "yourbrand.com"
+  tagline: "Your one-line description"
+  location: "City, State"
+
+product:
+  # Which domain pack to use (see packs/ directory)
+  # Built-in: "_template" (generic). Create your own for specialized vocabulary.
+  domain: "_template"
+  domain_pack: "packs/_template"
+
+  # Base product schema fields (always present in products.json)
+  base_fields:
+    - id
+    - name
+    - price
+    - category
+    - description
+    - available
+    - image
+    - materials
+
+  # Add domain-specific fields for your product type.
+  # These extend the base schema in products.json and control what shows on product cards.
+  # Examples for different domains:
+  #
+  # Ceramics: food_safe, care, one_of_one
+  # Jewelry: metal_type, stone_type, sizing
+  # Art/Prints: medium, edition_size, framed
+  # Vintage: era, condition, provenance
+  domain_fields: {}
+
+  categories:
+    - category-1
+    - category-2
+    - category-3
+
+sales:
+  method: "dm"  # dm, link, comment
+  payment:
+    - stripe
+  shipping: true
+  local_pickup: ""  # Leave empty if no local pickup
+
+instagram:
+  posts_per_week: 3
+  stories_per_week: 5
+  content_pillars:
+    - finished_work
+    - process
+    - behind_brand
+
+vision:
+  # Path to vision prompt template (relative to repo root)
+  # The domain pack provides the default. Override here if needed.
+  prompt_template: "packs/_template/vision_prompt.md"
+  analysis_schema: "packs/_template/analysis_schema.yaml"
+
+creative:
+  frame_theme: "clean"  # clean, minimal, or path to custom theme module
+  logo_path: "brand/logo.png"
+
+website:
+  theme: "studio-dark"
+  cart_key: "your_brand_cart"  # localStorage key for shopping cart

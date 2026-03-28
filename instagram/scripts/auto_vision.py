@@ -99,11 +99,18 @@ def init_db():
             hypotheses TEXT,
             vision_reasoning TEXT,
             raw_response TEXT,
+            domain_fields TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (photo_id) REFERENCES photos(id),
             UNIQUE(photo_id, model)
         )
     ''')
+
+    # Add domain_fields column if missing (backward compat for existing DBs)
+    try:
+        c.execute('ALTER TABLE vision_results ADD COLUMN domain_fields TEXT')
+    except sqlite3.OperationalError:
+        pass  # Column already exists
 
     # Idea seeds - user creative associations
     c.execute('''

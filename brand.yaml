@@ -1,0 +1,82 @@
+# Cerafica Brand Configuration
+# Machine-readable companion to brand/identity.md and brand/voice-rules.md
+# This file drives the content pipeline, website, and all automation.
+
+brand:
+  name: "Cerafica"
+  handle: "@cerafica_design"
+  domain: "cerafica.com"
+  tagline: "Postmodern Organic Brutalist ceramics"
+  location: "Long Beach, CA"
+
+product:
+  # Which domain pack to use (see packs/ directory)
+  domain: "ceramics"
+  domain_pack: "packs/ceramics"
+
+  # Base product schema fields (always present)
+  base_fields:
+    - id
+    - name
+    - price
+    - category
+    - description
+    - available
+    - image
+    - materials
+    - dimensions_cm
+    - dimensions_in
+
+  # Domain-specific fields (from domain pack)
+  domain_fields:
+    food_safe:
+      type: boolean
+      label: "Food Safe"
+      show_on_card: true
+    care:
+      type: string
+      label: "Care Instructions"
+    one_of_one:
+      type: boolean
+      label: "One of One"
+      show_on_card: true
+
+  categories:
+    - vessels
+    - bowls
+    - mugs
+    - sculpture
+    - plates
+    - planters
+
+sales:
+  method: "dm"  # dm, link, comment
+  payment:
+    - stripe
+    - venmo
+  shipping: true
+  local_pickup: "Long Beach, CA"
+
+instagram:
+  posts_per_week: 3
+  stories_per_week: 5
+  content_pillars:
+    - finished_work
+    - process
+    - studio
+    - cross_domain
+    - behind_brand
+
+vision:
+  # Path to the vision prompt template (relative to repo root)
+  prompt_template: "packs/ceramics/vision_prompt.md"
+  # Path to analysis schema (defines domain-specific PhotoAnalysis fields)
+  analysis_schema: "packs/ceramics/analysis_schema.yaml"
+
+creative:
+  frame_theme: "clean"  # clean, minimal, or path to custom theme module
+  logo_path: "brand/logo.png"
+
+website:
+  theme: "studio-dark"
+  cart_key: "cerafica_cart"

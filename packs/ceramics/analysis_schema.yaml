@@ -1,0 +1,94 @@
+# Ceramics Domain Pack — Analysis Schema
+# Defines domain-specific fields for PhotoAnalysis beyond the core fields.
+# Core fields (always present): content_type, primary_colors, secondary_colors,
+#   mood, suggested_hook, surface_qualities, piece_count, hypotheses, lighting,
+#   photo_quality, uncertainties, color_distribution
+
+domain_fields:
+  piece_type:
+    type: string
+    description: "Ceramic form classification"
+    values:
+      - bud_vase
+      - vase
+      - jar
+      - bowl
+      - mug
+      - cup
+      - tumbler
+      - planter
+      - plate
+      - pitcher
+      - teapot
+      - sculpture
+      - collection
+      - piece  # fallback
+
+  glaze_type:
+    type: string
+    nullable: true
+    description: "Technical glaze identification (null by default — describe in color_appearance instead)"
+
+  color_appearance:
+    type: string
+    nullable: true
+    description: "Vivid visual description of surface/glaze effects"
+
+  clay_type:
+    type: string
+    nullable: true
+    values:
+      - b_mix
+      - death_valley
+      - porcelain
+      - stoneware
+      - sculptural_raku
+      - earthenware
+
+  firing_state:
+    type: string
+    nullable: true
+    values:
+      - greenware
+      - bisque
+      - glazed
+      - finished
+
+  technique:
+    type: string
+    nullable: true
+    values:
+      - wheel-thrown
+      - handbuilt
+      - slip-cast
+      - coil_built
+      - pinch_pot
+      - slab_built
+      - wheel_altered
+      - extruded
+      - press_molded
+
+  form_attributes:
+    type: array
+    description: "Structural/aesthetic features using ceramics vocabulary"
+
+  purpose:
+    type: string
+    nullable: true
+    values: [functional, decorative, sculptural, hybrid]
+
+  product_family:
+    type: string
+    nullable: true
+    values: [dinnerware, serveware, drinkware, decor, garden, art]
+
+  safety_flags:
+    type: array
+    description: "Safety certifications"
+    values: [food_safe, microwave_safe, dishwasher_safe, outdoor_safe]
+
+# Process shot detection: these firing_state values indicate work-in-progress
+process_indicators:
+  firing_states:
+    - greenware
+    - bisque

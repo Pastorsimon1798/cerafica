@@ -28,8 +28,8 @@ function initShop() {
     let STRIPE_LINKS = {};
     let COINBASE_LINKS = {};
 
-    // Cart management
-    const CART_KEY = 'cerafica_cart';
+    // Cart management — reads from BRAND config if available
+    const CART_KEY = (window.BRAND && window.BRAND.cartKey) || 'cerafica_cart';
 
     function getCart() {
         try {
@@ -65,7 +65,8 @@ function initShop() {
         const existingItem = cart.find(item => item.id === productId);
 
         if (existingItem) {
-            if (!product.one_of_one) {
+            const limitOne = window.BRAND && window.BRAND.product && window.BRAND.product.limitOneOfOne;
+            if (!(limitOne && product.one_of_one)) {
                 existingItem.quantity += 1;
             }
         } else {
