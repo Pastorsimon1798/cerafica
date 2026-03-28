@@ -1,0 +1,77 @@
+#!/bin/bash
+# Instagram posting pack generator
+# Analyzes framed videos/photos and creates a drag-and-drop posting pack.
+#
+# Usage:
+#   ./post              All framed videos as Reels
+#   ./post 1            Just 1 video
+#   ./post 3            3 videos
+#   ./post --no-ai      Skip AI (fast, generic captions)
+#   ./post --help       Show all options
+
+set -e
+cd "$(dirname "$0")/.."
+source .venv/bin/activate
+export PYTHONPATH=.
+
+COUNT=""
+EXTRA=""
+
+for arg in "$@"; do
+  case "$arg" in
+    [0-9]*)
+      COUNT="--count $arg"
+      ;;
+    --help|-h|help)
+      echo "post — Generate Instagram posting pack from framed videos"
+      echo ""
+      echo "Analyzes your framed videos, generates captions in brand voice,"
+      echo "and creates a posting pack you can drag-and-drop into Meta Business Suite."
+      echo ""
+      echo "Usage:"
+      echo "  ./instagram/post              All framed videos as Reels"
+      echo "  ./instagram/post 1            Just 1 video"
+      echo "  ./instagram/post 3            3 videos"
+      echo ""
+      echo "Options:"
+      echo "  --no-ai             Skip AI analysis (fast, generic captions)"
+      echo "  --reel              Force as Reel (default for videos)"
+      echo "  --story             Force as Story"
+      echo "  --post              Force as feed post"
+      echo "  --carousel          Group photos as carousel"
+      echo "  --from-output       Read from output/framed/ (default)"
+      echo ""
+      echo "Output:"
+      echo "  instagram/posting-packs/posting-pack-YYYY-MM-DD/"
+      echo "    01-Sat-Mar-22-10AM/"
+      echo "      Ceruleix-2_rotating.mp4   (the video)"
+      echo "      caption.txt                 (copy-paste into Meta)"
+      echo "      README.txt                  (schedule time + instructions)"
+      echo "    02-Sun-Mar-23-09AM/"
+      echo "      ..."
+      exit 0
+      ;;
+    *)
+      EXTRA="$EXTRA $arg"
+      ;;
+  esac
+done
+
+python -u instagram/scripts/auto-post.py --from-output --reel $COUNT $EXTRA
+
+# Open the posting pack when done
+PACK=$(ls -dt instagram/posting-packs/posting-pack-* 2>/dev/null | head -1)
+if [ -n "$PACK" ]; then
+  echo ""
+  echo "=== Posting pack ready ==="
+  echo "Location: $PACK"
+  echo ""
+  echo "To post:"
+  echo "  1. Open Meta Business Suite → Content → Create"
+  echo "  2. For each folder in the pack:"
+  echo "     - Drag the video into the upload area"
+  echo "     - Copy the caption from caption.txt"
+  echo "     - Set the schedule time from README.txt"
+  echo ""
+  open "$PACK"
+fi

@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceramics Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #FAFAF8; --bg-elevated: #FFFFFF; --bg-subtle: #F3F2EF;
+            --text: #1A1A1A; --text-muted: #6B6B6B; --text-faint: #9E9E9E;
+            --border: #E5E4E0; --border-strong: #D1D0CC;
+            --accent: #1D4ED8; --accent-light: #DBEAFE; --accent-text: #1E40AF;
+            --gold: #B45309; --gold-light: #FEF3C7; --gold-text: #92400E;
+            --success: #059669; --success-light: #D1FAE5; --success-text: #065F46;
+            --surface: #F8F7F4;
+            --t-xs: 0.6875rem; --t-sm: 0.8125rem; --t-base: 0.9375rem;
+            --t-lg: 1.125rem; --t-xl: 1.5rem; --t-2xl: 2rem;
+            --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+            --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem; --space-8: 3rem;
+            --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-full: 9999px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --font-mono: 'SF Mono', 'Fira Code', monospace;
+        }
+        [data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0F1117; --bg-elevated: #1A1D27; --bg-subtle: #252833;
+            --text: #E8E8EC; --text-muted: #9B9BA8; --text-faint: #6B6B78;
+            --border: #2E3140; --border-strong: #3E4155;
+            --accent: #6B8AFF; --accent-light: #1E2A4A; --accent-text: #8BA4FF;
+            --gold: #E5A530; --gold-light: #3D2E10; --gold-text: #F0BD50;
+            --success: #34D399; --success-light: #0D3326; --success-text: #6EE7B7;
+            --surface: #1E2130;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.4), 0 4px 8px rgba(0,0,0,0.2);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; min-height: 100dvh; line-height: 1.6; font-size: var(--t-base); }
+
+        /* === Header === */
+        .header { background: var(--bg-elevated); padding: 0 var(--space-8); height: 56px; display: flex; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .header-inner { max-width: 1920px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); }
+        .brand {
+            h1 { font-family: var(--font-body); font-size: var(--t-lg); font-weight: 400; letter-spacing: -0.3px; display: flex; align-items: baseline; gap: 6px;
+                span { font-family: var(--font-display); font-style: italic; color: var(--accent-text); font-weight: 400; }
+            }
+        }
+        .tagline { font-size: var(--t-xs); color: var(--text-faint); font-weight: 400; letter-spacing: 0.3px; margin-top: 1px; }
+        .header-actions { display: flex; align-items: center; gap: var(--space-3); }
+        .theme-toggle { background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); cursor: pointer; font-size: 16px; line-height: 1; transition: all 0.2s;
+            &:hover { background: var(--border); }
+        }
+
+        /* === Nav === */
+        .main-nav { background: var(--bg-elevated); border-bottom: 2px solid var(--border); display: flex; padding: 0 var(--space-8); gap: 0; max-width: 1920px; margin: 0 auto; }
+        .nav-tab { background: none; border: none; padding: 0.75rem 1.5rem; cursor: pointer; font-size: var(--t-sm); font-weight: 500; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; font-family: var(--font-body); transition: all 0.15s;
+            &:hover { color: var(--text); }
+            &.active { color: var(--text); border-bottom-color: var(--accent);
+                .nav-count { background: var(--accent-light); color: var(--accent-text); }
+            }
+            .nav-count { background: var(--bg-subtle); color: var(--text-faint); padding: 1px 6px; border-radius: var(--radius-full); font-size: var(--t-xs); margin-left: 6px; font-weight: 600; }
+        }
+
+        /* === Views === */
+        .view { display: none; }
+        .view.active { display: block; }
+        .view-container { max-width: 1920px; margin: 0 auto; padding: var(--space-5); }
+
+        /* === Dashboard === */
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+        .dash-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--shadow-sm); }
+        .dash-card-value { font-size: var(--t-2xl); font-weight: 600; font-variant-numeric: tabular-nums;
+            &.accent { color: var(--accent-text); }
+            &.gold { color: var(--gold-text); }
+            &.success { color: var(--success-text); }
+        }
+        .dash-card-label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-top: var(--space-1); }
+        .dash-section { margin-bottom: var(--space-6); }
+        .dash-section-title { font-size: var(--t-sm); font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: var(--space-3); }
+        .dash-cta { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-size: var(--t-sm); font-weight: 500; cursor: pointer; font-family: var(--font-body); transition: all 0.15s;
+            &:hover { background: var(--accent-text); }
+            .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
+            &.generating .spinner { display: inline-block; }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .dash-needs-attention { list-style: none;
+            li { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+                &:last-child { border-bottom: none; }
+            }
+        }
+        .dash-link { color: var(--accent-text); font-size: var(--t-sm); cursor: pointer; text-decoration: none; font-weight: 500;
+            &:hover { text-decoration: underline; }
+        }
+
+        /* === Filters === */
+        .filters { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center; margin-bottom: var(--space-4); }
+        .filter-label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); font-weight: 500; margin-right: var(--space-1); }
+        .filter-btn { padding: var(--space-1) var(--space-4); background: var(--bg-subtle); border: none; border-radius: var(--radius-full); font-size: var(--t-sm); cursor: pointer; transition: all 0.2s; font-family: var(--font-body); color: var(--text-muted); font-weight: 500;
+            &:hover { background: var(--border); color: var(--text); }
+            &.active { background: var(--accent); color: white; }
+        }
+
+        /* === Photo Grid === */
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-4); }
+        .photo-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: box-shadow 0.2s, transform 0.15s; content-visibility: auto; contain-intrinsic-size: auto 400px;
+            &:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+            &:has(.tag-frame) { border-left: 3px solid var(--success); }
+            &:has(.tag-series) { border-left: 3px solid var(--gold); }
+        }
+        .photo-card-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--bg-subtle); display: block; }
+        .photo-card-body { padding: var(--space-3) var(--space-4); }
+        .photo-card-name { font-size: var(--t-xs); color: var(--text-faint); font-family: var(--font-mono); margin-bottom: var(--space-2); }
+        .photo-card-tags { display: flex; gap: var(--space-1); flex-wrap: wrap; margin-bottom: var(--space-2); }
+        .tag { font-size: var(--t-xs); padding: 2px var(--space-2); border-radius: var(--radius-full); font-weight: 500; border: none;
+            &-piece { background: var(--text); color: white; }
+            &-glaze { background: var(--accent-light); color: var(--accent-text); }
+            &-series { background: var(--gold-light); color: var(--gold-text); }
+            &-frame { background: var(--success-light); color: var(--success-text); }
+        }
+        .color-dots { display: flex; gap: 4px; margin-bottom: var(--space-2); }
+        .color-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--border); }
+        .photo-card-caption { font-size: var(--t-sm); color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* === Detail Panel (master-detail) === */
+        .detail-layout { display: grid; grid-template-columns: 1fr; gap: var(--space-4); container-type: inline-size; }
+        .detail-layout.open { grid-template-columns: 1fr 480px; }
+        @container (max-width: 900px) { .detail-layout.open { grid-template-columns: 1fr; } }
+        .detail-panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); position: sticky; top: 72px; max-height: calc(100vh - 88px); max-height: calc(100dvh - 88px); overflow-y: auto; box-shadow: var(--shadow-md); display: none; }
+        .detail-layout.open .detail-panel { display: block; }
+        .detail-header { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--bg-elevated); z-index: 1; }
+        .detail-title { font-family: var(--font-display); font-size: var(--t-lg); }
+        .detail-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-faint); padding: var(--space-2); border-radius: var(--radius-sm); transition: all 0.2s;
+            &:hover { color: var(--text); background: var(--bg-subtle); }
+        }
+        .detail-body { padding: var(--space-5); }
+        .detail-img-wrap { text-align: center; margin-bottom: var(--space-4); position: relative; }
+        .detail-img { width: 100%; max-width: 400px; border-radius: var(--radius-md); }
+        .frame-toggle { display: inline-flex; gap: var(--space-1); margin-top: var(--space-2); }
+        .frame-toggle-btn { padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); border: 1px solid var(--border); background: var(--bg-subtle); color: var(--text-muted); cursor: pointer; font-size: var(--t-xs); font-family: var(--font-body); transition: all 0.2s;
+            &.active { background: var(--success); color: white; border-color: var(--success); }
+        }
+        .detail-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: var(--space-4); }
+        .detail-tab { background: none; border: none; padding: var(--space-2) var(--space-3); cursor: pointer; font-size: var(--t-sm); color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; font-family: var(--font-body); font-weight: 500;
+            &.active { color: var(--text); border-bottom-color: var(--accent); }
+        }
+        .detail-tab-panel { display: none; }
+        .detail-tab-panel.active { display: block; }
+        .detail-footer { padding: var(--space-4) var(--space-5); border-top: 1px solid var(--border); display: flex; gap: var(--space-2); position: sticky; bottom: 0; background: var(--bg-elevated); }
+
+        /* === Vision/Caption/Worldbuilding in detail === */
+        .vision-tags { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
+        .surface-qualities { display: flex; gap: var(--space-1); flex-wrap: wrap; margin-bottom: var(--space-2); }
+        .surface-tag { font-size: var(--t-xs); padding: 2px var(--space-2); background: var(--bg-subtle); border-radius: var(--radius-full); color: var(--text-muted); }
+        .detail-caption-text { font-family: var(--font-display); font-size: var(--t-base); line-height: 1.7; font-style: italic; margin-bottom: var(--space-3); }
+        .detail-field { margin-bottom: var(--space-3); }
+        .detail-field-label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: var(--space-1); font-weight: 500; }
+        .detail-field-value { font-size: var(--t-sm); line-height: 1.6; }
+
+        /* === Worldbuilding in detail === */
+        .wb-section { background: var(--gold-light); padding: var(--space-4); border-radius: var(--radius-md); margin-bottom: var(--space-4); }
+        .wb-planet-name { font-family: var(--font-display); font-size: 1.5rem; font-style: italic; color: var(--gold-text); margin-bottom: var(--space-3); }
+        .wb-caption { background: var(--bg-elevated); padding: var(--space-3); border-radius: var(--radius-sm); font-family: var(--font-display); font-size: var(--t-sm); line-height: 1.7; font-style: italic; border-left: 3px solid var(--gold); }
+
+        /* === Seeds in detail === */
+        .seeds-section { border-left: 3px solid var(--success); padding-left: var(--space-4); margin-bottom: var(--space-4); }
+        .seeds-list { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-3); }
+        .seed-chip { background: var(--success-light); color: var(--success-text); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--t-sm); display: flex; align-items: center; gap: var(--space-2); }
+        .seed-chip .delete-seed { cursor: pointer; opacity: 0.5; }
+        .seed-chip .delete-seed:hover { opacity: 1; }
+        .seed-chip.editing { border: 2px solid var(--accent); background: var(--bg-elevated); }
+        .seed-edit-input { border: none; background: transparent; font-size: var(--t-sm); font-family: var(--font-body); color: var(--success-text); outline: none; width: 100%; min-width: 60px; }
+        .seed-input-row { display: flex; gap: var(--space-2); }
+        .seed-input { flex: 1; padding: var(--space-2) var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: var(--t-sm); font-family: var(--font-body); background: var(--bg); color: var(--text); }
+        .seed-btn { padding: var(--space-2) var(--space-4); background: var(--success); color: white; border: none; border-radius: var(--radius-full); font-size: var(--t-sm); font-weight: 500; cursor: pointer; font-family: var(--font-body); }
+
+        /* === Series View === */
+        .series-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+        .series-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-5); cursor: pointer; transition: all 0.2s; }
+        .series-card:hover { box-shadow: var(--shadow-md); }
+        .series-card-name { font-family: var(--font-display); font-weight: 600; font-size: var(--t-lg); margin-bottom: var(--space-1); }
+        .series-card-desc { font-size: var(--t-sm); color: var(--text-muted); margin-bottom: var(--space-2); line-height: 1.5; }
+        .series-card-count { font-size: var(--t-xs); color: var(--text-faint); }
+        .series-detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border); }
+        .series-detail-title { font-family: var(--font-display); font-size: var(--t-xl); }
+        .series-pieces-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-5); }
+        .series-piece-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
+        .series-piece-card:hover { box-shadow: var(--shadow-md); }
+        .series-piece-img { width: 100%; aspect-ratio: 1; object-fit: contain; background: #1a1a2e; display: block; }
+        .series-piece-info { padding: var(--space-3) var(--space-4); }
+        .series-piece-planet { font-family: var(--font-display); font-size: var(--t-base); font-style: italic; color: var(--gold-text); margin-bottom: var(--space-1); }
+        .series-piece-photo { font-size: var(--t-xs); color: var(--text-faint); font-family: var(--font-mono); }
+        .series-piece-caption { font-size: var(--t-sm); color: var(--text-muted); line-height: 1.5; margin-top: var(--space-2); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .series-piece-actions { padding: var(--space-2) var(--space-3); background: var(--bg-subtle); display: flex; gap: var(--space-2); }
+        .piece-btn { padding: var(--space-1) var(--space-2); font-size: var(--t-xs); border: 1px solid var(--border); background: var(--bg-elevated); border-radius: var(--radius-sm); cursor: pointer; font-family: var(--font-body); transition: all 0.2s; color: var(--text-muted);
+            &:hover { background: var(--text); color: white; border-color: var(--text); }
+        }
+
+        /* === Buttons === */
+        .btn { padding: var(--space-2) var(--space-4); border: 1px solid var(--border); background: var(--bg-elevated); border-radius: var(--radius-sm); cursor: pointer; font-family: var(--font-body); font-size: var(--t-sm); transition: all 0.2s; color: var(--text-muted); }
+        .btn:hover { background: var(--text); color: white; border-color: var(--text); }
+        .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
+        .btn-primary:hover { background: var(--accent-text); }
+        .btn-gold { background: var(--gold); color: white; border-color: var(--gold); }
+        .btn-gold:hover { background: var(--gold-text); }
+        .btn-success { background: var(--success); color: white; border-color: var(--success); }
+        .btn-success:hover { background: var(--success-text); }
+        .btn.regenerate { background: transparent; }
+        .btn.regenerate:hover { background: var(--bg-subtle); color: var(--text); }
+        .btn.regenerate:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn.regenerate.loading { position: relative; padding-left: 25px; }
+        .btn.regenerate.loading::before { content: ''; position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border: 2px solid var(--accent); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .btn.selected { background: var(--gold); color: white; border-color: var(--gold); font-weight: 500; }
+        .btn-copy { background: var(--accent); color: white; border-color: var(--accent); }
+        .btn-copy:hover { background: var(--accent-text); }
+        .btn-create { padding: var(--space-2) var(--space-4); background: var(--accent); color: white; border: none; border-radius: var(--radius-full); font-size: var(--t-sm); font-weight: 500; cursor: pointer; font-family: var(--font-body); }
+
+        /* === Modal === */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: var(--space-5);
+            &.show { display: flex; }
+        }
+        .modal { background: var(--bg-elevated); border-radius: var(--radius-lg); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+        .modal-header { padding: var(--space-5); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-family: var(--font-display); font-size: var(--t-xl); }
+        .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-faint); padding: var(--space-2); border-radius: var(--radius-sm);
+            &:hover { color: var(--text); background: var(--bg-subtle); }
+        }
+        .modal-body { padding: var(--space-5); }
+        .modal-footer { padding: var(--space-4) var(--space-5); border-top: 1px solid var(--border); display: flex; gap: var(--space-3); justify-content: flex-end; }
+        .form-group { margin-bottom: var(--space-4); }
+        .form-label { display: block; font-size: var(--t-sm); font-weight: 500; margin-bottom: var(--space-2); }
+        .form-input, .form-textarea { width: 100%; padding: var(--space-3) var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: var(--t-base); font-family: var(--font-body); background: var(--bg); color: var(--text); }
+        .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+        .form-textarea { min-height: 100px; resize: vertical; }
+
+        /* === Toast === */
+        .toast { position: fixed; bottom: var(--space-6); right: var(--space-6); background: var(--text); color: white; padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); font-size: var(--t-sm); box-shadow: var(--shadow-lg); transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 200;
+            &.show { transform: translateY(0); opacity: 1; }
+        }
+
+        /* === Loading / Empty === */
+        .loading { display: flex; align-items: center; justify-content: center; padding: var(--space-8); color: var(--text-faint); gap: var(--space-3); }
+        .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .empty-state { text-align: center; padding: var(--space-8) var(--space-5); color: var(--text-muted); }
+        .empty-state h2 { font-family: var(--font-display); font-size: var(--t-xl); margin-bottom: var(--space-2); color: var(--text); }
+
+        /* === Responsive === */
+        @media (max-width: 900px) {
+            .header { padding: 0 var(--space-4); }
+            .main-nav { padding: 0 var(--space-4); overflow-x: auto; }
+            .view-container { padding: var(--space-4); }
+            .photo-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+            .series-pieces-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+            .toast { bottom: var(--space-4); right: var(--space-4); left: var(--space-4); }
+        }
+        @media (max-width: 480px) {
+            .nav-tab { padding: 0.6rem 1rem; font-size: var(--t-xs); }
+            .photo-grid { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+            .photo-card-body { padding: var(--space-2); }
+            .photo-card-name { font-size: 0.625rem; }
+        }
+        /* === Accessibility: Reduced Motion === */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <h1>Ceramics <span>Intelligence</span></h1>
+                <div class="tagline">Vision + Caption Pipeline</div>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode"></button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav" role="tablist" aria-label="Main navigation">
+        <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="view-dashboard" id="tab-dashboard" data-view="dashboard" onclick="navigate('dashboard')">Dashboard</button>
+        <button class="nav-tab" role="tab" aria-selected="false" aria-controls="view-photos" id="tab-photos" data-view="photos" onclick="navigate('photos')">Photos <span class="nav-count" id="navPhotoCount">--</span></button>
+        <button class="nav-tab" role="tab" aria-selected="false" aria-controls="view-series" id="tab-series" data-view="series" onclick="navigate('series')">Series <span class="nav-count" id="navSeriesCount">--</span></button>
+    </nav>
+
+    <!-- Dashboard View -->
+    <div id="view-dashboard" class="view active" role="tabpanel" aria-labelledby="tab-dashboard">
+        <div class="view-container">
+            <div class="dash-grid" id="dashStats">
+                <div class="loading"><div class="spinner"></div></div>
+            </div>
+            <div class="dash-section">
+                <div class="dash-section-title">Needs Attention</div>
+                <div id="dashNeedsAttention"><div class="loading"><div class="spinner"></div></div></div>
+            </div>
+            <div class="dash-section">
+                <button class="dash-cta" id="generateAllBtn" onclick="generateMissingCaptions()">
+                    <div class="spinner"></div> Generate Missing Captions
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photos View -->
+    <div id="view-photos" class="view" role="tabpanel" aria-labelledby="tab-photos">
+        <div class="view-container">
+            <div class="filters" id="photoFilters">
+                <span class="filter-label">Filter:</span>
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="needs-caption">Needs Caption</button>
+                <button class="filter-btn" data-filter="in-series">In Series</button>
+                <button class="filter-btn" data-filter="has-seeds">Has Seeds</button>
+                <button class="filter-btn" data-filter="has-framed">Has Frame</button>
+            </div>
+            <div class="detail-layout" id="detailLayout">
+                <div class="photo-grid" id="photoGrid"><div class="loading"><div class="spinner"></div></div></div>
+                <div class="detail-panel" id="detailPanel"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Series View -->
+    <div id="view-series" class="view" role="tabpanel" aria-labelledby="tab-series">
+        <div class="view-container">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-5);">
+                <div class="dash-section-title" style="margin:0;">Your Series</div>
+                <button class="btn-create" onclick="showCreateSeriesModal()">+ New Series</button>
+            </div>
+            <div class="series-grid" id="seriesGrid"><div class="loading"><div class="spinner"></div></div></div>
+            <div id="seriesDetail" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Create Series Modal -->
+    <div class="modal-overlay" id="createSeriesModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Create New Series</div>
+                <button class="modal-close" onclick="closeModal('createSeriesModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Series Name</label>
+                    <input type="text" class="form-input" id="seriesName" placeholder="e.g., Glaze Exploration Series">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="seriesDesc" placeholder="What connects these pieces?"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('createSeriesModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createSeries()">Create Series</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add to Series Modal -->
+    <div class="modal-overlay" id="addToSeriesModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Add to Series</div>
+                <button class="modal-close" onclick="closeModal('addToSeriesModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Series</label>
+                    <select class="form-input" id="seriesSelect"></select>
+                </div>
+                <div id="worldbuildingPreview" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label">Planet Name</label>
+                        <input type="text" class="form-input" id="planetName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Generated Caption Preview</label>
+                        <div class="wb-caption" id="captionPreview"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('addToSeriesModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmAddToSeries()">Add to Series</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    // === State ===
+    let allData = { results: [] };
+    let allSeeds = [], allSeries = [], allSeriesPieces = [];
+    let captionWinners = {}, framedMap = {};
+    let currentFilter = 'all', pendingAddPhoto = null;
+    let currentDetailPhoto = null, currentDetailTab = 'vision';
+
+    // === Router ===
+    function navigate(view) {
+        window.location.hash = view;
+    }
+    function handleHash() {
+        const hash = window.location.hash.replace('#', '') || 'dashboard';
+        document.querySelectorAll('.view').forEach(v => { v.classList.remove('active'); v.hidden = true; });
+        document.querySelectorAll('.nav-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        const view = document.getElementById('view-' + hash);
+        if (view) { view.classList.add('active'); view.hidden = false; }
+        const tab = document.querySelector(`.nav-tab[data-view="${hash}"]`);
+        if (tab) { tab.classList.add('active'); tab.setAttribute('aria-selected', 'true'); }
+        if (hash === 'series' && !seriesRendered) renderSeriesView();
+    }
+    window.addEventListener('hashchange', handleHash);
+
+    // === Theme ===
+    function toggleTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        document.getElementById('themeToggle').textContent = isDark ? '' : '';
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+    (function() {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeToggle').textContent = '';
+        } else {
+            document.getElementById('themeToggle').textContent = '';
+        }
+    })();
+
+    // === Data Loading ===
+    function loadData() {
+        fetch('/api/pipeline-data')
+            .then(r => r.json())
+            .then(data => {
+                allData = data;
+                allSeeds = data.idea_seeds || [];
+                allSeries = data.series || [];
+                allSeriesPieces = data.series_pieces || [];
+                captionWinners = data.selections || {};
+                framedMap = data.framed || {};
+                renderDashboard();
+                renderPhotoGrid();
+                document.getElementById('navPhotoCount').textContent = Object.keys(groupPhotos()).length;
+                document.getElementById('navSeriesCount').textContent = allSeries.length;
+                if (currentDetailPhoto) renderDetailContent();
+            })
+            .catch(err => console.error('Load error:', err));
+    }
+
+    function groupPhotos() {
+        const groups = {};
+        allData.results.forEach(r => {
+            if (!groups[r.photo]) groups[r.photo] = [];
+            groups[r.photo].push(r);
+        });
+        return groups;
+    }
+
+    // === Helpers ===
+    function getKimiResult(photo) {
+        return allData.results.find(r => r.photo === photo && r.model.includes('Kimi'));
+    }
+    function getSeedsForPhoto(photo) { return allSeeds.filter(s => s.photo === photo); }
+    function getSeriesPieceForPhoto(photo) { return allSeriesPieces.find(p => p.photo === photo); }
+    function parseIdeas(text) {
+        if (!text) return [];
+        const ideas = [];
+        const match = text.match(/\*\*STEP 1: 7 CAPTION IDEAS\*\*([\s\S]*?)(?=\*\*STEP 2:|$)/i);
+        if (match) { const p = /\d+\.\s*\*\*(Emotional|Technical|Playful|Poetic|Minimal|Story-driven|Sensory)\*\*:?\s*([^\n]+)/gi; let m; while ((m = p.exec(match[1])) !== null) ideas.push({ type: m[1], text: m[2].trim() }); }
+        return ideas;
+    }
+    function getCaptionText(result) {
+        return [result?.caption?.hook, result?.caption?.body, result?.caption?.cta].filter(Boolean).join('\n\n') || 'No caption generated';
+    }
+
+    // === Dashboard ===
+    function renderDashboard() {
+        const groups = groupPhotos();
+        const photos = Object.keys(groups);
+        const totalSeries = allSeries.length;
+        const totalPieces = allSeriesPieces.length;
+        const noCaption = photos.filter(p => { const r = getKimiResult(p); return !r || !r.caption?.hook; });
+        const hasFramed = photos.filter(p => framedMap[p]);
+
+        document.getElementById('dashStats').innerHTML = `
+            <div class="dash-card"><div class="dash-card-value accent">${photos.length}</div><div class="dash-card-label">Total Photos</div></div>
+            <div class="dash-card"><div class="dash-card-value">${totalSeries}</div><div class="dash-card-label">Series</div></div>
+            <div class="dash-card"><div class="dash-card-value gold">${totalPieces}</div><div class="dash-card-label">Series Pieces</div></div>
+            <div class="dash-card"><div class="dash-card-value success">${hasFramed.length}</div><div class="dash-card-label">Framed</div></div>
+        `;
+
+        const attentionEl = document.getElementById('dashNeedsAttention');
+        if (noCaption.length > 0) {
+            attentionEl.innerHTML = `<ul class="dash-needs-attention">${noCaption.map(p => `
+                <li><span style="font-family:var(--font-mono);font-size:var(--t-sm)">${p}</span><a class="dash-link" onclick="navigate('photos');setTimeout(()=>openDetail('${p}'),100)">View</a></li>
+            `).join('')}</ul>`;
+        } else {
+            attentionEl.innerHTML = '<div style="color:var(--text-faint);font-size:var(--t-sm);padding:var(--space-3)">All photos have captions.</div>';
+        }
+    }
+
+    // === Photos Grid ===
+    function renderPhotoGrid() {
+        const groups = groupPhotos();
+        let photos = Object.keys(groups);
+
+        if (currentFilter === 'needs-caption') photos = photos.filter(p => { const r = getKimiResult(p); return !r || !r.caption?.hook; });
+        else if (currentFilter === 'in-series') photos = photos.filter(p => getSeriesPieceForPhoto(p));
+        else if (currentFilter === 'has-seeds') photos = photos.filter(p => getSeedsForPhoto(p).length > 0);
+        else if (currentFilter === 'has-framed') photos = photos.filter(p => framedMap[p]);
+
+        const grid = document.getElementById('photoGrid');
+        if (photos.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><h2>No Photos Found</h2><p>Try a different filter</p></div>';
+            return;
+        }
+
+        grid.innerHTML = photos.map(photo => renderPhotoCard(photo, groups[photo])).join('');
+    }
+
+    function renderPhotoCard(photo, results) {
+        const kimi = results.find(r => r.model.includes('Kimi'));
+        const v = kimi?.vision || {};
+        const caption = getCaptionText(kimi);
+        const seeds = getSeedsForPhoto(photo);
+        const sp = getSeriesPieceForPhoto(photo);
+        const hasFramed = !!framedMap[photo];
+        const colors = [...(v.primary_colors || []), ...(v.secondary_colors || [])].slice(0, 4);
+
+        return `<div class="photo-card" onclick="openDetail('${photo}')">
+            <img src="/images/${photo}" alt="${photo}" class="photo-card-thumb" loading="lazy" onerror="this.style.display='none'">
+            <div class="photo-card-body">
+                <div class="photo-card-name">${photo}</div>
+                <div class="photo-card-tags">
+                    <span class="tag tag-piece">${v.piece_type || 'unknown'}</span>
+                    <span class="tag tag-glaze">${(v.glaze_type || 'unknown').substring(0, 20)}</span>
+                    ${sp ? `<span class="tag tag-series">${sp.planet_name || 'In Series'}</span>` : ''}
+                    ${hasFramed ? `<span class="tag tag-frame">Framed</span>` : ''}
+                </div>
+                ${colors.length > 0 ? `<div class="color-dots">${colors.map(c => `<span class="color-dot" style="background:${c}" title="${c}"></span>`).join('')}</div>` : ''}
+                <div class="photo-card-caption">${caption}</div>
+            </div>
+        </div>`;
+    }
+
+    // === Detail Panel ===
+    function openDetail(photo) {
+        currentDetailPhoto = photo;
+        currentDetailTab = 'vision';
+        const layout = document.getElementById('detailLayout');
+        layout.classList.add('open');
+        renderDetailContent();
+        window.location.hash = 'photos';
+    }
+
+    function closeDetail() {
+        currentDetailPhoto = null;
+        document.getElementById('detailLayout').classList.remove('open');
+    }
+
+    function switchDetailTab(tab) {
+        currentDetailTab = tab;
+        document.querySelectorAll('.detail-tab').forEach(t => {
+            const isActive = t.dataset.tab === tab;
+            t.classList.toggle('active', isActive);
+            t.setAttribute('aria-selected', isActive);
+        });
+        document.querySelectorAll('.detail-tab-panel').forEach(p => p.classList.toggle('active', p.id === 'dtab-' + tab));
+    }
+
+    function renderDetailContent() {
+        const photo = currentDetailPhoto;
+        if (!photo) return;
+        const kimi = getKimiResult(photo);
+        const v = kimi?.vision || {};
+        const caption = getCaptionText(kimi);
+        const hashtags = kimi?.caption?.hashtags || '';
+        const seeds = getSeedsForPhoto(photo);
+        const sp = getSeriesPieceForPhoto(photo);
+        const hasFramed = !!framedMap[photo];
+        const isSelected = captionWinners[photo] === kimi?.model;
+        const ideas = parseIdeas(kimi?.caption_reasoning);
+        const colors = [...(v.primary_colors || []), ...(v.secondary_colors || [])].slice(0, 4);
+        const surfaces = (v.surface_qualities || []).slice(0, 5);
+
+        const panel = document.getElementById('detailPanel');
+        panel.innerHTML = `
+            <div class="detail-header">
+                <div class="detail-title">${photo}</div>
+                <button class="detail-close" onclick="closeDetail()">&times;</button>
+            </div>
+            <div class="detail-body">
+                <div class="detail-img-wrap">
+                    <img src="/images/${photo}" class="detail-img" id="detailImg" alt="${photo}" onerror="this.style.display='none'">
+                    ${hasFramed ? `<img src="${framedMap[photo]}" class="detail-img" id="detailImgFramed" alt="${photo} framed" style="display:none">` : ''}
+                </div>
+                ${hasFramed ? `<div class="frame-toggle">
+                    <button class="frame-toggle-btn active" id="ftOriginal" onclick="toggleDetailFrame('original')">Original</button>
+                    <button class="frame-toggle-btn" id="ftFramed" onclick="toggleDetailFrame('framed')">Framed</button>
+                </div>` : ''}
+
+                <div class="detail-tabs" role="tablist" aria-label="Photo detail tabs">
+                    <button class="detail-tab ${currentDetailTab==='vision'?'active':''}" role="tab" aria-selected="${currentDetailTab==='vision'}" aria-controls="dtab-vision" data-tab="vision" onclick="switchDetailTab('vision')">Vision</button>
+                    <button class="detail-tab ${currentDetailTab==='caption'?'active':''}" role="tab" aria-selected="${currentDetailTab==='caption'}" aria-controls="dtab-caption" data-tab="caption" onclick="switchDetailTab('caption')">Caption</button>
+                    ${sp ? `<button class="detail-tab ${currentDetailTab==='worldbuilding'?'active':''}" role="tab" aria-selected="${currentDetailTab==='worldbuilding'}" aria-controls="dtab-worldbuilding" data-tab="worldbuilding" onclick="switchDetailTab('worldbuilding')">Worldbuilding</button>` : ''}
+                    <button class="detail-tab ${currentDetailTab==='seeds'?'active':''}" role="tab" aria-selected="${currentDetailTab==='seeds'}" aria-controls="dtab-seeds" data-tab="seeds" onclick="switchDetailTab('seeds')">Seeds (${seeds.length})</button>
+                </div>
+
+                <div class="detail-tab-panel ${currentDetailTab==='vision'?'active':''}" id="dtab-vision" role="tabpanel" aria-label="Vision">
+                    <div class="vision-tags">
+                        <span class="tag tag-piece">${v.piece_type || 'unknown'}</span>
+                        <span class="tag tag-glaze">${v.glaze_type || 'unknown'}</span>
+                    </div>
+                    ${surfaces.length > 0 ? `<div class="surface-qualities">${surfaces.map(s => `<span class="surface-tag">${s}</span>`).join('')}</div>` : ''}
+                    ${colors.length > 0 ? `<div class="surface-qualities">${colors.map(c => `<span class="surface-tag" style="background:var(--bg)">${c}</span>`).join('')}</div>` : ''}
+                    ${(kimi?.vision_reasoning || '').substring(0, 200) ? `<div style="font-size:var(--t-xs);color:var(--text-faint);margin-top:var(--space-3);line-height:1.6">${(kimi?.vision_reasoning || '').substring(0, 200)}...</div>` : ''}
+                </div>
+
+                <div class="detail-tab-panel ${currentDetailTab==='caption'?'active':''}" id="dtab-caption" role="tabpanel" aria-label="Caption">
+                    <div class="detail-caption-text">${caption}</div>
+                    ${hashtags ? `<div style="color:var(--accent-text);font-size:var(--t-xs);margin-bottom:var(--space-3)">${hashtags}</div>` : ''}
+                    ${ideas.length > 0 ? `<details style="margin-top:var(--space-3)">
+                        <summary style="cursor:pointer;font-size:var(--t-sm);color:var(--text-muted)"><span style="background:var(--accent);color:white;padding:2px 8px;border-radius:10px;font-size:10px">${ideas.length}</span> Caption Ideas</summary>
+                        <div style="margin-top:var(--space-2);font-size:var(--t-sm);color:var(--text-muted)">${ideas.map(i => `<p><strong>${i.type}:</strong> ${i.text}</p>`).join('')}</div>
+                    </details>` : ''}
+                </div>
+
+                ${sp ? `<div class="detail-tab-panel ${currentDetailTab==='worldbuilding'?'active':''}" id="dtab-worldbuilding" role="tabpanel" aria-label="Worldbuilding">
+                    <div class="wb-section">
+                        <div class="wb-planet-name">${sp.planet_name}</div>
+                        <div class="detail-field"><div class="detail-field-label">Orbital Data</div><div class="detail-field-value">${(sp.orbital_data || '').replace(/\\n/g, '<br>')}</div></div>
+                        <div class="detail-field"><div class="detail-field-label">Formation History</div><div class="detail-field-value">${sp.formation_history || ''}</div></div>
+                        <div class="wb-caption">${sp.generated_caption || ''}</div>
+                    </div>
+                </div>` : ''}
+
+                <div class="detail-tab-panel ${currentDetailTab==='seeds'?'active':''}" id="dtab-seeds" role="tabpanel" aria-label="Seeds">
+                    <div class="seeds-section">
+                        <div class="seeds-list">${seeds.map(s => `<span class="seed-chip" ondblclick="editSeed(${s.id}, this, '${photo}')"><span class="seed-text">${s.seed_text}</span><span class="delete-seed" onclick="deleteSeed(${s.id},'${photo}')">&times;</span></span>`).join('')}</div>
+                        <div class="seed-input-row">
+                            <input type="text" class="seed-input" id="detailSeedInput" placeholder="Add creative association..." onkeypress="if(event.key==='Enter')addSeed('${photo}')">
+                            <button class="seed-btn" onclick="addSeed('${photo}')">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-footer">
+                <button class="btn btn-copy" onclick="copyText(\`${(caption + (hashtags ? '\\n\\n' + hashtags : '')).replace(/`/g, '\\`')}\`)">Copy Caption</button>
+                <button class="btn regenerate" onclick="regenerateCaption('${photo}','${kimi?.model || 'Kimi'}',this)">Regenerate</button>
+                ${!sp ? `<button class="btn" onclick="showAddToSeriesModal('${photo}')">+ Series</button>` : ''}
+                <button class="btn ${isSelected ? 'selected' : ''}" onclick="selectCaption('${photo}','${(kimi?.model || '').replace(/'/g, "\\'")}')">${isSelected ? 'Selected' : 'Select'}</button>
+            </div>
+        `;
+    }
+
+    function toggleDetailFrame(mode) {
+        const orig = document.getElementById('detailImg');
+        const framed = document.getElementById('detailImgFramed');
+        if (!framed) return;
+        document.getElementById('ftOriginal').classList.toggle('active', mode === 'original');
+        document.getElementById('ftFramed').classList.toggle('active', mode === 'framed');
+        orig.style.display = mode === 'original' ? 'block' : 'none';
+        framed.style.display = mode === 'framed' ? 'block' : 'none';
+    }
+
+    // === Filters ===
+    document.querySelectorAll('#photoFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#photoFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderPhotoGrid();
+        });
+    });
+
+    // === Series View ===
+    let seriesRendered = false;
+    function renderSeriesView() {
+        seriesRendered = true;
+        const grid = document.getElementById('seriesGrid');
+        if (allSeries.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><h2>No Series Yet</h2><p>Create a series to group pieces with worldbuilding.</p></div>';
+            return;
+        }
+        grid.innerHTML = allSeries.map(s => `
+            <div class="series-card" onclick="showSeriesDetail(${s.id})">
+                <div class="series-card-name">${s.name}</div>
+                <div class="series-card-desc">${(s.description || '').substring(0, 80)}${(s.description || '').length > 80 ? '...' : ''}</div>
+                <div class="series-card-count">${s.piece_count} piece${s.piece_count !== 1 ? 's' : ''}</div>
+            </div>
+        `).join('');
+    }
+
+    function showSeriesDetail(seriesId) {
+        const series = allSeries.find(s => s.id === seriesId);
+        const pieces = allSeriesPieces.filter(p => p.series_id === seriesId);
+        const detail = document.getElementById('seriesDetail');
+
+        detail.style.display = 'block';
+        detail.innerHTML = `
+            <div class="series-detail-header">
+                <div class="series-detail-title">${series?.name || 'Series'}</div>
+                <div style="display:flex;gap:var(--space-2);align-items:center;">
+                    <button class="btn" onclick="copyAllSeriesCaptions(${seriesId})">Copy All Captions</button>
+                    <button class="btn" onclick="document.getElementById('seriesDetail').style.display='none'">Close</button>
+                </div>
+            </div>
+            <div style="font-size:var(--t-sm);color:var(--text-muted);margin-bottom:var(--space-4)">${series?.description || ''}</div>
+            ${pieces.length === 0 ? '<div class="empty-state"><p>No pieces yet. Add photos from the Photos tab.</p></div>' : `
+                <div class="series-pieces-grid">${pieces.map(p => {
+                    const framedUrl = framedMap[p.photo];
+                    return `<div class="series-piece-card">
+                        <div style="position:relative">
+                            <img src="/images/${p.photo}" class="series-piece-img" alt="${p.photo}" loading="lazy" onerror="this.style.display='none'" id="sp-img-${p.id}">
+                            ${framedUrl ? `<img src="${framedUrl}" class="series-piece-img" alt="${p.photo} framed" style="display:none;position:absolute;top:0;left:0" id="sp-frame-${p.id}" loading="lazy">` : ''}
+                        </div>
+                        <div class="series-piece-info">
+                            <div class="series-piece-planet">${p.planet_name || 'Unnamed'}</div>
+                            <div class="series-piece-photo">${p.photo}</div>
+                            <div class="series-piece-caption">${p.generated_caption || ''}</div>
+                        </div>
+                        <div class="series-piece-actions">
+                            ${framedUrl ? `<button class="piece-btn" onclick="toggleSeriesFrame(${p.id})">Show Frame</button>` : ''}
+                            <button class="piece-btn" onclick="copyText(\`${(p.generated_caption || '').replace(/`/g, '\\`')}\`)">Copy</button>
+                            <button class="piece-btn" onclick="regenerateWorldbuilding('${p.photo}')">Regenerate</button>
+                            <button class="piece-btn" onclick="removeFromSeries(${p.id})">Remove</button>
+                        </div>
+                    </div>`;
+                }).join('')}</div>
+            `}
+        `;
+        detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function toggleSeriesFrame(pieceId) {
+        const img = document.getElementById('sp-img-' + pieceId);
+        const frame = document.getElementById('sp-frame-' + pieceId);
+        if (!frame) return;
+        const visible = frame.style.display !== 'none';
+        frame.style.display = visible ? 'none' : 'block';
+        img.style.display = visible ? 'block' : 'none';
+        const btn = frame.closest('.series-piece-card').querySelector('.piece-btn');
+        if (btn) btn.textContent = visible ? 'Show Frame' : 'Show Original';
+    }
+
+    function copyAllSeriesCaptions(seriesId) {
+        const pieces = allSeriesPieces.filter(p => p.series_id === seriesId);
+        const text = pieces.map(p => `--- ${p.planet_name} ---\n${p.generated_caption || ''}`).join('\n\n');
+        copyText(text);
+    }
+
+    // === Actions ===
+    function copyText(text) { navigator.clipboard.writeText(text); showToast('Copied!'); }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg; toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function addSeed(photo) {
+        const input = document.getElementById('detailSeedInput');
+        if (!input) { console.error('addSeed: input not found'); return; }
+        const text = input.value.trim();
+        if (!text) return;
+        fetch('/api/idea-seeds', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ photo, seed_text: text }) })
+            .then(r => r.json().then(data => ({ status: r.status, data })))
+            .then(({ status, data }) => {
+                if (status === 409) { input.value = ''; showToast('Already added'); return; }
+                if (!data.success) { showToast('Error: ' + (data.error || 'Unknown')); return; }
+                input.value = ''; showToast('Seed added!'); loadData();
+            })
+            .catch(err => { console.error('addSeed error:', err); showToast('Error: ' + err.message); });
+    }
+
+    function deleteSeed(id, photo) {
+        fetch(`/api/idea-seeds/${id}`, { method: 'DELETE' }).then(() => { showToast('Removed'); loadData(); });
+    }
+
+    function editSeed(id, chip, photo) {
+        const textSpan = chip.querySelector('.seed-text');
+        if (!textSpan || chip.classList.contains('editing')) return;
+        const original = textSpan.textContent;
+        chip.classList.add('editing');
+        textSpan.innerHTML = `<input class="seed-edit-input" value="${original.replace(/"/g, '&quot;')}">`;
+        const input = textSpan.querySelector('input');
+        input.focus(); input.select();
+        let saved = false;
+        const save = () => {
+            if (saved) return; saved = true;
+            const newText = input.value.trim();
+            if (newText && newText !== original) {
+                fetch(`/api/idea-seeds/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ seed_text: newText }) })
+                    .then(r => r.json())
+                    .then(data => { if (data.success) { showToast('Seed updated'); loadData(); } else showToast('Error: ' + (data.error || '')); })
+                    .catch(() => { chip.classList.remove('editing'); textSpan.textContent = original; });
+            } else {
+                chip.classList.remove('editing'); textSpan.textContent = original;
+            }
+        };
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); save(); } if (e.key === 'Escape') { saved = true; chip.classList.remove('editing'); textSpan.textContent = original; } });
+        input.addEventListener('blur', save);
+    }
+
+    function selectCaption(photo, model) {
+        fetch('/api/select-caption', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ photo, model }) })
+            .then(r => r.json())
+            .then(data => { if (data.success) { captionWinners[photo] = model; loadData(); showToast('Selected!'); } else showToast('Error: ' + (data.error || '')); })
+            .catch(err => showToast('Error: ' + err.message));
+    }
+
+    async function regenerateCaption(photo, model, btn) {
+        btn.disabled = true; btn.classList.add('loading'); btn.textContent = 'Regenerating...';
+        const seeds = getSeedsForPhoto(photo);
+        const seedText = seeds.map(s => s.seed_text).join(', ');
+        try {
+            const res = await fetch('/api/regenerate-caption', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ photo, model, seed_text: seedText }) });
+            const data = await res.json();
+            if (data.error) { showToast('Error: ' + data.error); return; }
+            const idx = allData.results.findIndex(r => r.photo === photo && r.model === model);
+            if (idx !== -1) allData.results[idx].caption = data.caption;
+            if (data.model === 'planetary') { const sp = allSeriesPieces.find(p => p.photo === photo || p.photo === photo + '.JPG'); if (sp) sp.generated_caption = data.caption.full_caption; }
+            loadData(); showToast('Regenerated!');
+        } catch (err) { showToast('Error: ' + err.message); } finally { btn.disabled = false; btn.classList.remove('loading'); btn.textContent = 'Regenerate'; }
+    }
+
+    async function generateMissingCaptions() {
+        const btn = document.getElementById('generateAllBtn');
+        btn.classList.add('generating'); btn.disabled = true;
+        try {
+            const res = await fetch('/api/generate-missing-captions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+            const data = await res.json();
+            if (data.generated > 0) { showToast(`Generated ${data.generated} caption${data.generated > 1 ? 's' : ''}!`); loadData(); }
+            else showToast(data.message || 'No captions generated.');
+        } catch (err) { showToast('Error: ' + err.message); } finally { btn.classList.remove('generating'); btn.disabled = false; }
+    }
+
+    // === Series Actions ===
+    function showCreateSeriesModal() {
+        document.getElementById('seriesName').value = '';
+        document.getElementById('seriesDesc').value = '';
+        document.getElementById('createSeriesModal').classList.add('show');
+    }
+
+    function showAddToSeriesModal(photo) {
+        pendingAddPhoto = photo;
+        if (allSeries.length === 0) { showToast('Create a series first!'); return; }
+        const select = document.getElementById('seriesSelect');
+        select.innerHTML = allSeries.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        const results = allData.results.filter(r => r.photo === photo);
+        const vision = mergeVisionData(results);
+        const planetName = generatePlanetName(vision);
+        const seeds = getSeedsForPhoto(photo);
+        const wb = generateWorldbuilding(vision, planetName, seeds);
+        document.getElementById('planetName').value = planetName;
+        document.getElementById('captionPreview').textContent = wb.caption;
+        document.getElementById('worldbuildingPreview').style.display = 'block';
+        document.getElementById('addToSeriesModal').classList.add('show');
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); pendingAddPhoto = null; }
+
+    function createSeries() {
+        const name = document.getElementById('seriesName').value.trim();
+        const desc = document.getElementById('seriesDesc').value.trim();
+        if (!name) { showToast('Enter a series name'); return; }
+        fetch('/api/series', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, description: desc }) })
+            .then(r => r.json()).then(() => { closeModal('createSeriesModal'); showToast('Series created!'); seriesRendered = false; loadData(); })
+            .catch(err => showToast('Error: ' + err.message));
+    }
+
+    function confirmAddToSeries() {
+        if (!pendingAddPhoto) return;
+        const seriesId = document.getElementById('seriesSelect').value;
+        const results = allData.results.filter(r => r.photo === pendingAddPhoto);
+        const vision = mergeVisionData(results);
+        const planetName = document.getElementById('planetName').value;
+        const seeds = getSeedsForPhoto(pendingAddPhoto);
+        const wb = generateWorldbuilding(vision, planetName, seeds);
+        fetch('/api/series-piece', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ series_id: seriesId, photo: pendingAddPhoto, planet_name: planetName, orbital_data: wb.orbitalData, surface_geology: wb.surfaceGeology, formation_history: wb.formationHistory, inhabitants: wb.inhabitants, generated_caption: wb.caption }) })
+            .then(r => r.json()).then(() => { closeModal('addToSeriesModal'); showToast(`Added as ${planetName}!`); loadData(); })
+            .catch(err => showToast('Error: ' + err.message));
+    }
+
+    function removeFromSeries(pieceId) {
+        if (!confirm('Remove from series?')) return;
+        fetch(`/api/series-piece/${pieceId}`, { method: 'DELETE' }).then(r => r.json()).then(data => { if (data.success) { showToast('Removed'); loadData(); } else showToast('Error'); }).catch(err => showToast('Error: ' + err.message));
+    }
+
+    function regenerateWorldbuilding(photo) {
+        const results = allData.results.filter(r => r.photo === photo);
+        const vision = mergeVisionData(results);
+        const piece = getSeriesPieceForPhoto(photo);
+        if (!vision || !piece) return;
+        const seeds = getSeedsForPhoto(photo);
+        const wb = generateWorldbuilding(vision, piece.planet_name, seeds);
+        fetch('/api/series-piece', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ series_id: piece.series_id, photo, planet_name: piece.planet_name, orbital_data: wb.orbitalData, surface_geology: wb.surfaceGeology, formation_history: wb.formationHistory, inhabitants: wb.inhabitants, generated_caption: wb.caption }) })
+            .then(r => r.json()).then(() => { showToast('Regenerated!'); loadData(); })
+            .catch(err => showToast('Error: ' + err.message));
+    }
+
+    // === Worldbuilding Generators ===
+    function mergeVisionData(results) {
+        const visions = results.map(r => r.vision).filter(Boolean);
+        if (visions.length === 0) return null;
+        if (visions.length === 1) return visions[0];
+
+        const merged = {};
+        const ARRAY_FIELDS = ['primary_colors', 'secondary_colors', 'surface_qualities', 'form_attributes', 'hypotheses'];
+        const TEXT_FIELDS = ['color_appearance'];
+        const SCALAR_FIELDS = ['mood', 'technique', 'clay_type', 'glaze_type', 'piece_type', 'firing_state'];
+
+        for (const key of ARRAY_FIELDS) {
+            const union = [];
+            const seen = new Set();
+            for (const v of visions) {
+                const arr = Array.isArray(v[key]) ? v[key] : [];
+                for (const item of arr) {
+                    if (!seen.has(item)) { seen.add(item); union.push(item); }
+                }
+            }
+            if (union.length > 0) merged[key] = union;
+        }
+
+        for (const key of TEXT_FIELDS) {
+            let longest = null;
+            for (const v of visions) {
+                if (v[key] && (!longest || v[key].length > longest.length)) longest = v[key];
+            }
+            if (longest) merged[key] = longest;
+        }
+
+        for (const key of SCALAR_FIELDS) {
+            for (const v of visions) {
+                if (v[key]) { merged[key] = v[key]; break; }
+            }
+        }
+
+        // Copy any remaining fields from first vision
+        for (const v of visions) {
+            for (const key of Object.keys(v)) {
+                if (!(key in merged) && v[key] != null) merged[key] = v[key];
+            }
+        }
+
+        return merged;
+    }
+
+    function generatePlanetName(vision) {
+        const prefixes = { 'blue': ['Aqu','Cerule','Azur','Mari'], 'green': ['Verd','Chlor','Sylv','Terr'], 'brown': ['Ochr','Umbr','Ferr','Lut'], 'rust': ['Ruf','Cinn','Ferr','Rubr'], 'teal': ['Cyan','Teal','Virid','Glau'], 'grey': ['Ciner','Gris','Slat','Pall'], 'bronze': ['Aer','Bron','Aur','Chry'] };
+        const suffixes = { 'gloss': ['ara','ia','na','ra'], 'matte': ['us','um','on','ex'], 'satin': ['is','ys','ix','ax'] };
+        const surfaceBonus = { 'crackle': 'th', 'crawling': 'or', 'variegation': 'ix', 'speckled': 'os' };
+        const pc = (vision?.primary_colors || ['blue'])[0].toLowerCase();
+        const sh = (vision?.surface_qualities || ['gloss'])[0].toLowerCase();
+        const surfs = vision?.surface_qualities || [];
+        const pl = prefixes[pc] || prefixes['blue'], sl = suffixes[sh] || suffixes['gloss'];
+        const pfx = pl[Math.floor(Math.random() * pl.length)];
+        let sfx = sl[Math.floor(Math.random() * sl.length)];
+        for (const s of surfs) { if (surfaceBonus[s.toLowerCase()]) { sfx = surfaceBonus[s.toLowerCase()]; break; } }
+        const gh = (vision?.glaze_type || '').length % 10;
+        return `${pfx}${sfx}-${gh}`;
+    }
+
+    // --- Shared lookups ---
+    const _pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const _has = (arr, val) => (arr || []).some(v => (v || '').toLowerCase().includes(val.toLowerCase()));
+    const _hasExact = (arr, val) => (arr || []).includes(val);
+
+    // --- Step 2: Atmosphere (uses glaze, colors, mood, surfaces) ---
+    function generateAtmosphere(glaze, colors, mood, surfaces) {
+        const gl = (glaze || '').toLowerCase();
+        const moodLow = (mood || 'earthy').toLowerCase();
+        let composition, breathability, suit, smell, temp;
+
+        // Glaze-driven composition and breathability
+        if (gl.includes('copper') || gl.includes('luster')) {
+            composition = 'Copper-sulfate particulates, trace oxygen, heavy metal aerosols';
+            breathability = 'TOXIC'; suit = 'Full hazmat required'; smell = 'Metallic, like licking a battery';
+        } else if (gl.includes('iron') || gl.includes('rust') || _hasExact(colors, 'rust')) {
+            composition = 'Iron oxide dust, carbon dioxide, nitrogen';
+            breathability = 'MARGINAL'; suit = 'Respirator minimum'; smell = 'Like blood and old pennies';
+        } else if (gl.includes('cobalt') || _hasExact(colors, 'cobalt blue')) {
+            composition = 'Cobalt salts aerosolized';
+            breathability = 'DEADLY'; suit = 'Military-grade sealed suit'; smell = 'No odor - dangerously sweet';
+        } else if (gl.includes('shino')) {
+            composition = 'Carbon dioxide, nitrogen, ash particles';
+            breathability = 'SURVIVABLE'; suit = 'Respirator and eye protection'; smell = 'Woodsmoke, ancient fire';
+        } else if (gl.includes('clear') && !gl.includes('blue')) {
+            composition = 'Mostly nitrogen and oxygen, thin aerosol layer';
+            breathability = 'SURVIVABLE'; suit = 'Light respiratory protection'; smell = 'Clean, thin air';
+        } else if (_hasExact(colors, 'chun_blue') || _hasExact(colors, 'denim') || _hasExact(colors, 'seafoam')) {
+            composition = 'Suspended silica particles, trace cobalt salts, nitrogen-rich';
+            breathability = 'MARGINAL'; suit = 'Respirator minimum'; smell = 'Like the air before a storm';
+        } else if (_hasExact(colors, 'mahogany') || _hasExact(colors, 'oxblood') || _hasExact(colors, 'burgundy')) {
+            composition = 'Iron-oxide heavy atmosphere, manganese particulates, low oxygen';
+            breathability = 'MARGINAL'; suit = 'Respirator minimum'; smell = 'Dark and heavy, like old wine cellars';
+        } else if (_hasExact(colors, 'slate') || _hasExact(colors, 'pewter') || _hasExact(colors, 'charcoal')) {
+            composition = 'Silicate dust, iron oxide traces, carbon particles';
+            breathability = 'MARGINAL'; suit = 'Respirator recommended'; smell = 'Like cold stone';
+        } else if (_hasExact(colors, 'tan') || _hasExact(colors, 'cream') || _hasExact(colors, 'oatmeal')) {
+            composition = 'Carbon dioxide, nitrogen, calcium particulates';
+            breathability = 'SURVIVABLE'; suit = 'Respirator and eye protection'; smell = 'Warm, like sun-baked clay';
+        } else if (_hasExact(colors, 'walnut') || _hasExact(colors, 'chestnut') || _hasExact(colors, 'chocolate') || _hasExact(colors, 'cocoa')) {
+            composition = 'Organic decay compounds, nitrogen, methane traces';
+            breathability = 'MARGINAL'; suit = 'Respirator minimum'; smell = 'Rich earth, turned soil, faint sweetness';
+        } else if (_hasExact(colors, 'garnet') || _hasExact(colors, 'bronze')) {
+            composition = 'Metallic particulates, copper and manganese aerosols';
+            breathability = 'TOXIC'; suit = 'Full hazmat required'; smell = 'Sharp, metallic tang';
+        } else if (_hasExact(colors, 'ice_blue')) {
+            composition = 'Thin atmosphere, suspended ice crystals, minimal gases';
+            breathability = 'UNKNOWN'; suit = 'Full environmental suit'; smell = 'No scent - too thin to carry molecules';
+        } else if (_hasExact(colors, 'olive') || _hasExact(colors, 'terracotta')) {
+            composition = 'Iron and magnesium oxides, organic compounds, moderate oxygen';
+            breathability = 'SURVIVABLE'; suit = 'Light respiratory protection'; smell = 'Like Mediterranean hillsides at dusk';
+        } else if (_hasExact(colors, 'earth tones')) {
+            composition = 'Mixed mineral particulates, moderate nitrogen-oxygen balance';
+            breathability = 'SURVIVABLE'; suit = 'Light respiratory protection'; smell = 'Like walking through an old greenhouse';
+        } else if (_hasExact(colors, 'amber') || _hasExact(colors, 'honey') || _hasExact(colors, 'taupe')) {
+            composition = 'Iron-oxide and organic compounds, moderate oxygen, particulate haze';
+            breathability = 'SURVIVABLE'; suit = 'Light respiratory protection'; smell = 'Warm resin and dry grass';
+        } else {
+            composition = 'Trace minerals, silicate particles';
+            breathability = 'UNKNOWN'; suit = 'Full environmental suit'; smell = 'Unknown';
+        }
+
+        // Mood modulates temperature and volatility
+        if (moodLow === 'dramatic' || moodLow === 'bold') {
+            temp = breathability === 'DEADLY' || breathability === 'TOXIC'
+                ? _pick(['Extreme - 180°C surface temperature swings', 'Violent thermal cycling - 120°C to -40°C', 'Unstable — thermal vents erupt without warning'])
+                : _pick(['Hot and volatile - 42°C with sudden drops', 'Warm but unpredictable - storms form in minutes']);
+        } else if (moodLow === 'cool' || moodLow === 'moody') {
+            temp = _pick(['Cold and still - 8°C', 'Cool and damp - 12°C with persistent fog', 'Crisp and cold - -2°C']);
+        } else if (moodLow === 'warm' || moodLow === 'rustic') {
+            temp = _pick(['Warm and dry - 26°C', 'Comfortable heat - 30°C, low humidity', 'Warm evenings, cool nights - 22°C average']);
+        } else if (moodLow === 'organic' || moodLow === 'vibrant') {
+            temp = _pick(['Temperate and humid - 24°C', 'Warm with life-supporting humidity - 28°C', 'Pleasant and stable - 20°C']);
+        } else if (moodLow === 'modern') {
+            temp = _pick(['Controlled-feeling — stable 18°C', 'Mild and even - 21°C, minimal fluctuation']);
+        } else if (moodLow === 'earthy') {
+            temp = _pick(['Variable — seasons shift unpredictably', 'Moderate - 22°C with mineral dust haze']);
+        } else {
+            temp = 'Variable';
+        }
+
+        // Surface qualities add atmospheric particulates
+        const particulates = [];
+        if (_hasExact(surfaces, 'crackle')) particulates.push('Fine mineral dust rises from fracture networks');
+        if (_hasExact(surfaces, 'carbon_trapping')) particulates.push('Carbon soot drifts from shadow zones');
+        if (_hasExact(surfaces, 'pinholing')) particulates.push('Gas vent emissions create localized plumes');
+        if (_hasExact(surfaces, 'speckled')) particulates.push('Metallic particulates shimmer in suspension');
+        if (_hasExact(surfaces, 'luster')) particulates.push('Crystalline dust catches light at odd angles');
+        if (_hasExact(surfaces, 'breaking')) particulates.push('Debris from contraction events lingers');
+        if (_hasExact(surfaces, 'running')) particulates.push('Mineral runoff creates low-lying chemical mists');
+        if (_hasExact(surfaces, 'flashing')) particulates.push('Intermittent plasma discharge ionizes the air');
+        if (particulates.length > 0) composition += '. ' + _pick(particulates);
+
+        return { classification: `Atmosphere: ${composition}\nBreathability: ${breathability}\nSuit: ${suit}\nTemp: ${temp}\nScent: ${smell}`, breathability, suit, temp, smell, composition };
+    }
+
+    // --- Step 3: Oceans (uses colors, glaze, atmosphere) ---
+    function generateOceans(colors, glaze, atmosphere) {
+        const gl = (glaze || '').toLowerCase();
+        const breathability = (atmosphere?.breathability || 'UNKNOWN').toUpperCase();
+        let types = [];
+
+        // Color-based liquid types
+        if (_hasExact(colors, 'blue') || _hasExact(colors, 'chun_blue') || _hasExact(colors, 'denim') || _hasExact(colors, 'ice_blue')) {
+            types.push(gl.includes('copper')
+                ? 'Copper sulfate solution - impossibly blue. Do not touch.'
+                : gl.includes('shino')
+                    ? 'Ash-tinted mineral pools - reflective, still, and deceptively deep.'
+                    : 'Water with unusual mineral content - technically potable but tastes like licking stone.');
+        }
+        if (_hasExact(colors, 'seafoam')) types.push('Foaming tidal shallows - bioluminescent algae turn the surf pale green at night.');
+        if (_hasExact(colors, 'green') || _hasExact(colors, 'olive')) types.push('Algae-rich shallows - alive and slowly colonizing everything.');
+        if (_hasExact(colors, 'brown') || _hasExact(colors, 'tan') || _hasExact(colors, 'oatmeal')) types.push('Silt-heavy rivers - not water exactly, but it flows like it.');
+        if (_hasExact(colors, 'rust') || _hasExact(colors, 'terracotta')) types.push('Iron oxide suspension - the oceans are literally rust.');
+        if (_hasExact(colors, 'bronze') || _hasExact(colors, 'gold') || _hasExact(colors, 'pewter')) types.push('Metallic salt flats - crystallized mineral deposits reflecting light.');
+        if (_hasExact(colors, 'cream') || _hasExact(colors, 'white')) types.push('Calcium carbonate seas - thick, milk-like liquid.');
+        if (_hasExact(colors, 'grey') || _hasExact(colors, 'slate') || _hasExact(colors, 'charcoal')) types.push('Volcanic ash runoff - grey slurry rivers.');
+        if (_hasExact(colors, 'mahogany') || _hasExact(colors, 'oxblood') || _hasExact(colors, 'burgundy') || _hasExact(colors, 'garnet')) types.push('Dark mineral-rich waters - deep red-brown, like cooled lava flows.');
+        if (_hasExact(colors, 'walnut') || _hasExact(colors, 'chestnut') || _hasExact(colors, 'chocolate') || _hasExact(colors, 'cocoa')) types.push('Tannin-dark rivers - the color of strong tea, staining everything they touch.');
+        if (_hasExact(colors, 'teal')) types.push('Transitional liquid - chemistry still reacting. Changes color by the hour.');
+        if (_hasExact(colors, 'earth tones')) types.push('Mixed mineral runoff - each river a different color depending on its source geology.');
+        if (types.length === 0) types.push('Unknown liquid composition - sondes do not return.');
+
+        // Atmospheric cross-reference: breathability affects toxicity
+        let toxicity = '';
+        if (breathability === 'TOXIC' || breathability === 'DEADLY') {
+            toxicity = _pick([
+                ' WARNING: Ocean contact is lethal — atmospheric toxins dissolve into all surface liquids.',
+                ' Lethally acidic. Any contact with unprotected skin results in chemical burns within seconds.',
+                ' Atmospheric toxins saturate the water cycle. Nothing that touches the surface survives.'
+            ]);
+            types[types.length - 1] += toxicity;
+        } else if (breathability === 'MARGINAL') {
+            toxicity = _pick([
+                ' Potable only with filtration — dissolved particulates require processing.',
+                ' Needs filtration before consumption. Mineral content is high but not immediately dangerous.',
+                ' Tolerable in small quantities. Long-term exposure not recommended.'
+            ]);
+            types[types.length - 1] += toxicity;
+        } else if (breathability === 'SURVIVABLE') {
+            types[types.length - 1] += _pick([
+                ' Safe to touch — the cleanest liquid on this world.',
+                ' Surprisingly potable. Survey teams refill canteens here.',
+                ' Clean enough to drink. Tastes metallic but harmless.'
+            ]);
+        }
+
+        return { description: types.join('\n\n'), types };
+    }
+
+    // --- Step 4: ColorSource (uses colors, glaze, surfaces, mood) ---
+    function generateColorSource(colors, glaze, surfaces, mood) {
+        const gl = (glaze || '').toLowerCase();
+        const moodLow = (mood || 'earthy').toLowerCase();
+        const origins = {
+            'blue': gl.includes('copper') ? 'Oxidized copper deposits leaching through substrate.' : 'Deep water + silica deposits + depth pressure.',
+            'chun_blue': 'Rare chun crystallization — a geological fluke that should not exist at this scale.',
+            'denim': 'Cobalt-iron oxidation under specific atmospheric pressure. The blue deepens with age.',
+            'ice_blue': 'Suspended ice micro-crystals refracting light through a thin atmosphere.',
+            'seafoam': 'Biological mineral processing — organisms concentrate calcium and copper in their shells.',
+            'green': 'Copper oxidation in a reducing atmosphere.',
+            'olive': 'Iron-magnesium silicates exposed by tectonic uplift. Olives only appear on geological fault lines.',
+            'brown': 'Iron and organic decay. Layers of composted biological material compressed over millennia.',
+            'tan': 'Dried seabeds and evaporite deposits.',
+            'oatmeal': 'Calcium-rich sedimentary deposits from ancient shallow seas.',
+            'cream': 'Volcanic ash + calcium deposits.',
+            'white': 'Pure calcium carbonate crystallization from thermal vent precipitation.',
+            'rust': 'Iron oxide exposure. This world was wounded repeatedly.',
+            'terracotta': 'Iron-rich clay substrate oxidized by sustained atmospheric exposure.',
+            'mahogany': 'Deep iron-manganese oxide deposits. The color of old blood baked into stone.',
+            'oxblood': 'Extreme iron oxidation under high-pressure conditions. Rare — only found near impact sites.',
+            'burgundy': 'Manganese-iron interaction in reducing zones. The chemistry is still not fully understood.',
+            'garnet': 'Aluminum-silicate metamorphism at extreme depth. Brought to surface by volcanic upwelling.',
+            'walnut': 'Organic tannin compounds leached from deep soil layers. The smell carries for kilometers.',
+            'chestnut': 'Iron-rich clay deposits stained by millennia of organic interaction.',
+            'chocolate': 'Dense organic matter compressed with iron oxides. This is decay, fossilized.',
+            'cocoa': 'Manganese-iron carbonate deposits with biological signatures.',
+            'bronze': 'Copper + tin + oxidation state. The metallic sheen comes from crystal alignment.',
+            'teal': 'Transitional chemistry. Colors still reacting.',
+            'slate': 'Iron-silicate compression. The grey comes from pressure, not composition.',
+            'pewter': 'Tin-lead alloy deposits from ancient volcanic activity.',
+            'charcoal': 'Carbon-rich deposits from prolonged reduction atmosphere events.',
+            'earth tones': 'Mixed geological strata — each layer a different epoch of this world\'s history.',
+            'amber': 'Iron-oxide and organic polymerization over millennia. The amber glow comes from fossilized biological resin.',
+            'honey': 'Biological amber deposits — ancient tree resin fossilized under pressure. The color is warmth, trapped.',
+            'taupe': 'Iron-manganese silicates in a specific oxidation state. Taupe only appears where geological stability has persisted for billions of years.'
+        };
+
+        const sources = [];
+        colors.forEach(c => { if (origins[c.toLowerCase()]) sources.push(origins[c.toLowerCase()]); });
+
+        // Surface cross-references
+        if (_hasExact(surfaces, 'crackle')) sources.push('Fracture-released mineral deposits bleed color along fault networks.');
+        if (_hasExact(surfaces, 'luster')) sources.push('Metallic crystallization from reduction firing creates reflective ore veins.');
+        if (_hasExact(surfaces, 'carbon_trapping')) sources.push('Carbon sequestration in surface fractures darkens entire geological zones.');
+        if (_hasExact(surfaces, 'speckled')) sources.push('Impact debris scatters foreign minerals across the surface like confetti.');
+        if (_hasExact(surfaces, 'color_pooling')) sources.push('Mineral pooling concentrates pigments in low-lying areas — the color runs and collects.');
+
+        // Mood flavor
+        if (moodLow === 'dramatic') sources.push('Colors compete for dominance. No single mineral won.');
+        else if (moodLow === 'organic') sources.push('Colors emerged from biological processes — the geology is alive.');
+        else if (moodLow === 'moody') sources.push('Colors shift with the light. By evening, the whole world looks different.');
+        else if (moodLow === 'vibrant') sources.push('Unusually saturated — the mineral chemistry here favors vivid expression.');
+        else if (moodLow === 'earthy') sources.push('Colors settled slowly. What you see is millions of years of patience.');
+
+        return sources.join('\n\n');
+    }
+
+    // --- Step 5: FormationStory (uses vision, name, surfaces, glaze, clay, technique, form, atmosphere) ---
+    function generateFormationStory(vision, name, surfaces, glaze, clay, technique, formAttrs, atmosphere) {
+        const gl = (glaze || '').toLowerCase();
+        const clayLow = (clay || '').toLowerCase();
+        const techLow = (technique || '').toLowerCase();
+        const breathability = (atmosphere?.breathability || 'UNKNOWN').toUpperCase();
+        const surfs = (surfaces || []).map(s => (s || '').toLowerCase());
+        const forms = (formAttrs || []).map(f => (f || '').toLowerCase());
+
+        let story = `${name} is approximately 4.7 billion years old. `;
+
+        // Form → planet scale
+        if (forms.some(f => f.includes('ovoid'))) story += 'A mid-sized terrestrial world — not too large, not too small. ';
+        else if (forms.some(f => f.includes('bulbous') || f.includes('spherical'))) story += 'A massive super-earth with gravity 1.4x standard. Everything here is heavier, slower. ';
+        else if (forms.some(f => f.includes('compact') || f.includes('squat'))) story += 'A dense, high-gravity world compressed by its own mass. Mountains are low and wide. ';
+        else if (forms.some(f => f.includes('flared') || f.includes('shouldered'))) story += 'A world with extreme axial tilt — 47 degrees. Seasons are violent and short. ';
+        else if (forms.some(f => f.includes('necked'))) story += 'A world with a narrow equatorial band separating two distinct hemispheres. ';
+        else if (forms.some(f => f.includes('cylindrical'))) story += 'An unusually elongated world — tidal forces stretched it over eons. ';
+
+        // Technique → formation process
+        if (techLow.includes('wheel')) story += 'Centrifugal formation during accretion gave it an unusual rotational symmetry. ';
+        else if (techLow.includes('hand')) story += 'Irregular accretion — this world formed from chaotic collisions, never achieving orbital balance. ';
+
+        // Clay → substrate
+        if (clayLow.includes('death_valley') || clayLow.includes('iron')) story += 'The substrate is iron-rich volcanic basalt, dark and dense. ';
+        else if (clayLow.includes('stoneware')) story += 'Silicate crystalline bedrock forms the foundation — ancient and stable. ';
+        else if (clayLow.includes('porcelain')) story += 'Fine-grained aluminosilicate substrate — unusually pure for a natural formation. ';
+        else if (clayLow.includes('earthenware')) story += 'Porous iron-rich substrate allows underground water circulation. ';
+
+        // Glaze → geological timeline
+        if (gl.includes('shino')) story += 'A carbon-rich reduction atmosphere persisted for 800 million years, staining everything it touched. ';
+        else if (gl.includes('clear') && !gl.includes('blue')) story += 'Late-stage resurfacing erased most geological history — this is a world reborn. ';
+        else if (gl.includes('copper') || gl.includes('luster')) story += 'Late Heavy Bombardment deposits left copper-rich ore beds across the surface. ';
+        else if (gl.includes('cobalt') || gl.includes('blue')) story += 'Cobalt infusion from an ancient impactor — a single massive collision changed everything. ';
+
+        // Surfaces → geological events
+        if (surfs.includes('crackle')) story += 'The crackle pattern dates to the Late Heavy Bombardment — fractures that never healed. ';
+        if (surfs.includes('crawling')) story += 'The crawling texture has two possible explanations: geological or biological. Survey teams still argue. ';
+        if (surfs.includes('variegation')) story += 'Color variation records atmospheric evolution — each band is a different epoch. ';
+        if (surfs.includes('color_pooling')) story += 'Mineral pooling from a wet geological era left concentrated deposits in every depression. ';
+        if (surfs.includes('carbon_trapping')) story += 'A reducing atmosphere trapped carbon in surface fractures — shadow zones where nothing oxidizes. ';
+        if (surfs.includes('pinholing')) story += 'Volcanic vent networks dot the surface — the world is still outgassing. ';
+        if (surfs.includes('breaking')) story += 'Contraction fractures from cooling split the crust into irregular plates. ';
+        if (surfs.includes('flashing')) story += 'Plasma discharge events scarred the surface — the cause remains unexplained. ';
+        if (surfs.includes('running')) story += 'Glaze flow patterns indicate massive ancient resurfacing events — rivers of molten mineral. ';
+        if (surfs.includes('luster')) story += 'Metallic crystallization occurred under specific pressure conditions that no longer exist. ';
+        if (surfs.includes('speckled')) story += 'Impact debris is scattered across the surface — this world absorbed many hits. ';
+
+        // Atmosphere cross-reference
+        if (breathability === 'TOXIC' || breathability === 'DEADLY') story += 'Ongoing erosion from the hostile atmosphere continues to reshape the surface. ';
+        else if (breathability === 'SURVIVABLE') story += 'Erosion has stabilized — the surface you see today will look the same in a million years. ';
+
+        story += 'What you see is a snapshot of 4 billion years of geological processes.';
+        return story;
+    }
+
+    // --- Step 6: Life (complete rewrite — references ALL prior outputs) ---
+    function generateLife(atmosphere, oceans, formation, glaze, colors, surfaces, mood, formAttrs, clay, technique, hypotheses) {
+        const breathability = (atmosphere?.breathability || 'UNKNOWN').toUpperCase();
+        const moodLow = (mood || 'earthy').toLowerCase();
+        const gl = (glaze || '').toLowerCase();
+        const clayLow = (clay || '').toLowerCase();
+        const techLow = (technique || '').toLowerCase();
+        const forms = (formAttrs || []).map(f => (f || '').toLowerCase());
+        const surfs = (surfaces || []).map(s => (s || '').toLowerCase());
+        const color1 = (colors || [])[0]?.toLowerCase() || 'blue';
+        const oceanTypes = oceans?.types || [];
+        const hasOceans = oceanTypes.length > 0 && !oceanTypes[0].startsWith('Unknown');
+        const hasColorPooling = surfs.includes('color_pooling');
+
+        // Habitability score
+        let habitability = 0;
+        if (breathability === 'SURVIVABLE') habitability += 3;
+        else if (breathability === 'MARGINAL') habitability += 1;
+        if (moodLow === 'organic' || moodLow === 'vibrant') habitability += 2;
+        else if (moodLow === 'moody' || moodLow === 'dramatic') habitability -= 1;
+        if (hasOceans || hasColorPooling) habitability += 1;
+        if (moodLow === 'warm' || moodLow === 'rustic') habitability += 1;
+
+        let plantLife, animalLife, civilization, visitorExperience;
+
+        if (habitability >= 4) {
+            // === RICH LIFE ===
+            // Plants by color
+            const plantByColor = {
+                'blue': 'Bioluminescent kelp-like organisms tower from canyon floors, pulsing with faint light.',
+                'chun_blue': 'Chun-crystal flora grows in fractal patterns — each leaf is a perfect geometric replica of the whole.',
+                'denim': 'Low-growing indigo mosses carpet volcanic slopes. They release a faint blue dust when disturbed.',
+                'seafoam': 'Translucent aquatic plants drift on wind currents — jellyfish-like, rooted in nothing.',
+                'ice_blue': 'Crystalline ice-organisms grow in hexagonal columns, refracting light into prismatic displays.',
+                'green': 'Photosynthetic organisms coat every surface — vertical gardens scale every cliff face.',
+                'olive': 'Tough, leathery vegetation clings to iron-rich soil. Olive-hued leaves reflect excess light.',
+                'brown': 'Fungal networks span kilometers underground. What you see above is just the fruiting bodies.',
+                'tan': 'Drought-resistant scrub with deep taproots that reach underground aquifers.',
+                'oatmeal': 'Pale lichen fields stretch to the horizon, slowly converting rock to soil.',
+                'cream': 'Calcium-shelled organisms build reef-like structures on dry land.',
+                'white': 'Albino flora thrives in shadow zones — it has never seen direct light.',
+                'rust': 'Iron-oxidizing bacteria form vast red mats in standing water. The ground bleeds.',
+                'terracotta': 'Clay-loving organisms build hardened shelters from local sediment.',
+                'mahogany': 'Massive tree-like organisms with dark, iron-hard bark. Their roots split bedrock.',
+                'oxblood': 'Deep-rooted hematite plants draw iron from the soil, their sap runs dark.',
+                'burgundy': 'Manganese-absorbing fungi create burgundy forests that smell of copper.',
+                'garnet': 'Crystalline plant structures that grow in geometric patterns — more mineral than vegetable.',
+                'walnut': 'Tannin-rich forests produce dark, astringent sap. The air smells of old wood.',
+                'chestnut': 'Nut-bearing organisms with chestnut-colored shells. The local food chain depends on them.',
+                'chocolate': 'Dense, dark organic matter — decomposing vegetation layers meters thick.',
+                'cocoa': 'Cocoa-colored lichens that thrive in mineral-rich volcanic soil.',
+                'bronze': 'Copper-accumulating organisms that grow metallic shells. They conduct electricity.',
+                'teal': 'Transitional organisms — part plant, part mineral, still deciding what to become.',
+                'slate': 'Lithophytic organisms that grow directly on stone, slowly dissolving it for nutrients.',
+                'pewter': 'Tin-absorbing lichens that form dull metallic crusts on exposed rock.',
+                'charcoal': 'Carbon-fixing organisms that create charcoal-like deposits as they grow.',
+                'earth tones': 'A patchwork ecosystem — each micro-region supports different vegetation based on soil mineral content.',
+                'amber': 'Resin-producing trees tower over the landscape, their sap slowly fossilizing even as it falls. The ground is sticky.',
+                'honey': 'Golden nectar-producing flora dominates — the air is thick with pollinators and the smell is intoxicating.',
+                'taupe': 'Low, ground-hugging organisms in muted tones. They photosynthesize using infrared light.'
+            };
+            // Mood behavior modifier
+            let plantBehavior = '';
+            if (moodLow === 'dramatic') plantBehavior = ' They grow aggressively, competing for every photon of light.';
+            else if (moodLow === 'moody') plantBehavior = ' They retract at dusk, pulling underground like they are hiding.';
+            else if (moodLow === 'vibrant') plantBehavior = ' They pulse with color changes throughout the day.';
+            else if (moodLow === 'warm') plantBehavior = ' They release warmth — the air around them is measurably hotter.';
+            else if (moodLow === 'organic') plantBehavior = ' They grow in symbiotic networks, sharing nutrients across species.';
+            // Atmosphere adaptation
+            let plantAtmo = '';
+            if (breathability === 'SURVIVABLE') plantAtmo = ' The breathable atmosphere allows them to grow tall and unchecked.';
+            else if (breathability === 'MARGINAL') plantAtmo = ' They filter atmospheric toxins, making the air around them slightly cleaner.';
+            // Soil from clay
+            let plantSoil = '';
+            if (clayLow.includes('death_valley') || clayLow.includes('iron')) plantSoil = ' Iron-rich volcanic soil gives them an unusual red tinge.';
+            else if (clayLow.includes('stoneware')) plantSoil = ' They root deep into silicate bedrock, drawing minerals from stone itself.';
+            plantLife = (plantByColor[color1] || 'Diverse plant life covers the surface — species vary by region.') + plantBehavior + plantAtmo + plantSoil;
+
+            // Animals by color
+            const animalByColor = {
+                'blue': 'Semi-aquatic creatures with iridescent scales navigate the shorelines in synchronized schools.',
+                'chun_blue': 'Translucent organisms drift through the air — whether animal or plant is unclear.',
+                'denim': 'Burrowing creatures with denim-colored carapaces tunnel through volcanic soil.',
+                'seafoam': 'Tidal organisms ride the surf — amphibious, quick, and impossible to catch.',
+                'ice_blue': 'Cold-adapted organisms with antifreeze blood. They move slowly but never stop.',
+                'green': 'Small, quick creatures dart between vegetation — too fast to catalog.',
+                'olive': 'Camouflaged ground-dwellers that match the terrain perfectly. You only see them when they move.',
+                'brown': 'Large, slow-moving herbivores graze on fungal fields. Gentle and enormous.',
+                'tan': 'Swift desert runners with reflective body armor that deflects heat.',
+                'oatmeal': 'Small burrowers that live in colonies beneath the lichen fields.',
+                'cream': 'Filter-feeding organisms that build calcified tubes on every surface.',
+                'white': 'Albino cave-dwellers with no eyes. They navigate by vibration alone.',
+                'rust': 'Iron-hard exoskeleton creatures that feed on oxidizing bacteria. Armored and patient.',
+                'terracotta': 'Clay-colored creatures that blend into the substrate. Predators, but rare.',
+                'mahogany': 'Massive arboreal creatures — slow-moving, intelligent, and deeply territorial.',
+                'oxblood': 'Dark-bodied predators with hemoglobin-rich blood. They hunt by sensing heat.',
+                'burgundy': 'Nocturnal creatures with burgundy fur that absorbs all ambient light.',
+                'garnet': 'Crystalline organisms — mineral structures that move with apparent purpose.',
+                'walnut': 'Hard-shelled creatures that curl into perfect spheres when threatened.',
+                'chestnut': 'Nut-gathering creatures with complex social hierarchies. Tool users.',
+                'chocolate': 'Decomposer organisms that break down organic matter. Essential to the ecosystem.',
+                'cocoa': 'Small, cocoa-colored foragers that live in the canopy of dark forests.',
+                'bronze': 'Metallic-shelled creatures that generate electrical fields. Approach with caution.',
+                'teal': 'Shape-shifting organisms that change color with their environment. Rarely seen twice in the same form.',
+                'slate': 'Lithovores — stone-eating creatures that slowly dissolve rock for sustenance.',
+                'pewter': 'Dense, heavy creatures with pewter-colored hides. They move like liquid metal.',
+                'charcoal': 'Ash-dwelling organisms that feed on carbon deposits. They glow faintly in the dark.',
+                'earth tones': 'A complex food web — dozens of species occupying every ecological niche.',
+                'amber': 'Insects trapped in resin are preserved indefinitely — paleontologists would weep. The local fauna learned to avoid the sticky trees long ago.',
+                'honey': 'Nectar-feeding organisms fill every ecological niche. Something here has evolved to pollinate everything.',
+                'taupe': 'Camouflaged ground-dwellers that match the taupe terrain perfectly. They are nearly impossible to see.'
+            };
+            // Scale from form
+            let animalScale = '';
+            if (forms.some(f => f.includes('small_scale'))) animalScale = ' Everything here is small — compact, efficient, scaled down.';
+            else if (forms.some(f => f.includes('compact') || f.includes('squat'))) animalScale = ' Dense, compact creatures built for high-gravity survival.';
+            else if (forms.some(f => f.includes('bulbous') || f.includes('spherical'))) animalScale = ' Large, rounded creatures — the high gravity favors bulk over height.';
+            else if (forms.some(f => f.includes('flared') || f.includes('shouldered'))) animalScale = ' Creatures with wide, stabilizing frames — built for extreme seasonal shifts.';
+            else if (forms.some(f => f.includes('necked'))) animalScale = ' Long-necked grazers reach vegetation others cannot access.';
+            // Behavior from surfaces
+            let animalBehavior = '';
+            if (surfs.includes('crackle')) animalBehavior = ' They navigate fracture networks with uncanny precision.';
+            else if (surfs.includes('luster')) animalBehavior = ' They are attracted to metallic deposits — some seem to feed on ore.';
+            else if (surfs.includes('crawling')) animalBehavior = ' They leave trails — whether intentional migration or geological effect is debated.';
+            // Ocean connection
+            let animalOcean = '';
+            if (hasOceans && breathability === 'SURVIVABLE') animalOcean = ' Aquatic and terrestrial life share a common ancestor — the boundary between ocean and land is porous here.';
+            animalLife = (animalByColor[color1] || 'Diverse fauna adapted to local conditions — species vary by biome.') + animalScale + animalBehavior + animalOcean;
+
+            // Civilization by mood
+            const civByMood = {
+                'organic': 'A civilization that builds with living materials — their architecture grows, is not built.',
+                'vibrant': 'A colorful, expressive society — every surface is decorated, every space is art.',
+                'dramatic': 'A civilization shaped by catastrophe — they build monuments to survival.',
+                'moody': 'A contemplative people — their cities are quiet, their science is philosophy.',
+                'warm': 'A hospitable culture — visitors are rare but welcomed with elaborate ceremony.',
+                'rustic': 'A practical, grounded people — they build to last and value craft over speed.',
+                'cool': 'A reserved, intellectual society — they record everything, share reluctantly.',
+                'bold': 'An expansionist civilization — they have already claimed three moons.',
+                'modern': 'A technologically sophisticated society — their infrastructure is invisible, integrated into the environment.',
+                'earthy': 'An agricultural civilization that measures time by harvests and seasons.'
+            };
+            // Building method from technique
+            let civBuilding = '';
+            if (techLow.includes('wheel')) civBuilding = ' Their architecture uses centrifugal construction — spinning structures that achieve impossible symmetry.';
+            else if (techLow.includes('hand')) civBuilding = ' Their buildings grow iteratively, each generation adding rooms and passages organically.';
+            // Atmospheric adaptation
+            let civAtmo = '';
+            if (breathability === 'SURVIVABLE') civAtmo = ' The survivable atmosphere allowed open-air construction — their cities sprawl across the surface.';
+            else if (breathability === 'MARGINAL') civAtmo = ' They build enclosed habitats connected by pressurized corridors.';
+            // Formation history connection
+            let civFormation = '';
+            if ((formation || '').includes('Bombardment')) civFormation = ' Ancient defensive architecture suggests the Bombardment shaped their earliest settlements.';
+            else if ((formation || '').includes('resurfacing')) civFormation = ' They built on top of an older, erased world — they sometimes dig up artifacts they cannot explain.';
+            // Hypotheses bridge
+            let civHypotheses = '';
+            const hypArr = hypotheses || [];
+            if (hypArr.length > 0) {
+                const firstHyp = typeof hypArr[0] === 'string' ? hypArr[0].toLowerCase() : '';
+                if (firstHyp.includes('vessel') || firstHyp.includes('vase') || firstHyp.includes('bud')) civHypotheses = ' Vessel culture is central to their identity — they create containers the way other civilizations create tools.';
+                else if (firstHyp.includes('decorative') || firstHyp.includes('artistic') || firstHyp.includes('wall')) civHypotheses = ' Art is not separate from survival here — it is survival.';
+                else if (firstHyp.includes('plate') || firstHyp.includes('serving') || firstHyp.includes('dish')) civHypotheses = ' Shared meals are sacred — their entire social structure revolves around the communal table.';
+                else if (firstHyp.includes('sculptural')) civHypotheses = ' They sculpt their world as much as they inhabit it — form and function are inseparable.';
+            }
+            civilization = (civByMood[moodLow] || civByMood['earthy']) + civBuilding + civAtmo + civFormation + civHypotheses;
+
+            // Visitor experience — immersive paragraph
+            const scent = atmosphere?.smell || 'the air';
+            const temp = atmosphere?.temp || 'the temperature';
+            // Per-piece unique details to prevent identical lore across pieces
+            const topColor = (colors || [])[0] || '';
+            const surfaceNote = surfs.length > 0 ? surfs.slice(0, 2).map(s => {
+                const notes = {
+                    'crackle': 'The ground cracks under your boots like a frozen lake.',
+                    'gloss': 'Everything here reflects. Light doubles back on itself until you cannot tell source from reflection.',
+                    'matte': 'No reflections. Light dies the moment it touches the surface.',
+                    'luster': 'Metallic iridescence shimmers across every surface — the ground glows at sunset.',
+                    'speckled': 'The terrain is stippled with darker deposits, like freckles on ancient skin.',
+                    'flashing': 'Sudden flashes of color erupt from the ground when struck by direct light.',
+                    'textured': 'The surface is rough under your gloves — you can read the geology by touch alone.',
+                    'satin': 'A satin sheen covers everything — not quite matte, not quite glossy. In between.',
+                    'variegated': 'No two steps look the same. The ground shifts color with every angle.',
+                    'carbon.trapping': 'Dark carbon trails vein through the lighter surface like buried lightning.',
+                    'color.pooling': 'Color pools in the low spots — blue in the crevices, bronze on the ridges.',
+                };
+                return notes[s] || '';
+            }).filter(Boolean).join(' ') : '';
+            const uniqueAnchor = [topColor ? `The dominant mineral here is ${topColor.toLowerCase()}.` : '', surfaceNote].filter(Boolean).join(' ');
+
+            if (moodLow === 'organic' || moodLow === 'vibrant') {
+                visitorExperience = `You step off the shuttle and the air hits you — ${scent.toLowerCase()}. ${temp}. ${uniqueAnchor} Life is everywhere: underfoot, overhead, in every crack and crevice. Something moves in your peripheral vision but when you turn, nothing is there. The ground is warm. Somewhere, something is singing. You came here to study minerals. You stay because you cannot leave.`;
+            } else if (moodLow === 'dramatic' || moodLow === 'bold') {
+                visitorExperience = `The landing site is chaotic — ${scent.toLowerCase()}. ${temp}. ${uniqueAnchor} The terrain shifts under your boots. Geological forces are visible in real-time: fractures widening, color migrating, surfaces that look wet but are not. This world is not finished. You are standing inside a process that will take another billion years. The inhabitants watch you from a distance. They are not afraid. They have seen worse.`;
+            } else if (moodLow === 'moody' || moodLow === 'cool') {
+                visitorExperience = `Silence. ${temp}. ${scent.toLowerCase()}. ${uniqueAnchor} The light here is diffused — no sharp shadows, no bright spots. Everything is rendered in soft tones. You feel observed but not threatened. The civilization here does not greet visitors loudly. They leave small offerings outside your habitat overnight — mineral samples, pressed vegetation, a carved stone that fits perfectly in your hand. You cannot tell if this is welcome or warning.`;
+            } else if (moodLow === 'warm' || moodLow === 'rustic') {
+                visitorExperience = `The shuttle door opens and ${scent.toLowerCase()}. ${temp}. ${uniqueAnchor} The ground underfoot is soft — not sand, not soil, something in between. The architecture rises organically from the landscape, as if the planet grew buildings the way it grows mountains. Children — or their equivalent — watch you from doorways. They are not afraid. Someone is cooking something that smells extraordinary. You realize you have been smiling since you landed.`;
+            } else if (moodLow === 'modern' || moodLow === 'earthy') {
+                visitorExperience = `The air here is ${scent.toLowerCase()}. ${temp}. ${uniqueAnchor} The infrastructure is seamless — you cannot tell where the planet ends and the civilization begins. Roads appear to grow from the ground. Structures shift to optimize for light. The technology is invisible because it is everywhere. You feel simultaneously like an explorer and a guest. Someone hands you a container — ceramic, impossibly thin — filled with something warm. You drink it. It tastes like the planet.`;
+            } else {
+                visitorExperience = `${scent}. ${temp}. ${uniqueAnchor} The surface stretches in every direction, textured and varied. You place your hand on the ground and feel warmth — geological processes working beneath you, patient and immense. This world has been here for 4.7 billion years. You have been here for eleven minutes. The proportions feel right.`;
+            }
+
+        } else if (habitability >= 2) {
+            // === MARGINAL LIFE ===
+            plantLife = 'Sparse but adapted — lichens cling to sheltered crevices, converting atmospheric minerals into usable compounds. Growth is measured in millimeters per year.';
+            animalLife = 'Burrowers and shelter-dwellers — creatures that never surface. They navigate by chemical traces left in fractures and tunnels.';
+            civilization = 'Sheltered communities exist in deep fracture networks. They do not build upward — they build inward. Surface expeditions are rare and ceremonial.';
+            const scent = atmosphere?.smell || 'the thin air';
+            const breathNote = breathability === 'MARGINAL' ? 'Your respirator hums constantly.' : breathability === 'UNKNOWN' ? 'You check your seals compulsively.' : '';
+            const marginColor = (colors || [])[0] || '';
+            const marginAnchor = marginColor ? `The ground is streaked with ${marginColor.toLowerCase()}.` : '';
+            visitorExperience = `The surface is hostile — ${scent.toLowerCase()}. ${breathNote} ${atmosphere?.temp || 'Temperature fluctuates unpredictably'}. ${marginAnchor} But in the fractures, in the cracks, in the spaces between rock — there is life. You crouch in a crevice and wait. Something brushes your boot. Small, quick, gone. You are not alone here. You are just not welcome.`;
+        } else {
+            // === EXTREME LIFE ===
+            const microHabitats = [];
+            if (surfs.includes('pinholing')) microHabitats.push('volcanic vent micro-ecosystems');
+            if (surfs.includes('crackle')) microHabitats.push('fracture-dwelling chemosynthetic colonies');
+            if (surfs.includes('carbon_trapping')) microHabitats.push('carbon-rich shadow zone extremophiles');
+            if (surfs.includes('luster')) microHabitats.push('metallic crystal-embedded microorganisms');
+            if (microHabitats.length === 0) microHabitats.push('subsurface chemosynthetic pockets');
+            plantLife = 'No visible plant life. Microbial mats may exist in deep fracture zones.';
+            animalLife = 'None confirmed. Microbial life possible in ' + microHabitats.join(' and ') + '.';
+            civilization = 'None detected. If intelligence exists here, it is not recognizable as such.';
+            const scent = atmosphere?.smell || 'Nothing — the atmosphere is too thin';
+            const extremeColor = (colors || [])[0] || '';
+            const extremeAnchor = extremeColor ? `The terrain is ${extremeColor.toLowerCase()} as far as your visor can resolve.` : '';
+            visitorExperience = `${scent.toLowerCase()}. ${atmosphere?.temp || 'Extreme temperatures'}. ${extremeAnchor} ${breathability === 'TOXIC' || breathability === 'DEADLY' ? 'Your suit alarms have been quiet for twenty minutes. You decide that is worse than the noise.' : 'The silence is absolute. No wind. No geological activity. No signal.'} You kneel and examine a crack in the surface. Inside, something shimmer — ${_pick(microHabitats)}. Life, maybe. You cannot stay long enough to find out. No one could.`;
+        }
+
+        return {
+            plantLife, animalLife, civilization, visitorExperience,
+            fullDescription: `=== WHAT IT FEELS LIKE TO BE THERE ===\n${visitorExperience}\n\n=== INTELLIGENT LIFE ===\n${civilization}\n\n=== ANIMAL LIFE ===\n${animalLife}\n\n=== PLANT LIFE ===\n${plantLife}`
+        };
+    }
+
+    // --- Step 7: RichCaption (uses ALL prior outputs) ---
+    function generateRichCaption(vision, name, atmosphere, oceans, colorSource, life, ideaSeeds = null) {
+        const colors = [...(vision?.primary_colors || []), ...(vision?.secondary_colors || [])];
+        const surfaces = vision?.surface_qualities || [];
+        const mood = (vision?.mood || 'earthy').toLowerCase();
+        const color1 = colors[0]?.toLowerCase() || 'blue';
+        const color2 = colors[1]?.toLowerCase() || 'bronze';
+        const surface1 = surfaces[0]?.toLowerCase() || 'glossy';
+
+        if (ideaSeeds && ideaSeeds.length > 0) {
+            return generateCaptionWithSeeds(vision, name, color1, color2, surface1, surfaces[1]?.toLowerCase() || 'textured', ideaSeeds.map(s => s.seed_text).join(' '));
+        }
+
+        // Expand chemistry mappings to cover all real colors
+        const chemistry = {
+            'slate_blue': 'copper sulfate', 'chun_blue': 'chun crystalline deposits', 'denim': 'cobalt-iron oxides',
+            'ice_blue': 'suspended ice micro-crystals', 'seafoam': 'biomineral calcium-copper compounds',
+            'bronze': 'oxidized copper-tin alloy', 'pewter': 'tin-lead volcanic deposits',
+            'rust': 'iron oxide', 'teal': 'transitional copper carbonates',
+            'mahogany': 'iron-manganese oxides', 'oxblood': 'extreme-pressure hematite',
+            'burgundy': 'manganese-iron reduction compounds', 'garnet': 'aluminum-silicate metamorphic minerals',
+            'walnut': 'tannin-iron organics', 'chestnut': 'iron-rich clay compounds',
+            'chocolate': 'compressed organic iron deposits', 'cocoa': 'manganese-iron carbonates',
+            'olive': 'iron-magnesium silicates', 'terracotta': 'oxidized iron clay',
+            'slate': 'compressed iron-silicate', 'charcoal': 'carbon-rich reduction deposits',
+            'earth tones': 'mixed mineral strata',
+            'amber': 'fossilized biological resin', 'honey': 'biological amber deposits',
+            'taupe': 'iron-manganese silicates'
+        };
+
+        // Expand geoEvent mappings
+        const geoEvent = {
+            'crawling': 'tectonic movement', 'variegation': 'mineral stratification',
+            'crackle': 'thermal shock fractures', 'color_pooling': 'mineral runoff collection',
+            'carbon_trapping': 'reducing atmosphere sequestration', 'pinholing': 'volcanic vent outgassing',
+            'breaking': 'contraction fractures', 'flashing': 'plasma discharge scarring',
+            'running': 'molten mineral flow', 'luster': 'metallic crystallization',
+            'speckled': 'impact debris scatter'
+        };
+
+        const chem1 = chemistry[color1] || `${color1} minerals`;
+        const geo1 = geoEvent[surface1] || surface1;
+
+        // Build atmosphere reference
+        const atmoRef = atmosphere?.smell ? ` The air smells of ${atmosphere.smell.toLowerCase()}.` : '';
+        // Build life reference
+        const hasCiv = life?.civilization && !life.civilization.startsWith('None') && !life.civilization.startsWith('No ');
+        const lifeRef = hasCiv ? ' Someone calls this place home.' : ' No one calls this place home — yet.';
+        // Ocean reference
+        const oceanRef = oceans?.types?.[0] ? ` Liquid exists here: ${oceans.types[0].split('.')[0]}.` : '';
+
+        const captions = [
+            `${name}. The ${color1} zones are ${chem1}. The ${surface1} texture marks ${geo1}.${atmoRef}${lifeRef} What chemistry do you read in its depths?`,
+            `${name} — ${color1} meets ${color2}. ${geo1.charAt(0).toUpperCase() + geo1.slice(1)} shaped the surface.${oceanRef}${lifeRef} What do you think it is waiting for?`,
+            `${name}. ${chem1.charAt(0).toUpperCase() + chem1.slice(1)} creates the ${color1} zones. ${atmosphere?.temp ? atmosphere.temp.split(' - ')[0] + '.' : ''}${lifeRef} What story does the surface tell you?`,
+            `${name}. ${geo1.charAt(0).toUpperCase() + geo1.slice(1)} from ${chem1}. ${oceanRef}The ${mood} mood of this world is palpable.${lifeRef} What would you do if you found it?`
+        ];
+        return captions[Math.floor(Math.random() * captions.length)];
+    }
+
+    function generateCaptionWithSeeds(vision, name, color1, color2, surface1, surface2, seedText) {
+        const themes = { 'memory': 'crystallized into the geology itself', 'time': 'frozen mid-reaction', 'water': 'trapped in crystal lattices', 'light': 'diffracted through mineral clouds', 'fire': 'still radiating from below', 'growth': 'pushing through toxic substrate', 'ancient': 'older than the survey instruments can measure' };
+        const matches = Object.entries(themes).filter(([k]) => seedText.toLowerCase().includes(k));
+        const frame = matches.length > 0 ? matches[0][1] : 'the surface holds something the instruments can\'t quantify';
+        const captions = [
+            `${name}. ${seedText.charAt(0).toUpperCase() + seedText.slice(1)} — that's what the survey team wrote first. ${frame}. What does this world make you want to remember?`,
+            `${name} — ${seedText.charAt(0).toUpperCase() + seedText.slice(1)}. The ${color1} and ${surface1} geology supports it: ${frame}. What does the surface tell you?`
+        ];
+        return captions[Math.floor(Math.random() * captions.length)];
+    }
+
+    // --- Step 8: Orchestrator (dependency-ordered, passes outputs forward) ---
+    function generateWorldbuilding(vision, planetName, ideaSeeds = null) {
+        const colors = [...(vision?.primary_colors || []), ...(vision?.secondary_colors || [])];
+        const surfaces = vision?.surface_qualities || [];
+        const glaze = vision?.glaze_type || '';
+        const mood = vision?.mood || 'earthy';
+        const formAttributes = vision?.form_attributes || [];
+        const clayType = vision?.clay_type || '';
+        const technique = vision?.technique || '';
+        const hypotheses = vision?.hypotheses || [];
+
+        // Generate in dependency order, passing outputs forward
+        const atmosphere = generateAtmosphere(glaze, colors, mood, surfaces);
+        const oceans = generateOceans(colors, glaze, atmosphere);
+        const colorSource = generateColorSource(colors, glaze, surfaces, mood);
+        const formation = generateFormationStory(vision, planetName, surfaces, glaze, clayType, technique, formAttributes, atmosphere);
+        const life = generateLife(atmosphere, oceans, formation, glaze, colors, surfaces, mood, formAttributes, clayType, technique, hypotheses);
+        const caption = generateRichCaption(vision, planetName, atmosphere, oceans, colorSource, life, ideaSeeds);
+
+        return { orbitalData: atmosphere.classification, surfaceGeology: oceans.description, formationHistory: formation, inhabitants: life.fullDescription, caption };
+    }
+
+    // === Init ===
+    handleHash();
+    loadData();
+    </script>
+</body>
+</html>

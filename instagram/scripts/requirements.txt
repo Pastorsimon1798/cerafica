@@ -1,0 +1,19 @@
+# Instagram Auto-Post Dependencies
+# Install with: pip install -r requirements.txt
+
+# Environment
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Browser automation for Meta Business Suite
+playwright>=1.40.0
+
+# AI analysis via OpenRouter (supports GPT-4o, Gemini, Claude, etc.)
+openai>=1.0.0
+
+# Image handling
+Pillow>=10.0.0
+
+# Video processing (frame_video.py)
+numpy>=1.24.0
+rembg>=2.0.50

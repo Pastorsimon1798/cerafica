@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cerafica.com/sitemap.xml

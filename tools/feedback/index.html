@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision + Caption A/B Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a; --fg: #e8e8e8; --muted: #666;
+            --accent: #ff6b35; --card: #151515; --border: #2a2a2a;
+            --kimi: #00d4aa;
+            --success: #00ff88; --warning: #ffaa00; --danger: #ff4444;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .header h1 { font-size: 24px; font-weight: 600; }
+        .header h1 span { color: var(--accent); }
+        .stats-row { display: flex; gap: 24px; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 28px; font-weight: bold; }
+        .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+
+        /* Navigation */
+        .nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .nav-btn { padding: 10px 20px; background: var(--card); border: 1px solid var(--border); color: var(--fg); border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+        .nav-btn:hover { border-color: var(--accent); }
+        .nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+
+        /* Cards */
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-body { padding: 20px; }
+
+        /* Photo Grid */
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 16px; }
+        .photo-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .photo-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .photo-thumbnail { width: 100%; border-radius: 8px 8px 0 0; object-fit: cover; max-height: 250px; }
+        .photo-thumbnail-small { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
+        .photo-thumbnail-large { width: 100%; max-width: 400px; border-radius: 8px; margin-bottom: 16px; }
+
+        .photo-header { display: flex; justify-content: space-between; align-items: center; }
+        .photo-name { font-weight: 600; font-size: 16px; }
+        .disagreement-badge { background: var(--warning); color: #000; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .agreement-badge { background: var(--success); color: #000; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+
+        .model-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .model-box { padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); }
+        .model-box.kimi { border-left: 3px solid var(--kimi); }
+        .model-label { font-size: 11px; font-weight: bold; margin-bottom: 8px; }
+        .model-box.kimi .model-label { color: var(--kimi); }
+
+        .vision-result { font-size: 13px; margin-bottom: 4px; }
+        .vision-result strong { color: var(--accent); }
+        .caption-preview { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* Views */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card); }
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-close { background: none; border: none; color: var(--muted); font-size: 28px; cursor: pointer; line-height: 1; }
+        .modal-close:hover { color: var(--fg); }
+        .modal-body { padding: 24px; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--card); }
+
+        /* Detail View */
+        .detail-section { margin-bottom: 24px; }
+        .detail-section h3 { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+
+        .caption-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .caption-box { padding: 16px; border-radius: 12px; background: rgba(0,0,0,0.4); }
+        .caption-box.kimi { border: 2px solid var(--kimi); }
+        .caption-box.selected { box-shadow: 0 0 0 3px var(--accent); }
+
+        .caption-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .caption-model-label { font-weight: bold; font-size: 14px; }
+        .caption-box.kimi .caption-model-label { color: var(--kimi); }
+
+        .caption-text { font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+        .caption-hook { color: var(--accent); font-weight: 500; }
+
+        /* Rating Widget */
+        .rating-widget { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .rating-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .rating-label { font-size: 12px; color: var(--muted); width: 100px; }
+        .rating-stars { display: flex; gap: 4px; }
+        .star { font-size: 20px; cursor: pointer; color: var(--border); transition: color 0.1s; }
+        .star:hover, .star.active { color: var(--accent); }
+
+        /* Feedback Form */
+        .feedback-section { background: rgba(255,107,53,0.1); padding: 20px; border-radius: 12px; margin-top: 20px; }
+        .feedback-title { font-weight: 600; margin-bottom: 12px; }
+        .feedback-row { margin-bottom: 12px; }
+        .feedback-row label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+        .feedback-row input, .feedback-row textarea, .feedback-row select {
+            width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border);
+            color: var(--fg); border-radius: 8px; font-size: 14px;
+        }
+        .feedback-row input:focus, .feedback-row textarea:focus { outline: none; border-color: var(--accent); }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-secondary { background: var(--border); color: var(--fg); }
+        .btn-success { background: var(--success); color: #000; }
+
+        /* Summary Stats */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .summary-card { text-align: center; padding: 20px; }
+        .summary-value { font-size: 36px; font-weight: bold; }
+        .summary-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+        .summary-card.kimi .summary-value { color: var(--kimi); }
+
+        /* Disagreements Table */
+        .disagreement-table { width: 100%; border-collapse: collapse; }
+        .disagreement-table th, .disagreement-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        .disagreement-table th { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+        .disagreement-table tr:hover { background: rgba(255,255,255,0.02); }
+        .piece-type { padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+        .piece-type.kimi { background: rgba(0,212,170,0.2); color: var(--kimi); }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 40px; color: var(--muted); }
+
+        /* Framed image toggle */
+        .frame-toggle { display: flex; align-items: center; gap: 8px; margin-left: 16px; }
+        .frame-toggle-btn { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--fg); cursor: pointer; font-size: 12px; transition: all 0.2s; }
+        .frame-toggle-btn:hover { border-color: var(--accent); }
+        .frame-toggle-btn.active { background: linear-gradient(135deg, #00FFCC, #00AA88); color: #000; border-color: #00FFCC; font-weight: 600; }
+        .framed-indicator { background: linear-gradient(135deg, #00FFCC, #00AA88); color: #000; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px; }
+
+        /* Hidden utility */
+        .hidden { display: none !important; }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header h1 { font-size: 18px; }
+            .header h1 span { display: none; }
+            .stats-row { gap: 12px; }
+            .stat-value { font-size: 22px; }
+            .stat-label { font-size: 10px; }
+            .nav { gap: 4px; }
+            .nav-btn { padding: 8px 12px; font-size: 12px; }
+            .photo-grid { grid-template-columns: 1fr; }
+            .caption-compare { grid-template-columns: 1fr; }
+            .model-comparison { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .card-body { padding: 12px; }
+            .modal { max-width: 100%; margin: 10px; max-height: 95vh; }
+            .modal-header { padding: 12px 16px; }
+            .modal-body { padding: 16px; }
+            .modal-footer { padding: 12px 16px; flex-wrap: wrap; }
+            .modal-footer .btn { flex: 1; min-width: 100px; }
+            .photo-thumbnail-large { max-width: 100%; }
+            .disagreement-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .disagreement-table { min-width: 500px; }
+            .feedback-section { padding: 12px; }
+            .feedback-row label { font-size: 11px; }
+            .feedback-row input, .feedback-row textarea, .feedback-row select { font-size: 16px; }
+            .btn { padding: 10px 16px; min-height: 44px; }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 16px; }
+            .nav { flex-wrap: wrap; }
+            .nav-btn { flex: 1; min-width: calc(50% - 4px); text-align: center; }
+            .summary-value { font-size: 28px; }
+            .photo-thumbnail { max-height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <h1>🧪 Vision + Caption <span>A/B Test</span></h1>
+                <a href="/pipeline" style="background: linear-gradient(135deg, #8B5A2B, #C9A227); color: #F5F0E6; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                    <span>🔥</span> Pipeline View
+                </a>
+            </div>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value" id="total-photos">--</div>
+                    <div class="stat-label">Photos Tested</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="total-tests">--</div>
+                    <div class="stat-label">Total Runs</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="disagreements-count">--</div>
+                    <div class="stat-label">Disagreements</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <button class="nav-btn active" onclick="showView('overview')">Overview</button>
+            <button class="nav-btn" onclick="showView('photos')">All Photos</button>
+            <button class="nav-btn" onclick="showView('disagreements')">Disagreements</button>
+            <button class="nav-btn" onclick="showView('feedback')">My Feedback</button>
+            <div class="frame-toggle" style="margin-left: auto;">
+                <span style="font-size: 12px; color: var(--muted);">Frame:</span>
+                <button id="frame-toggle-original" class="frame-toggle-btn active" onclick="toggleFramedView()">Original</button>
+                <button id="frame-toggle-framed" class="frame-toggle-btn" onclick="toggleFramedView()">Planetary</button>
+            </div>
+        </nav>
+
+        <!-- Overview View -->
+        <div id="overview-view" class="view active">
+            <div class="summary-grid">
+                <div class="card summary-card kimi">
+                    <div class="summary-value" id="kimi-wins">--</div>
+                    <div class="summary-label">Kimi Preferred</div>
+                </div>
+                <div class="card summary-card">
+                    <div class="summary-value" id="vision-accuracy">--%</div>
+                    <div class="summary-label">Vision Accuracy</div>
+                </div>
+                <div class="card summary-card">
+                    <div class="summary-value" id="feedback-count">--</div>
+                    <div class="summary-label">Feedback Given</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Recent Disagreements</div>
+                </div>
+                <div class="card-body" id="recent-disagreements">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Photos View -->
+        <div id="photos-view" class="view">
+            <div class="photo-grid" id="photo-grid">
+                <div class="empty-state">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Disagreements View -->
+        <div id="disagreements-view" class="view">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Vision Disagreements (Click to Resolve)</div>
+                </div>
+                <div class="card-body" id="disagreements-list">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback View -->
+        <div id="feedback-view" class="view">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Your Feedback History</div>
+                </div>
+                <div class="card-body" id="feedback-list">
+                    <div class="empty-state">No feedback yet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">Photo Details</div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer"></div>
+        </div>
+    </div>
+
+    <script>
+        let testData = null;
+        let feedbackData = [];
+        let currentPhoto = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+        });
+
+        async function loadData() {
+            try {
+                const [testRes, feedbackRes] = await Promise.all([
+                    fetch('/api/test-data'),
+                    fetch('/api/feedback')
+                ]);
+                testData = await testRes.json();
+                feedbackData = await feedbackRes.json();
+
+                // Load framed status for all photos (non-blocking)
+                loadFramedStatus();
+
+                renderOverview();
+                renderPhotos();
+                renderDisagreements();
+                renderFeedback();
+            } catch (err) {
+                console.error('Failed to load data:', err);
+            }
+        }
+
+        function showView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(viewName + '-view').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function getImageUrl(photoName) {
+            // Photo names are like "IMG_4910" - serve from /images/ endpoint
+            return `/images/${photoName}`;
+        }
+
+        // Track framed image status
+        let framedStatus = {};
+        let showFramed = false;
+
+        function checkFramedStatus(photoName) {
+            return fetch(`/api/framed-status?photo=${encodeURIComponent(photoName)}`)
+                .then(r => r.json())
+                .then(data => {
+                    framedStatus[photoName] = data.has_framed;
+                    return data.has_framed;
+                })
+                .catch(() => false);
+        }
+
+        function getImageUrlWithFrame(photoName) {
+            if (showFramed && framedStatus[photoName]) {
+                const baseName = photoName.split('.')[0];
+                return `/framed/${baseName}_planetary.jpg`;
+            }
+            return getImageUrl(photoName);
+        }
+
+        function toggleFramedView() {
+            showFramed = !showFramed;
+            document.getElementById('frame-toggle-original').classList.toggle('active', !showFramed);
+            document.getElementById('frame-toggle-framed').classList.toggle('active', showFramed);
+            // Re-render current view
+            renderOverview();
+            renderPhotos();
+        }
+
+        async function loadFramedStatus() {
+            const photos = getAllPhotos();
+            await Promise.all(photos.map(p => checkFramedStatus(p)));
+            // Update UI to show which photos have framed versions
+            updateFramedIndicators();
+        }
+
+        function updateFramedIndicators() {
+            // Add visual indicators for photos with framed versions
+            // This is called after loadFramedStatus completes
+        }
+
+        function handleImageError(img) {
+            // Hide broken image or show placeholder
+            img.style.display = 'none';
+        }
+
+        function getPhotoResults(photoName) {
+            const results = testData.results.filter(r => r.photo === photoName);
+            return results.find(r => r.model.includes('Kimi'));
+        }
+
+        function getAllPhotos() {
+            const photos = [...new Set(testData.results.map(r => r.photo))];
+            return photos.sort();
+        }
+
+        function getDisagreements() {
+            // No disagreements with single model
+            return [];
+        }
+
+        function renderOverview() {
+            document.getElementById('total-photos').textContent = getAllPhotos().length;
+            document.getElementById('total-tests').textContent = testData.total_tests;
+            document.getElementById('disagreements-count').textContent = getDisagreements().length;
+            document.getElementById('feedback-count').textContent = feedbackData.length;
+
+            // Calculate preferences from feedback
+            const kimiPreferred = feedbackData.filter(f => f.preferred_model === 'Kimi').length;
+            document.getElementById('kimi-wins').textContent = kimiPreferred;
+
+            // Vision accuracy from corrections
+            const correctCount = feedbackData.filter(f => f.vision_correct === 1).length;
+            const totalVision = feedbackData.filter(f => f.vision_correct !== null).length;
+            const accuracy = totalVision > 0 ? Math.round((correctCount / totalVision) * 100) : '--';
+            document.getElementById('vision-accuracy').textContent = accuracy + '%';
+
+            // Recent disagreements (no longer used with single model)
+            const container = document.getElementById('recent-disagreements');
+            container.innerHTML = '<div class="empty-state">Single model view - no disagreements to show</div>';
+        }
+
+        function renderPhotos() {
+            const photos = getAllPhotos();
+            const container = document.getElementById('photo-grid');
+
+            container.innerHTML = photos.map(photo => {
+                const result = getPhotoResults(photo);
+
+                return `
+                    <div class="card photo-card" onclick="openPhotoDetail('${photo}')">
+                        <img src="${getImageUrlWithFrame(photo)}" class="photo-thumbnail" alt="${photo}" onerror="handleImageError(this)" data-photo="${photo}">
+                        <div class="card-body">
+                            <div class="photo-header">
+                                <span class="photo-name">${photo}</span>
+                            </div>
+                            <div class="model-comparison">
+                                <div class="model-box kimi">
+                                    <div class="model-label">KIMI</div>
+                                    <div class="vision-result"><strong>${result?.vision?.piece_type || '---'}</strong> / ${result?.vision?.glaze_type || '---'}</div>
+                                    <div class="caption-preview">${[result?.caption?.hook, result?.caption?.body, result?.caption?.cta].filter(Boolean).join('\n\n') || 'No caption'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderDisagreements() {
+            const disagreements = getDisagreements();
+            const container = document.getElementById('disagreements-list');
+
+            if (disagreements.length === 0) {
+                container.innerHTML = '<div class="empty-state">Single model view - no disagreements to show</div>';
+                return;
+            }
+        }
+
+        function renderFeedback() {
+            const container = document.getElementById('feedback-list');
+            if (feedbackData.length === 0) {
+                container.innerHTML = '<div class="empty-state">No feedback submitted yet. Review photos to give feedback.</div>';
+                return;
+            }
+
+            container.innerHTML = feedbackData.map(f => `
+                <div class="list-item" style="padding: 12px 0; border-bottom: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between;">
+                        <strong>${f.photo}</strong>
+                        <span style="color: var(--muted); font-size: 12px;">${new Date(f.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 13px; color: var(--muted);">
+                        Vision: ${f.vision_correct ? '✓ Correct' : '✗ Incorrect'} |
+                        Caption Rating: ${f.caption_rating || '--'}/5 |
+                        Preferred: ${f.preferred_model || 'N/A'}
+                    </div>
+                    ${f.notes ? `<div style="margin-top: 8px; font-size: 13px;">${f.notes}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function openPhotoDetail(photoName) {
+            currentPhoto = photoName;
+            const result = getPhotoResults(photoName);
+
+            const bodyHtml = `
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <img src="${getImageUrlWithFrame(photoName)}" class="photo-thumbnail-large" alt="${photoName}" onerror="handleImageError(this)" data-photo="${photoName}">
+                </div>
+
+                <div class="detail-section">
+                    <h3>Vision Analysis</h3>
+                    <div class="model-comparison">
+                        <div class="model-box kimi">
+                            <div class="model-label">KIMI</div>
+                            <div><strong>Piece:</strong> ${result?.vision?.piece_type || '---'}</div>
+                            <div><strong>Glaze:</strong> ${result?.vision?.glaze_type || '---'}</div>
+                            <div><strong>Colors:</strong> ${(result?.vision?.primary_colors || []).join(', ')}</div>
+                            <div><strong>Surface:</strong> ${(result?.vision?.surface_qualities || []).join(', ')}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Generated Caption</h3>
+                    <div class="caption-compare">
+                        <div class="caption-box kimi" id="kimi-caption-box">
+                            <div class="caption-header">
+                                <span class="caption-model-label">KIMI</span>
+                            </div>
+                            <div class="caption-text">${[result?.caption?.hook, result?.caption?.body, result?.caption?.cta].filter(Boolean).join('\n\n') || 'No caption generated'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <div class="feedback-title">📝 Your Feedback</div>
+
+                    <div class="feedback-row">
+                        <label>Vision Accuracy</label>
+                        <select id="preferred-vision">
+                            <option value="">-- Select --</option>
+                            <option value="Both">Correct</option>
+                            <option value="Neither">Incorrect</option>
+                        </select>
+                    </div>
+
+                    <div class="feedback-row">
+                        <label>Caption Quality (1-5)</label>
+                        <input type="range" id="caption-rating" min="1" max="5" value="3" style="width: 100%;">
+                        <div style="text-align: center; margin-top: 4px;"><span id="rating-display">3</span>/5</div>
+                    </div>
+
+                    <div class="feedback-row">
+                        <label>Notes (what could be improved?)</label>
+                        <textarea id="feedback-notes" rows="3" placeholder="e.g., 'Hook is strong but glaze description could be more specific'"></textarea>
+                    </div>
+                </div>
+
+                <div class="feedback-section" style="background: rgba(0,212,170,0.1);">
+                    <div class="feedback-title">💡 Idea Seeds</div>
+                    <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
+                        What does this piece remind you of? This will inspire the AI's vision and caption generation.
+                    </p>
+                    <div id="existing-seeds" style="margin-bottom: 12px;"></div>
+                    <div class="feedback-row">
+                        <label>Add your creative association</label>
+                        <textarea id="idea-seed-input" rows="2" placeholder="e.g., 'reminds me of basalt rock formations' or 'looks like it has a mossy forest floor texture'"></textarea>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 8px;" onclick="saveIdeaSeed()">+ Add Seed</button>
+                </div>
+
+                <div class="feedback-section" style="background: rgba(255,107,53,0.15);">
+                    <div class="feedback-title">🎬 Creative Director</div>
+                    <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
+                        <strong>Strong guidance:</strong> When you have a specific theme, series, or concept in mind. This will shape ALL outputs.
+                    </p>
+                    <div id="director-status" style="margin-bottom: 12px;"></div>
+                    <div class="feedback-row">
+                        <label>Your creative direction</label>
+                        <textarea id="director-input" rows="3" placeholder="e.g., 'This is part of my &quot;Geological Strata&quot; series exploring sedimentary layers. Emphasize the horizontal banding and earth tones that evoke ancient rock formations.'"></textarea>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 8px;" onclick="saveCreativeDirector()">Set Direction</button>
+                    <button class="btn btn-secondary" style="margin-top: 8px; margin-left: 8px;" onclick="clearCreativeDirector()">Clear</button>
+                </div>
+            `;
+
+            document.getElementById('modal-title').textContent = photoName;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+            document.getElementById('modal-footer').innerHTML = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-success" onclick="submitFeedback()">Save Feedback</button>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+
+            // Rating slider
+            document.getElementById('caption-rating').addEventListener('input', (e) => {
+                document.getElementById('rating-display').textContent = e.target.value;
+            });
+
+            // Load existing idea seeds and creative director
+            loadIdeaSeeds(photoName);
+            loadCreativeDirector(photoName);
+        }
+
+        async function submitFeedback() {
+            const data = {
+                photo: currentPhoto,
+                preferred_model: 'Kimi',
+                caption_rating: parseInt(document.getElementById('caption-rating').value),
+                vision_correct: document.getElementById('preferred-vision').value === 'Both' ? 1 : 0,
+                notes: document.getElementById('feedback-notes').value
+            };
+
+            try {
+                const res = await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    closeModal();
+                    loadData(); // Refresh
+                }
+            } catch (err) {
+                console.error('Failed to save feedback:', err);
+            }
+        }
+
+        async function loadIdeaSeeds(photoName) {
+            try {
+                const res = await fetch(`/api/idea-seeds?photo=${encodeURIComponent(photoName)}`);
+                const seeds = await res.json();
+                const container = document.getElementById('existing-seeds');
+                if (seeds.length === 0) {
+                    container.innerHTML = '<div style="color: var(--muted); font-size: 12px;">No idea seeds yet</div>';
+                } else {
+                    container.innerHTML = seeds.map(s => `
+                        <div style="background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;">
+                            💭 ${s.seed_text}
+                            <span style="color: var(--muted); font-size: 11px; float: right;">${new Date(s.created_at).toLocaleDateString()}</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error('Failed to load idea seeds:', err);
+            }
+        }
+
+        async function saveIdeaSeed() {
+            const input = document.getElementById('idea-seed-input');
+            const seedText = input.value.trim();
+            if (!seedText) return;
+
+            try {
+                const res = await fetch('/api/idea-seeds', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        photo: currentPhoto,
+                        seed_text: seedText
+                    })
+                });
+                if (res.ok) {
+                    input.value = '';
+                    loadIdeaSeeds(currentPhoto);
+                }
+            } catch (err) {
+                console.error('Failed to save idea seed:', err);
+            }
+        }
+
+        async function loadCreativeDirector(photoName) {
+            try {
+                const res = await fetch(`/api/creative-director?photo=${encodeURIComponent(photoName)}`);
+                const director = await res.json();
+                const statusDiv = document.getElementById('director-status');
+                const input = document.getElementById('director-input');
+
+                if (director && director.direction_text) {
+                    statusDiv.innerHTML = `<div style="background: rgba(255,107,53,0.3); padding: 8px 12px; border-radius: 6px; font-size: 13px;">
+                        <strong>🎬 Active Direction:</strong> ${director.direction_text}
+                    </div>`;
+                    input.value = director.direction_text;
+                } else {
+                    statusDiv.innerHTML = '<div style="color: var(--muted); font-size: 12px;">No active direction - AI will explore freely</div>';
+                    input.value = '';
+                }
+            } catch (err) {
+                console.error('Failed to load creative director:', err);
+            }
+        }
+
+        async function saveCreativeDirector() {
+            const input = document.getElementById('director-input');
+            const directionText = input.value.trim();
+            if (!directionText) return;
+
+            try {
+                const res = await fetch('/api/creative-director', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        photo: currentPhoto,
+                        direction_text: directionText
+                    })
+                });
+                if (res.ok) {
+                    loadCreativeDirector(currentPhoto);
+                }
+            } catch (err) {
+                console.error('Failed to save creative director:', err);
+            }
+        }
+
+        async function clearCreativeDirector() {
+            try {
+                const res = await fetch('/api/creative-director', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        photo: currentPhoto,
+                        direction_text: ''
+                    })
+                });
+                if (res.ok) {
+                    loadCreativeDirector(currentPhoto);
+                }
+            } catch (err) {
+                console.error('Failed to clear creative director:', err);
+            }
+        }
+
+        function openDisagreementResolver(photoName) {
+            currentPhoto = photoName;
+            const result = getPhotoResults(photoName);
+
+            const bodyHtml = `
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <img src="${getImageUrlWithFrame(photoName)}" class="photo-thumbnail-large" alt="${photoName}" onerror="handleImageError(this)" data-photo="${photoName}">
+                </div>
+
+                <div class="detail-section">
+                    <h3>Vision Analysis</h3>
+                    <div class="model-comparison">
+                        <div class="model-box kimi">
+                            <div class="model-label">KIMI SAYS</div>
+                            <div style="font-size: 20px; font-weight: bold; margin: 12px 0;">${result?.vision?.piece_type || '---'}</div>
+                            <div style="font-size: 13px; color: var(--muted);">Glaze: ${result?.vision?.glaze_type || '---'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <div class="feedback-title">🎯 What is the CORRECT answer?</div>
+
+                    <div class="feedback-row">
+                        <label>Correct Piece Type</label>
+                        <select id="correct-piece-type">
+                            <option value="">-- Select Correct Type --</option>
+                            <option value="${result?.vision?.piece_type}">Kimi: ${result?.vision?.piece_type}</option>
+                            <option value="bud_vase">Bud Vase</option>
+                            <option value="vase">Vase</option>
+                            <option value="bowl">Bowl</option>
+                            <option value="cup">Cup</option>
+                            <option value="mug">Mug</option>
+                            <option value="plate">Plate</option>
+                            <option value="planter">Planter</option>
+                            <option value="jar">Jar</option>
+                            <option value="sculpture">Sculpture</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="feedback-row">
+                        <label>Correct Glaze (optional)</label>
+                        <input type="text" id="correct-glaze-type" placeholder="e.g., Shino, Tenmoku, Floating Blue">
+                    </div>
+
+                    <div class="feedback-row">
+                        <label>Notes (why is this the correct answer?)</label>
+                        <textarea id="correction-notes" rows="3" placeholder="e.g., 'The narrow neck clearly indicates bud vase, not bowl'"></textarea>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-title').textContent = `Resolve: ${photoName}`;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+            document.getElementById('modal-footer').innerHTML = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-success" onclick="submitCorrection()">Save Correction</button>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        async function submitCorrection() {
+            const result = getPhotoResults(currentPhoto);
+
+            const data = {
+                photo: currentPhoto,
+                ai_piece_type: result?.vision?.piece_type,
+                ai_glaze_type: result?.vision?.glaze_type,
+                correct_piece_type: document.getElementById('correct-piece-type').value,
+                correct_glaze_type: document.getElementById('correct-glaze-type').value,
+                notes: document.getElementById('correction-notes').value
+            };
+
+            try {
+                const res = await fetch('/api/vision-correction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    closeModal();
+                    loadData();
+                }
+            } catch (err) {
+                console.error('Failed to save correction:', err);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            currentPhoto = null;
+        }
+
+        // Close modal on overlay click or Escape
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>

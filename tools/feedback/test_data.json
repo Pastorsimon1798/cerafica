@@ -1,0 +1,925 @@
+{
+  "total_tests": 17,
+  "generated_at": "2026-03-16T12:35:01.669252",
+  "model": "Kimi K2.5",
+  "results": [
+    {
+      "photo": "IMG_4759.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "studio",
+        "piece_type": "piece",
+        "primary_colors": [
+          "sienna",
+          "chestnut"
+        ],
+        "secondary_colors": [
+          "rust",
+          "umber"
+        ],
+        "glaze_type": null,
+        "color_appearance": "toasted sienna and chestnut base with rust-colored veining and pooling, overlaid with prominent crackle network revealing dark umber beneath",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Handheld crackle-glazed vessel in warm sienna and rust tones",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "crackle",
+          "variegation"
+        ],
+        "piece_count": 3,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "bulbous",
+          "wheel-thrown",
+          "organic",
+          "handheld",
+          "rounded"
+        ],
+        "purpose": "decorative",
+        "product_family": "decor",
+        "hypotheses": [
+          "Collection of mixed forms - bulbous crackle-glazed vessel in foreground with dark glazed cups/bowls visible in background",
+          "Small jar with heavy crackle Shino-type glaze showing sienna and rust variegation",
+          "Bud vase with carbon-trapped glaze and prominent surface crackle network",
+          "Finished stoneware piece with toasted amber glaze and dark speckled clay body",
+          "Wheel-thrown bulbous vessel with glossy crackle surface in warm earth tones"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "1. **Hook:** There's a quiet moment before the kiln claims everything.      **Body:** When sienna clay still holds the memory of the wheel's rhythm, chestnut slip drying to matte perfection. This is the in-between\u2014complete yet completely vulnerable.",
+        "cta": "   **Question:** What's your favorite part of the making process?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Hook:** There's a quiet moment before the kiln claims everything.      **Body:** When sienna clay still holds the memory of the wheel's rhythm, chestnut slip drying to matte perfection. This is the in-between\u2014complete yet completely vulnerable.\n\n   **Question:** What's your favorite part of the making process?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4782.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bowl",
+        "primary_colors": [
+          "olive",
+          "charcoal"
+        ],
+        "secondary_colors": [
+          "chestnut",
+          "slate"
+        ],
+        "glaze_type": null,
+        "color_appearance": "dark olive and charcoal in variegated waves with chestnut breaking at the rim over exposed stoneware clay",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Dark olive bowl with glossy variegated glaze and chestnut rim",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "variegation",
+          "breaking"
+        ],
+        "piece_count": 1,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "flared",
+          "conical",
+          "textured"
+        ],
+        "purpose": "functional",
+        "product_family": "serveware",
+        "hypotheses": [
+          "Bowl with celadon-type glaze - dark olive-green variegated surface with chestnut rim breaking",
+          "Serving bowl with iron-rich reduction glaze - glossy with visible throwing rings",
+          "Stoneware bowl with ash glaze - moss and charcoal tones with exposed clay rim",
+          "Functional bowl with dark variegated glaze - glossy finish with brown breaking at edges",
+          "Wheel-thrown bowl with slate-olive glaze - conical form with textured surface"
+        ],
+        "safety_flags": [
+          "food_safe"
+        ]
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "",
+        "cta": "1. **Technical/Process Hook:** The wheel keeps spinning. Olive and charcoal swirled together in a glassy dance, uneven color telling the story of flame and flux. Can you see where the heat kissed the surface hardest?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Technical/Process Hook:** The wheel keeps spinning. Olive and charcoal swirled together in a glassy dance, uneven color telling the story of flame and flux. Can you see where the heat kissed the surface hardest?\n\n.\n#wheelthrown #ceramicbowl #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicbowl #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4818.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "studio",
+        "piece_type": "collection",
+        "primary_colors": [
+          "terracotta",
+          "sienna"
+        ],
+        "secondary_colors": [],
+        "glaze_type": null,
+        "color_appearance": null,
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Nine bisque-fired terracotta vessels in various forms awaiting glaze",
+        "firing_state": "bisque",
+        "surface_qualities": null,
+        "piece_count": 9,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "wheel_thrown",
+          "throwing_lines",
+          "bowls",
+          "jars",
+          "bottles",
+          "open_and_closed_forms"
+        ],
+        "purpose": "functional",
+        "product_family": null,
+        "hypotheses": [
+          "Collection of mixed forms - bisque fired terracotta vessels with visible throwing lines",
+          "Greenware assortment of bowls and jars - leather hard red clay awaiting first firing",
+          "Bisque ware test collection - various vessel forms for glaze application experiments",
+          "Wheel-thrown vessel collection - unglazed stoneware in warm terracotta tone",
+          "Studio grouping of functional vessels - matte bisque surface ready for glazing"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "1. **Technical/Scientific**: The bisque stage is the last chance for forgiveness. These terracotta forms are headed for the kiln, still porous enough to absorb water but rigid enough to hold their shape. The sienna tones will deepen after firing. Do you prefer working with leather-hard or bisque clay?",
+        "body": "",
+        "cta": "2. **Poetic/Meditative**: Dusty hands and dusty shelves. There's something meditative about the bisque stage\u2014when the wheel-thrown pieces turn from wet earth to terracotta stone, waiting in sienna silence. What part of the making process feels most like meditation to you?",
+        "full_caption": "1. **Technical/Scientific**: The bisque stage is the last chance for forgiveness. These terracotta forms are headed for the kiln, still porous enough to absorb water but rigid enough to hold their shape. The sienna tones will deepen after firing. Do you prefer working with leather-hard or bisque clay?\n\n2. **Poetic/Meditative**: Dusty hands and dusty shelves. There's something meditative about the bisque stage\u2014when the wheel-thrown pieces turn from wet earth to terracotta stone, waiting in sienna silence. What part of the making process feels most like meditation to you?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4821.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "studio",
+        "piece_type": "vase",
+        "primary_colors": [
+          "chocolate",
+          "cocoa"
+        ],
+        "secondary_colors": [],
+        "glaze_type": null,
+        "color_appearance": null,
+        "technique": "handbuilt",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Ribbed chocolate-brown clay vase on wooden bat",
+        "firing_state": "greenware",
+        "surface_qualities": null,
+        "piece_count": 1,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "cylindrical",
+          "ribbed",
+          "textured",
+          "horizontal_striations",
+          "handbuilt"
+        ],
+        "purpose": "functional",
+        "product_family": "decor",
+        "hypotheses": [
+          "Handbuilt cylindrical vase with exposed coil texture in dark chocolate stoneware - greenware state drying on bat",
+          "Extruded clay form with horizontal ribbing, leather-hard and attached to wooden bat for studio drying",
+          "Sculptural cylinder with pronounced striations, unfired dark clay body in process shot",
+          "Tall tumbler or drinking vessel with intentional ribbed surface texture, raw and unglazed",
+          "Test piece demonstrating clay body capabilities, showing extrusion or coil texture in greenware"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "1. **The Fingerprint Archive** (Technical/Intimate) Hook: My fingerprints are in there forever. Body: Building this vase coil by coil, watching the chocolate clay shift from wet to leather-hard. Greenware is that fragile in-between where every touch leaves a memory in the cocoa-colored walls.",
+        "cta": "Question: Do you leave your marks visible or smooth them into oblivion?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **The Fingerprint Archive** (Technical/Intimate) Hook: My fingerprints are in there forever. Body: Building this vase coil by coil, watching the chocolate clay shift from wet to leather-hard. Greenware is that fragile in-between where every touch leaves a memory in the cocoa-colored walls.\n\nQuestion: Do you leave your marks visible or smooth them into oblivion?\n\n.\n#handbuilt #ceramicvase #pottery #longbeachartist",
+        "hashtags": "#handbuilt #ceramicvase #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4896.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "collection",
+        "primary_colors": [
+          "toast",
+          "cream"
+        ],
+        "secondary_colors": [
+          "chestnut",
+          "rust",
+          "buttermilk"
+        ],
+        "glaze_type": null,
+        "color_appearance": "warm cream base with toast and chestnut spiral stripes on vessel, buttermilk sculptural form with rust pooling in carved ridges and prominent crackle network throughout",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Striped bud vase and sculptural shell form with crackle glaze in warm earth tones",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "crackle",
+          "speckled"
+        ],
+        "piece_count": 2,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "necked",
+          "organic",
+          "sculptural",
+          "striped",
+          "ridged",
+          "textured"
+        ],
+        "purpose": "hybrid",
+        "product_family": "decor",
+        "hypotheses": [
+          "Bud vase with Shino-type glaze - cream and toast spiral stripes with iron speckles",
+          "Sculptural shell form with heavy crackle glaze - buttermilk and rust with ridged texture",
+          "Wheel-thrown striped vessel alongside handbuilt organic sculpture - both in warm earth tones",
+          "Cone 10 reduction fired pieces featuring carbon trapping and crackle patterns",
+          "Functional bud vase and decorative shell-form vessel with complementary glaze palettes"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: 7 CAPTION IDEAS ===",
+        "body": "1. **Technical/Process Hook**",
+        "cta": "The crackle pattern emerges as the kiln cools\u2014tension between clay body and surface creating these delicate webs. Each line maps the stress of transformation. Wheel-thrown in toast and cream tones with a glassy finish. Do you prefer your ceramics perfectly smooth or beautifully broken-in?",
+        "full_caption": "=== STEP 1: 7 CAPTION IDEAS ===\n\n1. **Technical/Process Hook**\n\nThe crackle pattern emerges as the kiln cools\u2014tension between clay body and surface creating these delicate webs. Each line maps the stress of transformation. Wheel-thrown in toast and cream tones with a glassy finish. Do you prefer your ceramics perfectly smooth or beautifully broken-in?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4898.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bud_vase",
+        "primary_colors": [
+          "denim",
+          "bronze"
+        ],
+        "secondary_colors": [
+          "copper",
+          "chestnut"
+        ],
+        "glaze_type": null,
+        "color_appearance": "deep chun_blue pooling on the bulbous body with metallic bronze and copper oil spots scattered across the surface, breaking to chestnut and tobacco at the rim and ridges, revealing the iron-speckled clay body at the unglazed foot",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Metallic blue bud vase with bronze oil spots and copper luster",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "luster",
+          "oil_spot"
+        ],
+        "piece_count": 1,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "bulbous",
+          "footed",
+          "flared",
+          "organic"
+        ],
+        "purpose": "functional",
+        "product_family": "decor",
+        "hypotheses": [
+          "Bud vase with oil spot glaze - metallic copper speckles on deep blue base",
+          "Small flanged vessel with Chun Blue type glaze - breaking to brown at edges",
+          "Wheel-thrown decorative vase with crystalline blue glaze - iron-rich clay body visible",
+          "Handheld bulbous vase with variegated denim glaze - carbon trap speckling",
+          "Miniature vase with bronze-lustered blue glaze - exposed chestnut foot"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "1. **Emotional/Earthy Hook**",
+        "cta": "There's something comforting about worn denim and the warmth of aged bronze. This wheel-thrown vessel carries both\u2014earthy, grounded, yet shimmering with a glass-like luster that catches the afternoon light. What small bloom would you tuck into this quiet companion?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Emotional/Earthy Hook**\n\nThere's something comforting about worn denim and the warmth of aged bronze. This wheel-thrown vessel carries both\u2014earthy, grounded, yet shimmering with a glass-like luster that catches the afternoon light. What small bloom would you tuck into this quiet companion?\n\n.\n#wheelthrown #ceramicvase #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicvase #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4901.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "piece",
+        "primary_colors": [
+          "denim",
+          "bronze"
+        ],
+        "secondary_colors": [
+          "chestnut",
+          "slate"
+        ],
+        "glaze_type": null,
+        "color_appearance": "deep denim blue pooling with metallic bronze breaking over speckled chestnut clay body, variegated surface with gloss and satin areas",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Small speckled vessel with metallic blue and bronze glaze surface",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "luster",
+          "variegation"
+        ],
+        "piece_count": 1,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "wheel-thrown",
+          "cylindrical",
+          "flat_rim",
+          "rustic"
+        ],
+        "purpose": "functional",
+        "product_family": "drinkware",
+        "hypotheses": [
+          "Small cup with crystalline reduction glaze - blue and bronze metallic surface with speckled texture",
+          "Tea bowl with layered Chun and Shino glazes - variegated denim and copper tones over dark clay",
+          "Tumbler with death valley clay body - high-fire reduction with luster highlights and carbon trapping",
+          "Handheld vessel with oil spot glaze characteristics - dark base with crystalline blue and bronze breaking",
+          "Small bowl with gloss and satin glaze variation - organic texture with metallic sheen"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "1. **Poetic/Visual**   Where the ocean meets the shore at golden hour. Denim blues sinking into bronze warmth, frozen in glassy stillness. Wheel-thrown and kissed by fire until the surface sang with luster.",
+        "cta": "Can clay hold the feeling of twilight?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Poetic/Visual**   Where the ocean meets the shore at golden hour. Denim blues sinking into bronze warmth, frozen in glassy stillness. Wheel-thrown and kissed by fire until the surface sang with luster.\n\nCan clay hold the feeling of twilight?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4908.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "piece",
+        "primary_colors": [
+          "chun_blue",
+          "moss"
+        ],
+        "secondary_colors": [
+          "chestnut",
+          "bronze"
+        ],
+        "glaze_type": null,
+        "color_appearance": "vibrant chun_blue pooling in deep cratered recesses with moss_green breaking over chestnut clay body, metallic bronze speckles scattered throughout, glossy wet-looking blue areas contrasting with matte textured green sections",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Volcanic textured vessel with vibrant blue glaze pooling",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "crawling",
+          "gloss",
+          "color_pooling"
+        ],
+        "piece_count": 1,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "cylindrical",
+          "wheel_thrown",
+          "textured",
+          "organic"
+        ],
+        "purpose": "decorative",
+        "product_family": "decor",
+        "hypotheses": [
+          "Small vessel with volcanic crawling glaze - chun_blue pooling in cratered recesses over moss_green and chestnut clay",
+          "Bud vase with layered Shino base and blue overlay - heavy carbon trapping and textured surface",
+          "Wheel-thrown cylindrical form with lava-like glaze texture - variegated blue and green with exposed clay body",
+          "Test piece demonstrating extreme glaze crawling - glossy blue areas contrasting with matte green and brown",
+          "Decorative cup with cratered surface treatment - metallic bronze speckles throughout blue and green glaze"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "1. **Hook**: The chemistry did the painting.",
+        "body": "**Body**: Chun blue beading up over moss, glossy and gravity-defying. Wheel-thrown, fire-touched, completely unplanned.",
+        "cta": "   **Question**: Do you trust the kiln to finish your work?",
+        "full_caption": "1. **Hook**: The chemistry did the painting.\n\n**Body**: Chun blue beading up over moss, glossy and gravity-defying. Wheel-thrown, fire-touched, completely unplanned.\n\n   **Question**: Do you trust the kiln to finish your work?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4908.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "tumbler",
+        "primary_colors": [
+          "chun_blue",
+          "seafoam"
+        ],
+        "secondary_colors": [
+          "chestnut",
+          "bronze"
+        ],
+        "glaze_type": null,
+        "color_appearance": "vivid chun blue pooling with seafoam green patches over chestnut speckled clay, heavy crater texture creating lunar surface with glossy pools in recesses and exposed brown body at foot",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Crater-glazed tumbler in vivid blue and green with textured lunar surface",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "crawling",
+          "gloss",
+          "speckled"
+        ],
+        "piece_count": 1,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "cylindrical",
+          "handheld",
+          "textured",
+          "footed"
+        ],
+        "purpose": "functional",
+        "product_family": "drinkware",
+        "hypotheses": [
+          "Tumbler with crater glaze - vivid chun blue and seafoam green with heavy crawling texture over speckled clay",
+          "Bud vase with layered copper reduction glaze - bubble formation creating lunar surface pattern",
+          "Small cup with death valley clay body - blue and green glaze interaction with exposed chestnut foot",
+          "Handheld vessel with experimental crater glaze - glossy surface with deep pitting and variegated color",
+          "Functional tumbler with variegated chun blue - cone 10 reduction with carbon trapping in recesses"
+        ],
+        "safety_flags": [
+          "food_safe"
+        ]
+      },
+      "captions": {
+        "hook": "=== STEP 1: 7 CAPTION IDEAS ===",
+        "body": "1. **Hook:** Poetic/Elemental   **Body:** Where the ocean forgets to be blue. Chun bleeding into seafoam, that retreating tide of color frozen under glass-like skin. Earthy but weightless. Wheel-thrown, then surrendered to the kiln.",
+        "cta": "**Question:** Can you hear the waves in stillness?",
+        "full_caption": "=== STEP 1: 7 CAPTION IDEAS ===\n\n1. **Hook:** Poetic/Elemental   **Body:** Where the ocean forgets to be blue. Chun bleeding into seafoam, that retreating tide of color frozen under glass-like skin. Earthy but weightless. Wheel-thrown, then surrendered to the kiln.\n\n**Question:** Can you hear the waves in stillness?\n\n.\n#wheelthrown #ceramictumbler #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramictumbler #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4910.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bowl",
+        "primary_colors": [
+          "slate",
+          "denim"
+        ],
+        "secondary_colors": [
+          "cream",
+          "chestnut"
+        ],
+        "glaze_type": null,
+        "color_appearance": "Flowing layers of slate and denim blue pooling in wave-like recesses with cream breaking at high points, contrasting against exposed chestnut clay body",
+        "technique": "handbuilt",
+        "mood": "cool",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Handheld organic bowl with flowing blue wave glaze and exposed clay accent",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "color_pooling",
+          "variegation"
+        ],
+        "piece_count": 1,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "organic",
+          "flat_base",
+          "textured"
+        ],
+        "purpose": "functional",
+        "product_family": "serveware",
+        "hypotheses": [
+          "Small handbuilt dish with flowing ocean-wave glaze in slate blues and cream",
+          "Organic ceramic plate with variegated high-fire glaze pooling over exposed clay foot",
+          "Shallow bowl with layered reduction glazes creating fluid water-like surface texture",
+          "Decorative serving dish with asymmetrical rim and gloss blue-gray glaze breaking to white",
+          "Artisan trinket dish with textured glaze application and unglazed clay accent"
+        ],
+        "safety_flags": [
+          "food_safe"
+        ]
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "",
+        "cta": "1. **Technical/Process**: Handbuilt curves holding glassy depths. The denim-to-slate gradient deepens where it pools, creating shadows you can almost feel. Cool tones fired hot, each thumbprint preserved in reflective silence. What's the first thing you'd reach for to put inside?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Technical/Process**: Handbuilt curves holding glassy depths. The denim-to-slate gradient deepens where it pools, creating shadows you can almost feel. Cool tones fired hot, each thumbprint preserved in reflective silence. What's the first thing you'd reach for to put inside?\n\n.\n#handbuilt #ceramicbowl #pottery #longbeachartist",
+        "hashtags": "#handbuilt #ceramicbowl #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4912.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "detail",
+        "piece_type": "piece",
+        "primary_colors": [
+          "slate",
+          "denim"
+        ],
+        "secondary_colors": [
+          "rust",
+          "chestnut"
+        ],
+        "glaze_type": null,
+        "color_appearance": "slate and denim blues flowing in organic waves over exposed chestnut clay body, with rust breaking at texture points and prominent crackle network throughout",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Crackled fluid glaze with slate blues and rust tones over textured clay",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "crackle",
+          "variegation"
+        ],
+        "piece_count": 1,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "curved",
+          "textured",
+          "organic"
+        ],
+        "purpose": "functional",
+        "product_family": "decor",
+        "hypotheses": [
+          "Detail of curved vessel with fluid crackle glaze showing slate blue and rust variegation",
+          "Bowl with ash-type or Shino-family glaze exhibiting prominent crackle network and color pooling",
+          "Sculptural form with textured iron-rich clay body and flowing denim-blue glaze breaking at edges",
+          "Jar shoulder with high-fire reduction glaze showing carbon trapping and crackle texture",
+          "Vase section with celadon-type glaze over speckled clay with exposed aggregate texture"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "1. **The wheel never lies.** Thrown in one sitting, then left to develop these fine crackled lines under a glossy slate finish. Denim blues settled where the heat lingered longest. Do you prefer your pieces perfectly smooth or beautifully broken-in?",
+        "body": "",
+        "cta": "2. **Like worn jeans and weathered stone.** This wheel-thrown form carries the colors of coastal cliffs and favorite denim, finished with a crackled surface that catches light like morning dew on slate. What everyday textures inspire you most?",
+        "full_caption": "1. **The wheel never lies.** Thrown in one sitting, then left to develop these fine crackled lines under a glossy slate finish. Denim blues settled where the heat lingered longest. Do you prefer your pieces perfectly smooth or beautifully broken-in?\n\n2. **Like worn jeans and weathered stone.** This wheel-thrown form carries the colors of coastal cliffs and favorite denim, finished with a crackled surface that catches light like morning dew on slate. What everyday textures inspire you most?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4915.PNG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bud_vase",
+        "primary_colors": [
+          "denim",
+          "ice_blue"
+        ],
+        "secondary_colors": [
+          "cream",
+          "chestnut"
+        ],
+        "glaze_type": null,
+        "color_appearance": "deep denim blue with crystalline white snowflake formations cascading down to ice blue, breaking to cream at the rim, above exposed chestnut stoneware foot",
+        "technique": "wheel-thrown",
+        "mood": "cool",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Crystalline blue bud vase with white crystal formations and exposed clay foot",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "crystalline",
+          "variegation",
+          "breaking",
+          "satin"
+        ],
+        "piece_count": 1,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "necked",
+          "cylindrical",
+          "footed",
+          "handheld",
+          "rolled"
+        ],
+        "purpose": "decorative",
+        "product_family": "decor",
+        "hypotheses": [
+          "Bud vase with crystalline blue glaze - white crystal formations visible on denim base",
+          "Small necked vessel with layered blue glazes showing variegation and breaking at rim",
+          "Wheel-thrown vessel with high-fire reduction glaze exhibiting snowflake crystalline surface",
+          "Cylindrical bud vase with Chun-type blue glaze transitioning to exposed stoneware foot",
+          "Handheld decorative vessel with textured blue crystalline surface and distinct trimmed foot"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "1.  **Technical/Process:** Thrown slowly on the wheel, this bud vase pooled denim and ice blue into something that looks like frozen water. Micro-crystals bloomed where the heat lingered longest, leaving blotchy fingerprints of the fire across the surface. Can you spot the crystal cluster near the base?",
+        "body": "",
+        "cta": "2.  **Poetic/Atmospheric:** Frozen tide pools in ceramic form. Wheel-thrown stoneware wearing layers of denim and ice, scattered with micro-crystal constellations and soft blotch marks like cloud shadows passing overhead. What does this blue remind you of?",
+        "full_caption": "1.  **Technical/Process:** Thrown slowly on the wheel, this bud vase pooled denim and ice blue into something that looks like frozen water. Micro-crystals bloomed where the heat lingered longest, leaving blotchy fingerprints of the fire across the surface. Can you spot the crystal cluster near the base?\n\n2.  **Poetic/Atmospheric:** Frozen tide pools in ceramic form. Wheel-thrown stoneware wearing layers of denim and ice, scattered with micro-crystal constellations and soft blotch marks like cloud shadows passing overhead. What does this blue remind you of?\n\n.\n#wheelthrown #ceramicvase #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicvase #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4916.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bud_vase",
+        "primary_colors": [
+          "chun_blue",
+          "pewter"
+        ],
+        "secondary_colors": [
+          "oatmeal",
+          "cream"
+        ],
+        "glaze_type": null,
+        "color_appearance": "chun_blue pooling at neck with heavy variegation, transitioning to stormy pewter and steel-gray body, cream breaking at edges over speckled oatmeal clay",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": true,
+        "suggested_hook": "Bulbous bud vase with cascading chun blue glaze over speckled gray body",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "variegation",
+          "breaking",
+          "satin",
+          "speckled"
+        ],
+        "piece_count": 1,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "bulbous",
+          "necked",
+          "organic",
+          "wheel-thrown"
+        ],
+        "purpose": "functional",
+        "product_family": "decor",
+        "hypotheses": [
+          "Bud vase with Chun Blue layered glaze - blue variegation at neck with speckled gray body breaking to cream",
+          "Wheel-thrown bulbous vase with floating blue glaze over Death Valley clay body showing exposed oatmeal foot",
+          "Single bud vase with reduction-fired surface exhibiting satin sheen and carbon trapping speckles throughout",
+          "Small necked vessel with Tom Coleman Clear over Chun Blue over Shino - denim pooling with metallic steel highlights",
+          "Bud vase with organic form showing glaze bubbles/pinholes and variegated blue-to-gray transition"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "1.  **Technical/Process:** The chun blue pooled thicker at the foot, breaking to pewter where the wheel's centrifugal force thinned the walls. Carbon trapping left these blotchy memories across the shoulder. Do you prefer when colors stay put or travel where gravity takes them?",
+        "body": "",
+        "cta": "2.  **Poetic/Nature:** Like rain on slate, the blotchy surface remembers every touch of flame. Chun blue settles into valleys while pewter highlights the ridges, breaking at every edge with intention. Which weather pattern does your favorite ceramic wear?",
+        "full_caption": "1.  **Technical/Process:** The chun blue pooled thicker at the foot, breaking to pewter where the wheel's centrifugal force thinned the walls. Carbon trapping left these blotchy memories across the shoulder. Do you prefer when colors stay put or travel where gravity takes them?\n\n2.  **Poetic/Nature:** Like rain on slate, the blotchy surface remembers every touch of flame. Chun blue settles into valleys while pewter highlights the ridges, breaking at every edge with intention. Which weather pattern does your favorite ceramic wear?\n\n.\n#wheelthrown #ceramicvase #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicvase #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4917.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "collection",
+        "primary_colors": [
+          "umber",
+          "rust"
+        ],
+        "secondary_colors": [
+          "bronze",
+          "copper",
+          "cream"
+        ],
+        "glaze_type": null,
+        "color_appearance": "Deep umber and chocolate base with scattered bronze oil spots and copper metallic highlights, cream breaking through in organic web-like patterns over rust-toned ground with glossy wet sheen",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Textured reduction-fired vessels with metallic oil spot glazing",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "oil_spot",
+          "variegation"
+        ],
+        "piece_count": 3,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "spherical",
+          "bulbous",
+          "organic",
+          "textured"
+        ],
+        "purpose": "decorative",
+        "product_family": "decor",
+        "hypotheses": [
+          "Collection of stoneware vessels with varied reduction glazes including oil spot and crackle textures",
+          "Grouped ceramic jars featuring iron-rich surfaces with bronze crystallization over umber clay bodies",
+          "High-fire pottery with crawling Shino-type glazes showing rust, chocolate, and metallic copper tones",
+          "Rounded ceramic forms with variegated surfaces exhibiting carbon trapping and glossy wet finishes"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "1. **Technical/Process Hook**",
+        "cta": "Reduction firing turned these vessels into mirrors. The oil spot effect catches light like wet pavement after rain\u2014each dot a moment of carbon trapped in glass. Wheel-thrown bodies wearing umber and rust like autumn armor. Do you prefer your surfaces loud or whisper-quiet?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Technical/Process Hook**\n\nReduction firing turned these vessels into mirrors. The oil spot effect catches light like wet pavement after rain\u2014each dot a moment of carbon trapped in glass. Wheel-thrown bodies wearing umber and rust like autumn armor. Do you prefer your surfaces loud or whisper-quiet?\n\n.\n#wheelthrown #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4919.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bud_vase",
+        "primary_colors": [
+          "teal",
+          "chestnut"
+        ],
+        "secondary_colors": [
+          "bronze",
+          "denim"
+        ],
+        "glaze_type": null,
+        "color_appearance": "fluid teal and chun blue swirling over chestnut and caramel with metallic bronze breaking and pooling in recesses",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Organic vessel with swirling teal and bronze metallic glaze",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "variegation",
+          "luster"
+        ],
+        "piece_count": 4,
+        "clay_type": null,
+        "form_attributes": [
+          "organic",
+          "bulbous",
+          "asymmetrical",
+          "necked"
+        ],
+        "purpose": "decorative",
+        "product_family": "decor",
+        "hypotheses": [
+          "Collection of mixed forms with reduction glazes - central piece shows teal and bronze variegation",
+          "Organic bud vase with copper-based glaze - swirling teal and chestnut with metallic luster",
+          "Altered jar with layered chun and shino - high gloss with color pooling",
+          "Sculptural vessel with raku metallic finish - blue-green and bronze carbon trapping",
+          "Handbuilt rock form with crystalline fluid glaze - glossy variegated surface"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===",
+        "body": "",
+        "cta": "1. **Small vessels, big grounding.** Wheel-thrown curves holding teal and chestnut like forest meeting sea. Glassy patches catch morning light differently every hour, patchy and alive. What small object centers your space?",
+        "full_caption": "=== STEP 1: BRAINSTORM 7 CAPTION IDEAS ===\n\n1. **Small vessels, big grounding.** Wheel-thrown curves holding teal and chestnut like forest meeting sea. Glassy patches catch morning light differently every hour, patchy and alive. What small object centers your space?\n\n.\n#wheelthrown #ceramicvase #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicvase #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4920.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "bud_vase",
+        "primary_colors": [
+          "denim",
+          "chestnut"
+        ],
+        "secondary_colors": [
+          "copper",
+          "rust"
+        ],
+        "glaze_type": null,
+        "color_appearance": "variegated denim blue and chestnut brown with metallic copper highlights and scattered rust flecks over iron-speckled clay body",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Bulbous bud vase with variegated blue-purple glaze and iron speckles",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "variegation",
+          "speckled",
+          "satin"
+        ],
+        "piece_count": 4,
+        "clay_type": "death_valley",
+        "form_attributes": [
+          "bulbous",
+          "footed",
+          "wheel-thrown",
+          "organic"
+        ],
+        "purpose": "functional",
+        "product_family": "decor",
+        "hypotheses": [
+          "Bud vase with floating blue reduction glaze - purple and chestnut variegation with iron speckles",
+          "Small bulbous vase with Chun-type glaze - satin surface with slate blue and rust tones",
+          "Wheel-thrown vessel with high-fire reduction glaze - speckled clay body visible at unglazed foot",
+          "Collection of glazed ceramics with central piece showing metallic luster and variegated blue-purple surface"
+        ],
+        "safety_flags": []
+      },
+      "captions": {
+        "hook": "1. **Thrown yesterday, altered today.** The denim and chestnut keep shifting in the light, flecked with iron spots from the clay body. Do you prefer subtle color shifts or bold contrasts?",
+        "body": "",
+        "cta": "2. **Where the river meets the soil.** Denim blues drift into chestnut browns, surface flecked like stone after rain. What small detail catches your eye first?",
+        "full_caption": "1. **Thrown yesterday, altered today.** The denim and chestnut keep shifting in the light, flecked with iron spots from the clay body. Do you prefer subtle color shifts or bold contrasts?\n\n2. **Where the river meets the soil.** Denim blues drift into chestnut browns, surface flecked like stone after rain. What small detail catches your eye first?\n\n.\n#wheelthrown #ceramicvase #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicvase #pottery #longbeachartist"
+      }
+    },
+    {
+      "photo": "IMG_4921.JPG",
+      "model": "Kimi K2.5",
+      "vision": {
+        "content_type": "finished",
+        "piece_type": "jar",
+        "primary_colors": [
+          "rust",
+          "garnet"
+        ],
+        "secondary_colors": [
+          "charcoal",
+          "bronze"
+        ],
+        "glaze_type": null,
+        "color_appearance": "Deep rust and garnet red surface with scattered charcoal carbon traps and fine crackle network throughout, glossy wet sheen with metallic bronze highlights in recessed areas",
+        "technique": "wheel-thrown",
+        "mood": "earthy",
+        "is_process": false,
+        "dimensions_visible": false,
+        "suggested_hook": "Crackled rust-red jar with carbon trapping",
+        "firing_state": "finished",
+        "surface_qualities": [
+          "gloss",
+          "crackle",
+          "carbon_trapping"
+        ],
+        "piece_count": 1,
+        "clay_type": "stoneware",
+        "form_attributes": [
+          "bulbous",
+          "rounded",
+          "shouldered",
+          "organic"
+        ],
+        "purpose": "functional",
+        "product_family": "decor",
+        "hypotheses": [
+          "Bulbous jar with Shino glaze - prominent crackle texture with carbon trapping",
+          "Rounded storage vessel with iron-rich red glaze - glossy surface with dark speckles",
+          "Wheel-thrown jar with reduction-fired rust glaze - bulbous body with unglazed rim",
+          "Ceramic vase with crawling crackle glaze - deep garnet tones with charcoal spots",
+          "Functional jar with carbon-trapped Shino - warm red body with metallic luster highlights"
+        ],
+        "safety_flags": [
+          "food_safe"
+        ]
+      },
+      "captions": {
+        "hook": "1. **Technical/Process**: The wheel threw this form, but the kiln wrote the story. That glossy spiderweb pattern? Total surrender to the fire. Rust and garnet bleeding into each other like autumn leaves pressed between glass. Do you prefer your carbon trapping subtle or dramatic?",
+        "body": "",
+        "cta": "2. **Poetic/Nature**: Earth returns to earth, but first it holds your coffee beans. This jar wears rust and garnet like forest floor after rain, glossy surface catching light in fractured spiderweb lines. Some cracks are worth keeping. What would you store inside?",
+        "full_caption": "1. **Technical/Process**: The wheel threw this form, but the kiln wrote the story. That glossy spiderweb pattern? Total surrender to the fire. Rust and garnet bleeding into each other like autumn leaves pressed between glass. Do you prefer your carbon trapping subtle or dramatic?\n\n2. **Poetic/Nature**: Earth returns to earth, but first it holds your coffee beans. This jar wears rust and garnet like forest floor after rain, glossy surface catching light in fractured spiderweb lines. Some cracks are worth keeping. What would you store inside?\n\n.\n#wheelthrown #ceramicjar #pottery #longbeachartist",
+        "hashtags": "#wheelthrown #ceramicjar #pottery #longbeachartist"
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[build]
+  # No build command needed for static site
+  command = ""
+  publish = "website"
+
+[build.environment]
+  # Node version for functions
+  NODE_VERSION = "20"
+  # Stripe API key (set in GitHub secrets)
+  STRIPE_SECRET_KEY = "${STRIPE_SECRET_KEY}"
+  CERAFICA_DOMAIN = "${CERAFICA_DOMAIN}"
+
+[functions]
+  # Directory containing serverless functions
+  directory = "netlify/functions"
+  
+  # Function settings
+  [functions.create-checkout]
+    # Timeout for checkout creation (max 10s on free tier)
+    timeout = 10
+
+[[redirects]]
+  # Optional: Redirect old checkout flow to new one
+  from = "/stripe/old-checkout.html"
+  to = "/stripe/checkout.html"
+  status = 301
+
+[[headers]]
+  # Security headers for all pages
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  # Allow CORS for the checkout function
+  for = "/.netlify/functions/create-checkout"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
