@@ -190,6 +190,71 @@ function initShop() {
         }
     }
 
+    // Color extraction from product descriptions and materials
+    const COLOR_KEYWORDS = {
+        blue: ['blue', 'cobalt', 'chun', 'ceruleix', 'lazur'],
+        red: ['red', 'copper', 'iron-manganese', 'manganese', 'rust', 'ferruginous'],
+        green: ['green', 'seafoam'],
+        warm: ['amber', 'warm', 'sienna', 'bronze', 'gold'],
+        neutral: ['grey', 'gray', 'slate', 'carbon', 'charcoal', 'anthracite', 'black', 'white'],
+        metallic: ['metallic', 'copper', 'bronze', 'luster', 'chrome']
+    };
+
+    const COLOR_ORDER = ['blue', 'green', 'warm', 'red', 'metallic', 'neutral'];
+
+    function getColorCategory(product) {
+        const text = `${product.description} ${product.materials} ${product.name}`.toLowerCase();
+        for (const color of COLOR_ORDER) {
+            const keywords = COLOR_KEYWORDS[color];
+            if (keywords.some(kw => text.includes(kw))) return color;
+        }
+        return 'neutral';
+    }
+
+    // Parse height in cm from dimensions_cm string
+    function parseHeightCm(product) {
+        const match = product.dimensions_cm.match(/H\s*([\d.]+)/);
+        return match ? parseFloat(match[1]) : 0;
+    }
+
+    // Parse width in cm from dimensions_cm string
+    function parseWidthCm(product) {
+        const match = product.dimensions_cm.match(/W\s*([\d.]+)/);
+        return match ? parseFloat(match[1]) : 0;
+    }
+
+    function getVolume(product) {
+        return parseHeightCm(product) * parseWidthCm(product);
+    }
+
+    function sortProducts(products, sortBy) {
+        const sorted = [...products];
+        switch (sortBy) {
+            case 'price-asc':
+                sorted.sort((a, b) => a.price - b.price);
+                break;
+            case 'price-desc':
+                sorted.sort((a, b) => b.price - a.price);
+                break;
+            case 'size-asc':
+                sorted.sort((a, b) => getVolume(a) - getVolume(b));
+                break;
+            case 'size-desc':
+                sorted.sort((a, b) => getVolume(b) - getVolume(a));
+                break;
+            case 'color':
+                sorted.sort((a, b) => {
+                    const catA = COLOR_ORDER.indexOf(getColorCategory(a));
+                    const catB = COLOR_ORDER.indexOf(getColorCategory(b));
+                    return catA - catB;
+                });
+                break;
+            default:
+                break;
+        }
+        return sorted;
+    }
+
     // Render product cards from data
     function renderProducts(products) {
         const gridInner = document.querySelector('.shop__grid-inner');
@@ -722,9 +787,25 @@ function initShop() {
                 COINBASE_LINKS[p.id] = `https://commerce.coinbase.com/checkout/YOUR_COINBASE_LINK_${p.id}`;
             });
 
-            // Render products and initialize shop
-            renderProducts(products);
+            // Filter to available products only
+            const availableProducts = products.filter(p => p.available && !p.coming_soon);
+
+            // Sort and render
+            let currentSort = 'default';
+            let displayedProducts = sortProducts(availableProducts, currentSort);
+            renderProducts(displayedProducts);
             initShopFunctionality();
+
+            // Sort control
+            const sortSelect = document.getElementById('sort-select');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    currentSort = sortSelect.value;
+                    displayedProducts = sortProducts(availableProducts, currentSort);
+                    renderProducts(displayedProducts);
+                    initShopFunctionality();
+                });
+            }
             // Initialize fade-in animations after products are rendered
             if (typeof initAnimations === 'function') {
                 initAnimations();
