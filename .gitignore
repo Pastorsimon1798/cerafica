@@ -19,8 +19,7 @@ venv/
 *.swp
 *.swo
 
-# Instagram posting packs and reports (generated)
-instagram/posting-packs/
+# Instagram reports (generated)
 instagram/reports/
 
 # Shared framed output (generated media)
