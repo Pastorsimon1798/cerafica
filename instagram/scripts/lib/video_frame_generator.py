@@ -1053,7 +1053,8 @@ class VideoFrameGenerator:
         Clean up the alpha mask from rembg to remove background artifacts.
 
         - alpha_matting already handles edge refinement
-        - Zero out bottom 8% — kills banding wheel that rembg often misses
+        - Fade out bottom 50% — kills banding wheel, coaster and stand that rembg often misses
+        - Uses gradient fade to prevent flickering at the cutoff
         """
         import numpy as np
 
@@ -1061,9 +1062,18 @@ class VideoFrameGenerator:
         alpha = arr[:, :, 3].copy()
         h = alpha.shape[0]
 
-        # Kill the bottom 8% of the frame (banding wheel lives here)
-        bottom_cutoff = int(h * 0.92)
-        alpha[bottom_cutoff:, :] = 0
+        # Create a gradient fade from 100% at 50% height to 0% at 75% height
+        # This cuts off the coaster/stand/turntable while keeping the pottery body
+        fade_start = int(h * 0.50)  # Start fade at 50% down
+        fade_end = int(h * 0.75)    # Fully transparent by 75%
+        
+        for y in range(fade_start, min(fade_end, h)):
+            # Linear gradient: 1.0 at fade_start, 0.0 at fade_end
+            factor = (fade_end - y) / (fade_end - fade_start)
+            alpha[y, :] = (alpha[y, :] * factor).astype(np.uint8)
+        
+        # Zero out everything below fade_end
+        alpha[fade_end:, :] = 0
 
         arr[:, :, 3] = alpha
         return Image.fromarray(arr, mode='RGBA')
