@@ -305,6 +305,43 @@ Production ceramicists price for volume. You're pricing for uniqueness:
 
 ---
 
+## Active Pricing Tiers (Implemented March 2026)
+
+Dimension-based pricing using H x W area (cm²). **Applies to vessels only (bud vases, tumblers, small cups).** Planters, bowls, and other form factors use separate pricing logic.
+
+### Vessel Tiers
+
+| Tier | Area (cm²) | Price | Examples |
+|------|-----------|-------|---------|
+| S (Small) | < 56 | $55 | Cupr-ex-6, Krel-ex-3, Ceruleix-2 |
+| M (Medium) | 56 - 72 | $65 | Cromix-0, Glacix-1, Ignix-5, Nex-un-3 |
+| L (Large) | > 72 | $75 | Bitum-os-5, Pallth-7, Mariix-0, Lazurix-4, Pyr-os-8 |
+| XL | > 110 | $90+ | Future: tall vessels, statement pieces. Price TBD per piece. |
+
+### Non-Vessel Pricing
+
+Planters, bowls, and other form factors require separate pricing because:
+- More clay used per piece (volume, not just footprint)
+- Different perceived value (functional vs. decorative)
+- Different market comparables
+
+**Planters:** Price TBD based on volume and market research when first planter is produced.
+
+**How to price a new vessel:**
+1. Get dimensions from `products.json` (`dimensions_cm` field)
+2. Calculate area: H (cm) x W (cm)
+3. Look up tier from table above
+4. Set `price` field to the tier price
+
+**Tier boundaries chosen because:**
+- Natural clusters in the existing product data
+- $10 gaps between tiers keep prices accessible
+- Aligns with April 2026 market research ($55-125 for one-of-one stoneware vessels)
+- Average price ~$66, room to grow as brand recognition builds
+- XL tier reserved for future larger work
+
+---
+
 ## Next Steps
 
 1. Update product descriptions to emphasize geological glaze materials

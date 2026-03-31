@@ -32,7 +32,7 @@ Shop all pieces at cerafica.com/shop
 ### Pallth-7
 - **Description:** Fracture networks catch the light — each line a fault from an ancient bombardment still exhaling the planet's history.
 - **Materials:** Stoneware, studio glaze
-- **Size:** H 10 cm x W 7.5 cm | **Price:** $70
+- **Size:** H 10 cm x W 7.5 cm | **Price:** $75
 - **Caption (from posting pack):** "The surface is hostile, streaked like old blood and oxidized copper. But in the fractures, in the spaces between rock, something persists."
 
 ### Nex-un-3
@@ -44,19 +44,19 @@ Shop all pieces at cerafica.com/shop
 ### Mariix-0
 - **Description:** Intermittent plasma discharge scars the metallic veins, leaving transient maps we cannot decipher. Cobalt-iron pools in the basins flash under shifting light.
 - **Materials:** Stoneware, studio glaze
-- **Size:** H 9 cm x W 8.5 cm | **Price:** $65
+- **Size:** H 9 cm x W 8.5 cm | **Price:** $75
 - **Caption (from posting pack):** "Mariix-0 glows with a deep, impossible blue. The planet's surface shows mineral pooling in its lowlands and bands of ancient history."
 
 ### Cupr-ex-6
 - **Description:** Metallic veins pulse with copper and bronze luster across stratified canyons. Carbon trapping creates dark speckles across a textured, living surface.
 - **Materials:** Stoneware, studio glaze
-- **Size:** H 8 cm x W 6 cm | **Price:** $65
+- **Size:** H 8 cm x W 6 cm | **Price:** $55
 - **Caption (from posting pack):** "The copper here runs through stratified canyons like something circulatory that forgot it was dead."
 
 ### Glacix-1
 - **Description:** Compression slate meets a crystallized fluke of cobalt blue in the lowlands. Dappled micro-crystalline variegation etched into ridges of deep time.
 - **Materials:** Stoneware, carbon trap shino
-- **Size:** H 9 cm x W 6.5 cm | **Price:** $60
+- **Size:** H 9 cm x W 6.5 cm | **Price:** $65
 - **Caption (from posting pack):** "Compression slate stretches to every horizon, fractured by a crystallized fluke of cobalt blue pooling in the lowlands."
 
 ## Posting Metadata

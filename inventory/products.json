@@ -2,7 +2,7 @@
   {
     "id": "001",
     "name": "Pallth-7",
-    "price": 70,
+    "price": 75,
     "category": "vessels",
     "description": "Fracture networks catch the light \u2014 each line a fault from an ancient bombardment still exhaling the planet's history.",
     "dimensions_cm": "H 10 cm x W 7.5 cm",
@@ -40,7 +40,7 @@
   {
     "id": "003",
     "name": "Ceruleix-2",
-    "price": 60,
+    "price": 55,
     "category": "vessels",
     "description": "Rare chun crystallization pools in tectonic basins. The surface shifts with geological history written in impossible blues and seafoam bands.",
     "dimensions_cm": "H 8.5 cm x W 6.5 cm",
@@ -59,7 +59,7 @@
   {
     "id": "004",
     "name": "Cromix-0",
-    "price": 55,
+    "price": 65,
     "category": "vessels",
     "description": "Silent, stratified war. Metallic veins flash copper and rust across its shoulders, while cobalt-iron pools in the valleys.",
     "dimensions_cm": "H 7.5 cm x W 7.5 cm",
@@ -97,7 +97,7 @@
   {
     "id": "006",
     "name": "Krel-ex-3",
-    "price": 50,
+    "price": 55,
     "category": "vessels",
     "description": "Cobalt-blue canyons run warm with ancient biological amber \u2014 a geological record written in slow-motion.",
     "dimensions_cm": "H 7.5 cm x W 7 cm",
@@ -106,7 +106,7 @@
     "food_safe": true,
     "care": "Dishwasher safe. Hand wash recommended to preserve glaze.",
     "one_of_one": true,
-    "available": false,
+    "available": true,
     "coming_soon": false,
     "has_video": true,
     "video_src": "images/products/krel-ex-3_rotating.mp4",
@@ -154,7 +154,7 @@
   {
     "id": "009",
     "name": "Mariix-0",
-    "price": 65,
+    "price": 75,
     "category": "vessels",
     "description": "Intermittent plasma discharge scars the metallic veins, leaving transient maps we cannot decipher. Cobalt-iron pools in the basins flash under shifting light.",
     "dimensions_cm": "H 9 cm x W 8.5 cm",
@@ -173,7 +173,7 @@
   {
     "id": "010",
     "name": "Cupr-ex-6",
-    "price": 65,
+    "price": 55,
     "category": "vessels",
     "description": "Metallic veins pulse with copper and bronze luster across stratified canyons. Carbon trapping creates dark speckles across a textured, living surface.",
     "dimensions_cm": "H 8 cm x W 6 cm",
@@ -192,7 +192,7 @@
   {
     "id": "011",
     "name": "Glacix-1",
-    "price": 60,
+    "price": 65,
     "category": "vessels",
     "description": "Compression slate meets a crystallized fluke of cobalt blue in the lowlands. Dappled micro-crystalline variegation etched into ridges of deep time.",
     "dimensions_cm": "H 9 cm x W 6.5 cm",
@@ -211,7 +211,7 @@
   {
     "id": "012",
     "name": "Bitum-os-5",
-    "price": 70,
+    "price": 75,
     "category": "vessels",
     "description": "Dense carbon trapping scatters anthracite constellations across a warm sienna ground, with ferruginous breaking at the neck and iron speckling in the recessed basins.",
     "dimensions_cm": "H 11.25 cm x W 6.5 cm",
@@ -220,7 +220,7 @@
     "food_safe": true,
     "care": "Dishwasher safe. Hand wash recommended to preserve glaze.",
     "one_of_one": true,
-    "available": false,
+    "available": true,
     "coming_soon": false,
     "has_video": true,
     "video_src": "images/products/bitum-os-5_rotating.mp4",
