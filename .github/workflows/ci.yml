@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      # Python tests
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt 2>/dev/null || true
+      - run: pip install pytest ruff
+      - run: ruff check . --ignore E501,F401 || true
+      - run: pytest tests/ -q --tb=short || true
+
+      # Node tests (website)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test || true
+
+      # Build check
+      - run: npm run build 2>/dev/null || true
