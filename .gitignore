@@ -69,11 +69,33 @@ instagram/stages/01-input/output/*.mov
 # Script output (generated videos, duplicates of website)
 instagram/scripts/output/
 
-# Debug screenshots
+# Generated video output
+output/
+
+# Posting packs (generated media)
+instagram/posting-packs/*/
+!instagram/posting-packs/.gitkeep
+
+# Debug/ephemeral screenshots (root level)
+lazurix_*_screenshot.png
+modal-*.png
+live-shop-page.png
+shop-page-current.png
+
+# Debug screenshots (website)
+website/modal-*.png
+website/shop-updated.png
+website/video-debug.png
+website/website-check.png
 website/shop-screenshot.png
 website/images/Screenshot*
+
+# SQLite WAL files
+*.db-shm
+*.db-wal
 
 # Local Netlify folder
 .netlify
 node_modules/
 .gstack/
+.worktrees/
