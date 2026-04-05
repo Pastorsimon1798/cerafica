@@ -1048,33 +1048,355 @@ class VideoFrameGenerator:
 
         return Image.alpha_composite(canvas.convert('RGBA'), overlay)
 
-    def _clean_alpha_mask(self, piece: Image.Image) -> Image.Image:
+    def precompute_coaster_mask(self, frame_dir, total_frames: int, sample_count: int = 15,
+                                 debug_dir: Path = None) -> None:
         """
-        Clean up the alpha mask from rembg to remove background artifacts.
+        Pre-compute a coaster/banding-wheel mask using temporal variance.
 
-        - alpha_matting already handles edge refinement
-        - Fade out bottom 50% — kills banding wheel, coaster and stand that rembg often misses
-        - Uses gradient fade to prevent flickering at the cutoff
+        The coaster is stationary while the piece rotates. By comparing pixels
+        across multiple frames, the coaster has near-zero temporal variance
+        while the rotating piece has high variance. This is fundamentally more
+        reliable than any single-frame brightness/saturation heuristic.
+
+        Stores the result as self._coaster_mask (PIL Image mode 'L') at full
+        frame resolution. Used by _clean_alpha_mask to zero out coaster pixels.
+
+        Args:
+            frame_dir: Directory containing extracted frames
+            total_frames: Total number of frames in the video
+            sample_count: Number of frames to sample for variance analysis
+            debug_dir: Optional directory to save debug visualizations
+        """
+        import numpy as np
+        from rembg import remove
+
+        if not REMBG_AVAILABLE or not self.rembg_session:
+            return
+
+        # Sample frames evenly across the video
+        indices = np.linspace(0, total_frames - 1, sample_count, dtype=int)
+
+        # Run rembg on frame 0 to get the alpha mask
+        frame_0_path = frame_dir / f"frame_{indices[0] + 1:06d}.png"
+        if not frame_0_path.exists():
+            return
+        frame_0 = Image.open(frame_0_path).convert('RGB')
+        no_bg_0 = remove(frame_0, session=self.rembg_session,
+                         post_process_mask=True, alpha_matting=True)
+        alpha_0 = np.array(no_bg_0.split()[3])
+
+        # Solid alpha region from frame 0
+        solid = alpha_0 > 128
+        if np.sum(solid) < 1000:
+            frame_0.close()
+            no_bg_0.close()
+            return
+
+        h, w = alpha_0.shape
+
+        # Collect raw pixel data AND alpha masks for ALL sampled frames
+        # This is critical: rembg produces different alpha masks on different
+        # frames (includes different amounts of coaster/grid). We need the
+        # UNION of all alpha regions to ensure we mask fragments that appear
+        # on any frame, not just frame 0.
+        pixel_samples = []
+        all_alphas = []
+        for idx in indices:
+            fpath = frame_dir / f"frame_{idx + 1:06d}.png"
+            if not fpath.exists():
+                continue
+            frame_img = Image.open(fpath)
+            raw = np.array(frame_img.convert('RGB'), dtype=np.float32)
+            pixel_samples.append(raw)
+            # Also compute alpha for this frame to get union
+            no_bg = remove(frame_img.convert('RGB'), session=self.rembg_session,
+                          post_process_mask=True, alpha_matting=True)
+            all_alphas.append(np.array(no_bg.split()[3]) > 128)
+            no_bg.close()
+            frame_img.close()
+
+        if len(pixel_samples) < 5:
+            frame_0.close()
+            no_bg_0.close()
+            return
+
+        # Union of all alpha masks across sampled frames
+        # This ensures we catch fragments that appear on ANY frame
+        union_alpha = np.any(np.stack(all_alphas, axis=0), axis=0)
+
+        # Stack: (N, H, W, 3)
+        stacked = np.stack(pixel_samples, axis=0)
+
+        # Per-pixel variance across frames, averaged over RGB channels
+        variance = np.var(stacked, axis=0)  # (H, W, 3)
+        mean_var = np.mean(variance, axis=2)  # (H, W)
+
+        # Only consider pixels within the UNION of all alphas (not just frame 0)
+        variance_in_alpha = mean_var[union_alpha]
+        # Use union for solid region too
+        solid = union_alpha
+
+        # Coaster pixels: bottom 70th percentile of variance within alpha
+        # (stationary = low variance). Increased from 40th->55th->60th->70th to 
+        # catch more coaster edges and floating fragments that rembg includes on
+        # some frames. The banding wheel and grid have texture/shadow variance.
+        coaster_var_threshold = np.percentile(variance_in_alpha, 70)
+
+        # --- SIMPLE APPROACH: Mask everything below piece foot ---
+        # Instead of using variance (which misses corners due to shadow variance),
+        # use the p90 brightness boundary to find where the piece ends and mask
+        # EVERYTHING below that line within the union alpha region.
+        no_bg_0_arr = np.array(no_bg_0)
+        rgb_0 = no_bg_0_arr[:, :, :3].astype(np.float32)
+        p90_per_row = np.full(h, 0.0)
+        has_solid = np.zeros(h, dtype=bool)
+        alpha_rows_0 = np.where(solid.any(axis=1))[0]
+        for y in alpha_rows_0:
+            solid_mask = alpha_0[y, :] > 128
+            if np.sum(solid_mask) > 10:
+                p90_per_row[y] = np.percentile(rgb_0[y, solid_mask], 90)
+                has_solid[y] = True
+
+        p90_boundary = None
+        solid_rows_0 = alpha_rows_0[has_solid[alpha_rows_0]]
+        coaster_mask = np.zeros_like(solid)  # Start with empty mask
+        
+        if len(solid_rows_0) >= 20:
+            solid_p90 = p90_per_row[solid_rows_0]
+            mid_s = int(len(solid_rows_0) * 0.30)
+            mid_e = int(len(solid_rows_0) * 0.50)
+            if mid_e <= mid_s:
+                mid_e = len(solid_rows_0)
+                mid_s = max(0, mid_e - 20)
+            body_p90 = float(np.median(solid_p90[mid_s:mid_e]))
+            sample_size = max(10, int(len(solid_rows_0) * 0.20))
+            bottom_p90 = float(np.median(solid_p90[-sample_size:]))
+            p90_gap = body_p90 - bottom_p90
+
+            if p90_gap >= 15:
+                recovery_threshold = body_p90 * 0.85
+                alpha_top = alpha_rows_0[0]
+                alpha_bottom = alpha_rows_0[-1]
+                p90_boundary = alpha_bottom  # default: no restriction
+                for y in range(alpha_bottom, alpha_top - 1, -1):
+                    if has_solid[y] and p90_per_row[y] >= recovery_threshold:
+                        p90_boundary = y
+                        break
+                
+                # Mask EVERYTHING in union_alpha below the p90 boundary
+                # (with larger buffer to handle rembg frame-to-frame variations)
+                alpha_height = alpha_bottom - alpha_top
+                # Larger buffer (8% instead of 2%) to catch rembg inconsistencies
+                buffer_rows = max(10, int(alpha_height * 0.08))
+                cut_line = max(0, p90_boundary - buffer_rows)
+                
+                # Fill coaster_mask: everything in solid (union_alpha) below cut_line
+                for y in range(cut_line, alpha_bottom + 1):
+                    if y < h:
+                        coaster_mask[y, :] = solid[y, :]
+                
+                # --- Insurance: extend mask upward to catch frame variations ---
+                # Find all rows that have ANY mask and extend upward by 12%
+                masked_rows = np.where(coaster_mask.any(axis=1))[0]
+                if len(masked_rows) > 0:
+                    topmost = masked_rows[0]
+                    extend_amount = int(alpha_height * 0.12)  # 12% extension
+                    new_top = max(0, topmost - extend_amount)
+                    for y in range(new_top, topmost):
+                        if y < h and solid[y, :].any():
+                            coaster_mask[y, solid[y, :]] = True
+            else:
+                # No clear p90 gap - mask bottom 40% of alpha region
+                cut_line = alpha_rows_0[int(len(alpha_rows_0) * 0.60)]
+                for y in range(cut_line, alpha_rows_0[-1] + 1):
+                    if y < h:
+                        coaster_mask[y, :] = solid[y, :]
+        else:
+            # Not enough solid rows - mask bottom half
+            if len(alpha_rows_0) > 0:
+                cut_line = alpha_rows_0[len(alpha_rows_0) // 2]
+                for y in range(cut_line, alpha_rows_0[-1] + 1):
+                    if y < h:
+                        coaster_mask[y, :] = solid[y, :]
+
+        # Morphological cleanup: remove small isolated noise clusters
+        # Keep only large connected components (coaster is one big blob)
+        from scipy import ndimage
+        labeled, num_features = ndimage.label(coaster_mask)
+        if num_features > 0:
+            # Keep components larger than 500 pixels
+            component_sizes = ndimage.sum(coaster_mask, labeled, range(1, num_features + 1))
+            large_components = set()
+            for i, size in enumerate(component_sizes, 1):
+                if size >= 500:
+                    large_components.add(i)
+            coaster_mask = np.isin(labeled, list(large_components))
+
+        # Note: The p90 boundary detection above already restricts the mask to
+        # below the piece foot. We don't need an additional bottom restriction
+        # which could cut off part of the coaster/banding wheel.
+
+        # Dilate to catch semi-transparent coaster edges and shadow boundaries
+        # Increased from 6 to 12 iterations for better edge coverage of the blue wheel
+        coaster_mask = ndimage.binary_dilation(coaster_mask, iterations=12)
+
+        self._coaster_mask = Image.fromarray(
+            (coaster_mask.astype(np.uint8) * 255), mode='L'
+        )
+
+        coaster_pixels = np.sum(coaster_mask)
+        total_solid = np.sum(solid)
+        coverage_pct = 100 * coaster_pixels / total_solid
+        print(f"  Coaster mask: {coaster_pixels}/{total_solid} pixels "
+              f"({coverage_pct:.1f}% of alpha)")
+
+        # --- Debug visualization ---
+        if debug_dir is not None:
+            debug_dir = Path(debug_dir)
+            debug_dir.mkdir(parents=True, exist_ok=True)
+
+            # 1. Save variance heatmap
+            var_norm = (mean_var - mean_var.min()) / (mean_var.max() - mean_var.min() + 1e-8)
+            var_img = Image.fromarray((var_norm * 255).astype(np.uint8), mode='L')
+            var_img.save(debug_dir / "variance_heatmap.png")
+
+            # 2. Save coaster mask overlay on frame 0
+            frame_0_rgb = np.array(frame_0)
+            overlay = frame_0_rgb.copy()
+            # Highlight coaster mask in red
+            overlay[coaster_mask] = overlay[coaster_mask] * 0.5 + np.array([255, 0, 0]) * 0.5
+            overlay_img = Image.fromarray(overlay.astype(np.uint8), mode='RGB')
+            overlay_img.save(debug_dir / "coaster_mask_overlay.png")
+
+            # 3. Save raw coaster mask
+            self._coaster_mask.save(debug_dir / "coaster_mask_raw.png")
+
+            # 4. Save p90 boundary visualization if detected
+            if p90_boundary is not None:
+                boundary_viz = frame_0_rgb.copy()
+                # Draw boundary line
+                boundary_viz[max(0, p90_boundary - 3):min(h, p90_boundary + 3), :, :] = [0, 255, 0]
+                Image.fromarray(boundary_viz, mode='RGB').save(debug_dir / "p90_boundary.png")
+
+            print(f"  Debug images saved to {debug_dir}")
+
+        frame_0.close()
+        no_bg_0.close()
+
+    def _clean_alpha_mask(self, piece: Image.Image, force_cut_row: int = None) -> Image.Image:
+        """
+        Clean up the alpha mask from rembg to remove coaster/banding wheel artifacts.
+
+        If a pre-computed coaster mask exists (from temporal variance analysis),
+        it is subtracted from the alpha. This is the preferred method because it
+        uses multi-frame information: the coaster is stationary (low variance)
+        while the piece rotates (high variance).
+
+        Falls back to p90 brightness heuristic when no pre-computed mask exists.
         """
         import numpy as np
 
+        # --- Preferred path: use pre-computed temporal variance coaster mask ---
+        if hasattr(self, '_coaster_mask') and self._coaster_mask is not None:
+            coaster_img = self._coaster_mask
+            # Coaster mask is at full frame resolution. If the input piece is
+            # cropped (subsequent frames), crop the coaster mask to match.
+            if coaster_img.size != piece.size:
+                if hasattr(self, '_ref_crop') and self._ref_crop is not None:
+                    coaster_img = coaster_img.crop(self._ref_crop)
+                else:
+                    coaster_img = None  # Can't align dimensions, skip
+
+            if coaster_img is not None and coaster_img.size == piece.size:
+                arr = np.array(piece)
+                alpha = arr[:, :, 3].copy()
+                coaster = np.array(coaster_img)
+                # Only zero out alpha where the coaster mask is set AND alpha is nonzero
+                alpha[coaster > 128] = 0
+                arr[:, :, 3] = alpha
+                return Image.fromarray(arr, mode='RGBA')
+
+        # --- Fallback: p90 brightness heuristic (single-frame, less reliable) ---
         arr = np.array(piece)
         alpha = arr[:, :, 3].copy()
         h = alpha.shape[0]
 
-        # Create a gradient fade from 100% at 50% height to 0% at 75% height
-        # This cuts off the coaster/stand/turntable while keeping the pottery body
-        fade_start = int(h * 0.50)  # Start fade at 50% down
-        fade_end = int(h * 0.75)    # Fully transparent by 75%
-        
-        for y in range(fade_start, min(fade_end, h)):
-            # Linear gradient: 1.0 at fade_start, 0.0 at fade_end
-            factor = (fade_end - y) / (fade_end - fade_start)
-            alpha[y, :] = (alpha[y, :] * factor).astype(np.uint8)
-        
-        # Zero out everything below fade_end
-        alpha[fade_end:, :] = 0
+        row_has_alpha = np.any(alpha > 30, axis=1)
+        if not np.any(row_has_alpha):
+            return piece
 
+        bottom = h - 1 - np.argmax(row_has_alpha[::-1])
+        top = np.argmax(row_has_alpha)
+
+        alpha_height = bottom - top + 1
+        if alpha_height < 40:
+            alpha[bottom + 1:, :] = 0
+            arr[:, :, 3] = alpha
+            return Image.fromarray(arr, mode='RGBA')
+
+        rgb = arr[:, :, :3].astype(np.float32)
+        alpha_rows = np.where(row_has_alpha)[0]
+
+        p90_per_row = np.full(h, 0.0)
+        has_solid = np.zeros(h, dtype=bool)
+        for y in alpha_rows:
+            solid_mask = alpha[y, :] > 128
+            n_solid = np.sum(solid_mask)
+            if n_solid > 10:
+                p90_per_row[y] = np.percentile(rgb[y, solid_mask], 90)
+                has_solid[y] = True
+
+        solid_rows = alpha_rows[has_solid[alpha_rows]]
+        if len(solid_rows) < 20:
+            alpha[bottom + 1:, :] = 0
+            arr[:, :, 3] = alpha
+            return Image.fromarray(arr, mode='RGBA')
+
+        solid_p90 = p90_per_row[solid_rows]
+
+        mid_start = int(len(solid_rows) * 0.30)
+        mid_end = int(len(solid_rows) * 0.50)
+        if mid_end <= mid_start:
+            mid_end = len(solid_rows)
+            mid_start = max(0, mid_end - 20)
+        body_p90 = float(np.median(solid_p90[mid_start:mid_end]))
+
+        sample_size = max(10, int(len(solid_rows) * 0.20))
+        bottom_p90 = float(np.median(solid_p90[-sample_size:]))
+
+        p90_gap = body_p90 - bottom_p90
+        if p90_gap < 15:
+            alpha[bottom + 1:, :] = 0
+            arr[:, :, 3] = alpha
+            return Image.fromarray(arr, mode='RGBA')
+
+        recovery_threshold = body_p90 * 0.85
+        detected_transition = bottom
+        for y in range(bottom, top - 1, -1):
+            if has_solid[y] and p90_per_row[y] >= recovery_threshold:
+                detected_transition = y
+                break
+
+        transition_row = force_cut_row if force_cut_row is not None else detected_transition
+
+        if not hasattr(self, '_cached_coaster_cut'):
+            self._cached_coaster_cut = None
+            self._cached_coaster_cut_h = None
+
+        if self._cached_coaster_cut is None or self._cached_coaster_cut_h != h:
+            self._cached_coaster_cut = transition_row
+            self._cached_coaster_cut_h = h
+        else:
+            self._cached_coaster_cut = min(self._cached_coaster_cut, transition_row)
+
+        soft_edge = 15
+        hard_cut = max(top, self._cached_coaster_cut - soft_edge)
+
+        for y in range(hard_cut, bottom + 1):
+            factor = 1.0 if y <= self._cached_coaster_cut else 0.0
+            alpha[y, :] = (alpha[y, :] * factor).astype(np.uint8)
+
+        alpha[bottom + 1:, :] = 0
         arr[:, :, 3] = alpha
         return Image.fromarray(arr, mode='RGBA')
 

@@ -112,6 +112,100 @@ def find_framed_photo(photo_filename: str) -> Path | None:
     return None
 
 
+def extract_zoom_panels_from_frame(frame_path: str) -> list:
+    """Extract zoom panel regions from a video frame with coaster-aware masking.
+    
+    Extracts 3 regions from the pottery piece at different vertical positions:
+    - Top: Upper body/glaze area
+    - Middle: Mid-body transition  
+    - Bottom: Lower body/foot
+    
+    Applies coaster mask cleaning to ensure no banding wheel in zoom panels.
+    Returns list of 150x150 RGBA images.
+    """
+    from rembg import remove, new_session
+    
+    frame = Image.open(frame_path).convert('RGB')
+    frame_rgba = frame.convert('RGBA')
+    
+    # Use rembg to get the pottery mask
+    try:
+        session = new_session()
+        no_bg = remove(frame, session=session, post_process_mask=True)
+    except Exception:
+        frame.close()
+        return []
+    
+    # Get alpha mask
+    alpha = np.array(no_bg.split()[3])
+    bbox = no_bg.getbbox()
+    if not bbox:
+        no_bg.close()
+        frame.close()
+        return []
+    
+    # Calculate zoom regions within the pottery bbox
+    x1, y1, x2, y2 = bbox
+    piece_w = x2 - x1
+    piece_h = y2 - y1
+    
+    target_size = 150
+    panel_size = min(300, piece_w // 2, piece_h // 3)
+    
+    # Define 3 vertical regions - ABOVE where coaster typically is
+    # Adjusted to stay well within the pottery piece body
+    regions = [
+        (0.15, 0.28),  # Top: upper glaze (well above coaster)
+        (0.32, 0.45),  # Upper-middle: glaze transition
+        (0.50, 0.63),  # Lower: body/foot (above coaster area)
+    ]
+    
+    panels = []
+    
+    for vy_top, vy_bottom in regions:
+        # Calculate crop center
+        cx = (x1 + x2) // 2
+        cy = int(y1 + piece_h * ((vy_top + vy_bottom) / 2))
+        
+        half_size = panel_size // 2
+        crop_x1 = max(0, cx - half_size)
+        crop_y1 = max(0, cy - half_size)
+        crop_x2 = min(frame.width, crop_x1 + panel_size)
+        crop_y2 = min(frame.height, crop_y1 + panel_size)
+        
+        if crop_x2 - crop_x1 < 100 or crop_y2 - crop_y1 < 100:
+            continue
+        
+        # Extract crop and apply alpha mask
+        crop = frame_rgba.crop((crop_x1, crop_y1, crop_x2, crop_y2))
+        crop_alpha = Image.fromarray(alpha[crop_y1:crop_y2, crop_x1:crop_x2], mode='L')
+        crop.putalpha(crop_alpha)
+        
+        # Check if crop has enough valid content (>30% non-transparent)
+        alpha_arr = np.array(crop_alpha)
+        valid_ratio = np.sum(alpha_arr > 128) / alpha_arr.size
+        
+        if valid_ratio < 0.3:
+            # Not enough content, skip
+            crop.close()
+            continue
+        
+        if crop.size != (target_size, target_size):
+            crop = crop.resize((target_size, target_size), Image.Resampling.LANCZOS)
+        panels.append(crop)
+    
+    # Fill missing panels by duplicating valid ones
+    while len(panels) < 3:
+        if panels:
+            panels.append(panels[0].copy())
+        else:
+            panels.append(Image.new('RGBA', (target_size, target_size), (50, 50, 50, 255)))
+    
+    no_bg.close()
+    frame.close()
+    return panels[:3]
+
+
 def enrich_planet_data(planet_data: dict, photo_filename: str) -> dict:
     """Enrich planet_data with vision analysis (chemistry, firing, clay, anomalies, etc.).
 
@@ -870,7 +964,26 @@ Examples:
                 if extra_keys:
                     print(f"  Vision enrichment: {', '.join(extra_keys)}")
 
-            generator = VideoFrameGenerator(planet_data, zoom=args.zoom, animate=animate)
+            # Extract zoom panels from frame 0 (for video processing)
+            zoom_panels = None
+            frame_0_path = all_frames / "frame_000001.png"
+            if frame_0_path.exists():
+                print("  Extracting zoom panels from frame 0...", end=" ", flush=True)
+                zoom_panels = extract_zoom_panels_from_frame(str(frame_0_path))
+                if zoom_panels:
+                    print(f"{len(zoom_panels)} panels")
+                else:
+                    print("skipped")
+            
+            generator = VideoFrameGenerator(planet_data, zoom=args.zoom, animate=animate,
+                                            photo_zoom_panels=zoom_panels)
+
+            # Pre-compute coaster mask using temporal variance (before phase 1)
+            print("  Pre-computing coaster mask (temporal variance)...", end=" ", flush=True)
+            debug_dir = output_path.parent / "debug" / output_path.stem
+            generator.precompute_coaster_mask(all_frames, total_frames, debug_dir=debug_dir)
+            t_precomp = time.time() - t_phase1
+            print(f"done ({t_precomp:.1f}s)")
 
             extract_masks_with_interpolation(
                 generator, all_frames, masks_out, loop_point,
