@@ -6,12 +6,42 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { calculateShipping, validateCart, calculateSubtotal } = require('./checkout-utils');
 
+// Simple in-memory rate limiter
+const rateLimiter = {
+  requests: new Map(),
+  WINDOW_MS: 60_000,
+  MAX_REQUESTS: 10,
+  check(ip) {
+    const now = Date.now();
+    const requests = this.requests.get(ip) || [];
+    const recent = requests.filter(t => now - t < this.WINDOW_MS);
+    if (recent.length >= this.MAX_REQUESTS) return false;
+    recent.push(now);
+    this.requests.set(ip, recent);
+    // Cleanup old entries periodically
+    if (Math.random() < 0.01) {
+      for (const [key, vals] of this.requests.entries()) {
+        if (vals.every(t => now - t >= this.WINDOW_MS)) this.requests.delete(key);
+      }
+    }
+    return true;
+  }
+};
+
 exports.handler = async (event, context) => {
-  // Enable CORS
+  // CORS - validate origin
+  const allowedOrigins = [
+    'https://cerafica.com',
+    'https://cerafica-checkout.netlify.app',
+    'http://localhost:8888',
+  ];
+  const origin = event.headers.origin || event.headers.Origin || '';
+  const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
   const headers = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': corsOrigin,
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Max-Age': '86400',
   };
 
   // Handle preflight request
@@ -20,6 +50,16 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       headers,
       body: '',
+    };
+  }
+
+  // Rate limiting
+  const clientIp = event.headers['client-ip'] || event.headers['x-forwarded-for'] || 'unknown';
+  if (!rateLimiter.check(clientIp)) {
+    return {
+      statusCode: 429,
+      headers,
+      body: JSON.stringify({ error: 'Too many requests. Please try again later.' }),
     };
   }
 
@@ -49,6 +89,9 @@ exports.handler = async (event, context) => {
     
     // Fetch products from JSON (use same origin for deployed site)
     const domain = process.env.CERAFICA_DOMAIN || 'https://cerafica-checkout.netlify.app';
+    if (!domain.startsWith('https://')) {
+      throw new Error('Invalid domain configuration');
+    }
     let products;
     try {
       const productsResponse = await fetch(`${domain}/data/products.json`);
@@ -140,13 +183,12 @@ exports.handler = async (event, context) => {
     
   } catch (error) {
     console.error('Checkout error:', error);
-    
+
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Failed to create checkout session',
-        details: error.message,
+        error: 'Unable to process checkout. Please try again later.',
       }),
     };
   }

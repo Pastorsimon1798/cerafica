@@ -32,11 +32,16 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    X-XSS-Protection = "1; mode=block"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
 [[headers]]
-  # Allow CORS for the checkout function
+  # CORS for checkout function - restricted to known domains
   for = "/.netlify/functions/create-checkout"
   [headers.values]
-    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Origin = "https://cerafica.com"
+    Vary = "Origin"
     Access-Control-Allow-Methods = "POST, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Max-Age = "86400"
