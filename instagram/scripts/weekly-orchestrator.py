@@ -17,34 +17,27 @@ Usage:
 import argparse
 import json
 import logging
-import os
 import re
 import shutil
 import subprocess
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
 import requests
 
 # =============================================================================
-# PATH SETUP — add lib/ directory for local imports
+# PATH SETUP — add lib/ directory for local imports (must precede local imports)
 # =============================================================================
 SCRIPTS_DIR = Path(__file__).parent
 REPO_ROOT = SCRIPTS_DIR.parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR / "lib"))
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-from caption_generator import (
-    analyze_photo,
-    analyze_video,
-    generate_caption,
-    PhotoAnalysis,
-    VideoAnalysis,
-    GeneratedCaption,
-)
-from instagram_scheduler import get_posting_schedule
+# noqa: E402 — path manipulation required before local imports
+from caption_generator import analyze_photo, analyze_video, generate_caption  # noqa: E402
+from instagram_scheduler import get_posting_schedule  # noqa: E402
 
 # =============================================================================
 # PATHS
@@ -547,7 +540,7 @@ def write_this_week(posts_data: list) -> Path:
     lines = []
     today = datetime.now().strftime("%B %-d, %Y")
 
-    lines.append(f"# This Week — Cerafica Instagram")
+    lines.append("# This Week — Cerafica Instagram")
     lines.append(f"Generated: {today}")
     lines.append(f"Posts scheduled: {len(posts_data)}")
     lines.append("")
