@@ -20,15 +20,15 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt 2>/dev/null || true
       - run: pip install pytest ruff
-      - run: ruff check . --ignore E501,F401 || true
-      - run: pytest tests/ -q --tb=short || true
+      - run: ruff check . --ignore E501,F401
+      - run: pytest tests/ -q --tb=short
 
       # Node tests (website)
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm ci
-      - run: npm test || true
+      - run: npm test
 
       # Build check
       - run: npm run build 2>/dev/null || true
