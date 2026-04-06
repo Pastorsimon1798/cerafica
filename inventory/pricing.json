@@ -1,0 +1,12 @@
+{
+  "size_categories": {
+    "tiny":   {"description": "thumb-sized, ornamental, under 3 inches", "price": 25},
+    "small":  {"description": "fits in palm, 3-4 inches, small cup or figurine", "price": 45},
+    "medium": {"description": "mug or bowl, 4-6 inches, everyday use", "price": 85},
+    "large":  {"description": "serving bowl or vase, 6-9 inches", "price": 145},
+    "xlarge": {"description": "statement piece, 10 inches or more", "price": 225}
+  },
+  "default_category": "medium",
+  "currency": "USD",
+  "note": "AI estimates size category from photo — no measuring needed. Edit prices here anytime."
+}
