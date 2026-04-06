@@ -200,7 +200,7 @@ def frame_single_photo(photo_path: str, planet_data: dict = None, test_mode: boo
             "surface_geology": "Uncharted terrain",
             "log_number": hash(photo_name) % 999 + 1
         }
-        print(f"  No planet data found, using defaults")
+        print("  No planet data found, using defaults")
 
     # Derive chemistry from vision analysis if not already present
     if "chemistry" not in planet_data or not planet_data.get("chemistry"):
@@ -321,15 +321,15 @@ def frame_single_photo(photo_path: str, planet_data: dict = None, test_mode: boo
         if import_to_photos and saved_path and not test_mode:
             create_albums(["Ready to Post"])
             if import_photo_to_album(saved_path, "Ready to Post"):
-                print(f"  -> Imported to 'Ready to Post' album")
+                print("  -> Imported to 'Ready to Post' album")
             else:
-                print(f"  -> Failed to import to 'Ready to Post' album")
+                print("  -> Failed to import to 'Ready to Post' album")
 
         # Always import to Framed Series album (non-test mode)
         if saved_path and not test_mode:
             create_albums(["Framed Series"])
             if import_photo_to_album(saved_path, "Framed Series"):
-                print(f"  -> Imported to 'Framed Series' album")
+                print("  -> Imported to 'Framed Series' album")
 
     return saved_path
 
@@ -404,7 +404,7 @@ def batch_frame(album_name: str = "To Post", dry_run: bool = False, website: boo
         # Check if planet data exists
         planet_data = get_planet_data_from_db(photo.filename)
         if planet_data is None:
-            print(f"  Skipping - no planet data in database")
+            print("  Skipping - no planet data in database")
             continue
 
         print(f"  Planet: {planet_data['planet_name']}")
@@ -417,7 +417,7 @@ def batch_frame(album_name: str = "To Post", dry_run: bool = False, website: boo
         # Export and frame
         exported = export_media_by_index(album_name, i, temp_dir)
         if not exported:
-            print(f"  Failed to export")
+            print("  Failed to export")
             continue
 
         framed_path = frame_single_photo(exported, planet_data, output_name=photo.filename, website=website)
@@ -543,7 +543,7 @@ Examples:
         if result and args.import_photos:
             create_albums(["Ready to Post"])
             if import_photo_to_album(result, "Ready to Post"):
-                print(f"  -> Imported to 'Ready to Post' album")
+                print("  -> Imported to 'Ready to Post' album")
         if result:
             print(f"\nFramed image: {result}")
 

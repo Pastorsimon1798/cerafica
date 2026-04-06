@@ -215,7 +215,7 @@ These hashtag pairs appear together on your highest-engagement posts:
     for combo in combinations[:10]:
         md += f"| {combo['hashtags'][0]} + {combo['hashtags'][1]} | {combo['count']} | {combo['avg_engagement']:,} |\n"
 
-    md += f"""
+    md += """
 ## Hashtag Sets by Content Type
 
 ### Finished Pieces
@@ -230,7 +230,7 @@ These hashtag pairs appear together on your highest-engagement posts:
     for tag in finished_tags:
         md += f"#{tag} "
 
-    md += f"""
+    md += """
 ```
 
 ### Process/Studio Content
@@ -244,7 +244,7 @@ These hashtag pairs appear together on your highest-engagement posts:
     for tag in process_tags:
         md += f"#{tag} "
 
-    md += f"""
+    md += """
 ```
 
 ### General/Discovery

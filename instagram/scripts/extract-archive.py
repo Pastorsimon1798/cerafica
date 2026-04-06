@@ -43,7 +43,7 @@ def extract_archive(username: str = "cerafica_design") -> dict:
         Dictionary with extraction results
     """
     print(f"\n{'='*60}")
-    print(f"Instagram Archive Extraction")
+    print("Instagram Archive Extraction")
     print(f"Target: @{username}")
     print(f"{'='*60}\n")
 
@@ -119,7 +119,7 @@ def extract_archive(username: str = "cerafica_design") -> dict:
             print(f"\n  Error extracting post {post.shortcode}: {e}")
             continue
 
-    print(f"\n\nExtraction complete!")
+    print("\n\nExtraction complete!")
     print(f"  - Successfully extracted: {extracted_count - failed_count}")
     print(f"  - Failed: {failed_count}")
 

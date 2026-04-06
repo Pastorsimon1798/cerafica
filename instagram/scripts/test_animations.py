@@ -161,12 +161,12 @@ def main():
             str(static_path),
         ], capture_output=True, check=True)
 
-        print(f"\n=== DONE ===")
-        print(f"\nOutput files:")
+        print("\n=== DONE ===")
+        print("\nOutput files:")
         print(f"  Animated + audio: {final_path}")
         print(f"  Animated (no audio): {video_path}")
         print(f"  Static (comparison): {static_path}")
-        print(f"\nOpen with:")
+        print("\nOpen with:")
         print(f"  open \"{final_path}\"")
 
 

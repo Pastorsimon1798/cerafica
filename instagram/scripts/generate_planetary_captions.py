@@ -230,7 +230,7 @@ def main():
         # Get vision data
         vision = get_vision_data(DB_PATH, planet["photo"])
         if not vision:
-            print(f"  WARNING: No vision data found, skipping")
+            print("  WARNING: No vision data found, skipping")
             continue
 
         print(f"Colors: {vision.get('primary_colors')}")

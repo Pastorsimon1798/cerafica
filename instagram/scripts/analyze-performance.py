@@ -287,7 +287,7 @@ def generate_performance_insights(
         caption_preview = post["caption"][:40] + "..." if len(post["caption"]) > 40 else post["caption"]
         md += f"| {i} | [{caption_preview or 'No caption'}]({post['url']}) | {post['comments']:,} | {post['likes']:,} | {post['date'][:10]} |\n"
 
-    md += f"""
+    md += """
 ---
 
 ## Best Times to Post

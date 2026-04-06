@@ -39,17 +39,17 @@ def main():
         print(f"  Exported to: {export_path}")
 
         # Run vision analysis with Kimi
-        print(f"  Running vision analysis...")
+        print("  Running vision analysis...")
         vision_result = analyze_photo(export_path)
 
         if not vision_result:
-            print(f"  ERROR: Vision analysis failed")
+            print("  ERROR: Vision analysis failed")
             continue
 
         print(f"  Vision: {vision_result.piece_type}, {vision_result.form_attributes}")
 
         # Generate caption
-        print(f"  Generating caption...")
+        print("  Generating caption...")
         caption_result = generate_caption(vision_result)
 
         # Generate hashtags (caption already has some, but get more)
@@ -74,7 +74,7 @@ def main():
         result["vision"]["mood"] = vision_result.mood.value if hasattr(vision_result.mood, 'value') else str(vision_result.mood) if vision_result.mood else "organic"
 
         results.append(result)
-        print(f"  Done!\n")
+        print("  Done!\n")
 
     # Save to dashboard
     test_data = {
@@ -91,7 +91,7 @@ def main():
     print(f"\n{'='*50}")
     print(f"Processed {len(results)}/{len(photos)} photos")
     print(f"Results saved to: {dashboard_path}")
-    print(f"Refresh http://localhost:8766/pipeline to see updates")
+    print("Refresh http://localhost:8766/pipeline to see updates")
 
 if __name__ == "__main__":
     main()

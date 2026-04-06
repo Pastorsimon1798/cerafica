@@ -90,7 +90,6 @@ def process_video(input_path: str, planet_name: str, output_dir: str = None) -> 
 
     # --- Detect piece bounding box from first frame ---
     print("Detecting pottery region from first frame...")
-    import tempfile
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
         tmp_path = tmp.name
 

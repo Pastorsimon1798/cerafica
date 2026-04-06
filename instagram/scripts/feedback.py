@@ -225,7 +225,7 @@ def interactive_review(predictions: list[dict], field_filter: str = None) -> Non
 
         if field_filter:
             print(f"\n🔍 Reviewing field: {field_filter}")
-            print(f"Press Enter to accept, or provide correction:\n")
+            print("Press Enter to accept, or provide correction:\n")
 
             # Single field review
             current_value = analysis.get(field_filter, None)
@@ -432,7 +432,7 @@ def show_stats(field_filter: str = None) -> None:
 
     # Overall summary
     total = len(entries)
-    print(f"\n📊 Overall Summary")
+    print("\n📊 Overall Summary")
     print(f"   Total feedback entries: {total}")
 
     if field_filter:

@@ -603,7 +603,6 @@ def parse_cot_caption_response(response_text: str) -> dict:
 def sync_to_dashboard(output_dir: Path):
     """Compile all test results into dashboard's test_data.json."""
     from collections import defaultdict
-    import sqlite3
 
     all_results = []
     photo_models = defaultdict(dict)  # photo -> {model_name: result_data}
@@ -792,7 +791,7 @@ def run_ab_test(single_mode: bool = False, target_photo: str = None, cot_mode: b
         mode_str = f"Model A: {split_point} photos, Model B: {total - split_point} photos"
 
     print(f"\n{'='*60}")
-    print(f"A/B Vision + Caption Test")
+    print("A/B Vision + Caption Test")
     print(f"{'='*60}")
     print(f"Total photos: {total}")
     print(mode_str)

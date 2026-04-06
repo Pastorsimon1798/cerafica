@@ -436,7 +436,7 @@ def run_once(force: bool = False):
         skipped = sum(1 for _, r in all_results if r["model"] == model["name"] and r["status"] == "skipped")
         errors = sum(1 for _, r in all_results if r["model"] == model["name"] and r["status"] == "error")
         print(f"  {model['name']}: {assigned} assigned, {success} successful, {skipped} skipped, {errors} errors")
-    print(f"\nNext step: Open http://localhost:8766/ to review and generate captions")
+    print("\nNext step: Open http://localhost:8766/ to review and generate captions")
 
 
 def watch_mode(interval: int = 60):
