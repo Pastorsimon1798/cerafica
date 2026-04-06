@@ -1,0 +1,11 @@
+[lint]
+# E501 — line too long (handled at CI level)
+# F401 — unused imports (handled at CI level)
+# E402 — module import not at top: intentional throughout codebase (sys.path manipulation before local imports)
+# F841 — local variable assigned but never used: too noisy for creative/script code
+extend-ignore = ["E501", "F401", "E402", "F841"]
+
+[lint.per-file-ignores]
+# Archived scripts: not maintained, do not enforce
+"instagram/scripts/_archived_*" = ["ALL"]
+"instagram/scripts/archive/*" = ["ALL"]

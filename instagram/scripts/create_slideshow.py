@@ -164,12 +164,12 @@ def place_on_space(product_rgba: Image.Image, canvas_w: int, canvas_h: int) -> I
 
 def create_product_frame(planet_name: str, lore: dict) -> Image.Image:
     """Create a planetary exploration log frame with bg-removed product."""
-    photo_path = EXPORTS_DIR / PHOTO_MAP[planet_name]
+    photo_path = EXPORTS_DIR / PHOTO_MAP[planet_name]  # type: ignore[name-defined]  # noqa: F821
     print(f"  Removing background for {planet_name}...", end=" ", flush=True)
     product_rgba = remove_background(photo_path)
     print("done", flush=True)
 
-    print(f"  Placing on space background...", end=" ", flush=True)
+    print("  Placing on space background...", end=" ", flush=True)
     img = place_on_space(product_rgba, W, H)
     print("done", flush=True)
 
@@ -642,7 +642,7 @@ def main():
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f"  Fade failed, using unmodified version")
+        print("  Fade failed, using unmodified version")
         final_mp4 = output_mp4
 
     # Cleanup temp clips

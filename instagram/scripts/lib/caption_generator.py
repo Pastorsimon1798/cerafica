@@ -2223,7 +2223,7 @@ def analyze_video_basic(video_path: str, duration: float = 0.0, width: int = 0, 
     if duration > 90:
         duration_warning = f"Video is {duration:.1f}s, exceeds 90s Reels limit"
     elif duration > 0 and aspect_ratio_category == "horizontal":
-        duration_warning = f"Video is horizontal, not suitable for Reels"
+        duration_warning = "Video is horizontal, not suitable for Reels"
 
     return VideoAnalysis(
         content_type=content_type,
@@ -2377,7 +2377,7 @@ def generate_caption_for_stories(analysis: StoriesAnalysis) -> str:
     return "\n".join(lines)
 
 
-def analyze_video_frames(video_path: str, max_frames: int = 5, duration: float = 0.0, width: int = 0, height: int = 0) -> VideoAnalysis:
+def analyze_video_frames(video_path: str, max_frames: int = 5, duration: float = 0.0, width: int = 0, height: int = 0, use_ai: bool = True) -> VideoAnalysis:
     """
     Extract multiple frames, analyze each, and aggregate results.
 
@@ -3796,7 +3796,7 @@ def _parse_ai_caption_response(caption_text: str, return_options: bool = False) 
 
     def _parse_single(item_text: str) -> dict:
         """Parse a single caption item into hook, body, cta."""
-        lines = [l.strip() for l in item_text.strip().split("\n") if l.strip()]
+        lines = [ln.strip() for ln in item_text.strip().split("\n") if ln.strip()]
         if not lines:
             return {"hook": "", "body": "", "cta": ""}
 
@@ -4149,7 +4149,7 @@ def generate_caption_for_video(
             f"Wait for it... {analysis.activity}",
             f"POV: {analysis.activity}",
             f"{analysis.activity.capitalize()} in real time",
-            f"The most satisfying part of pottery",
+            "The most satisfying part of pottery",
             f"Pottery ASMR: {analysis.activity}",
         ]
         hook = reel_hooks[0]  # Could randomize later
@@ -4232,7 +4232,7 @@ def test_module(photo_path: str = None, test_ai: bool = False):
     print("=" * 60)
 
     # 0. Show AI configuration
-    print(f"\n0. AI Configuration:")
+    print("\n0. AI Configuration:")
     print(f"   Backend: {config.backend}")
     if config.backend == "ollama":
         print(f"   Vision Model: {config.ollama_vision_model}")
