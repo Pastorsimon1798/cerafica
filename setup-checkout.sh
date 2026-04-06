@@ -6,31 +6,19 @@
 
 set -e
 
+# Source shared deployment library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/shared/deploy-lib.sh"
+
 echo "═══════════════════════════════════════════════════════════"
 echo "  CHECKOUT DEPLOYMENT SETUP"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-# Load Stripe key from .env
-if [ -f ".env" ]; then
-    export $(grep -v '^#' .env | xargs)
-fi
-
-if [ -z "$STRIPE_SECRET_KEY" ]; then
-    echo -e "${RED}❌ STRIPE_SECRET_KEY not found in .env${NC}"
-    exit 1
-fi
-
-echo -e "${GREEN}✓ Stripe key loaded${NC}"
-
-# Verify GitHub CLI
-gh auth status || (echo "Run: gh auth login" && exit 1)
+# Load environment and validate
+load_env
+validate_stripe_key
+check_gh_auth
 
 echo ""
 echo "🌐 Creating Netlify site (website folder only)..."

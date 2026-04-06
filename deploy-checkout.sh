@@ -6,56 +6,30 @@
 
 set -e
 
+# Source shared deployment library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/shared/deploy-lib.sh"
+
 echo "═══════════════════════════════════════════════════════════"
 echo "  CERAFICA MULTI-ITEM CHECKOUT DEPLOYMENT"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
 
 # Check prerequisites
 echo "📋 Checking prerequisites..."
 
 # Check for Node.js
 if ! command -v node &> /dev/null; then
-    echo -e "${RED}❌ Node.js is required but not installed.${NC}"
-    echo "   Install from: https://nodejs.org/"
+    log_error "Node.js is required but not installed. Install from: https://nodejs.org/"
     exit 1
 fi
 
-# Load environment variables from .env file
-if [ -f ".env" ]; then
-    echo "📄 Loading environment from .env file..."
-    export $(grep -v '^#' .env | xargs)
-fi
-
-# Check for Stripe key
-if [ -z "$STRIPE_SECRET_KEY" ]; then
-    echo -e "${YELLOW}⚠️  STRIPE_SECRET_KEY not found${NC}"
-    echo ""
-    echo "   Add it to your .env file:"
-    echo "   STRIPE_SECRET_KEY=sk_live_..."
-    echo ""
-    exit 1
-fi
-
-echo -e "${GREEN}✓ Stripe key found${NC}"
-
-# Check for Netlify CLI
-if ! command -v netlify &> /dev/null; then
-    echo -e "${YELLOW}⚠️  Netlify CLI not found. Please install it:${NC}"
-    echo "   npm install -g netlify-cli"
-    exit 1
-fi
+# Load environment and validate
+load_env
+validate_stripe_key
+check_netlify_auth
 
 echo -e "${GREEN}✓ Prerequisites met${NC}"
-echo ""
-
-echo -e "${GREEN}✓ Dependencies installed${NC}"
 echo ""
 
 # Check if already linked to Netlify

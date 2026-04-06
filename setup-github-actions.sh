@@ -6,46 +6,23 @@
 
 set -e
 
+# Source shared deployment library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/shared/deploy-lib.sh"
+
 echo "═══════════════════════════════════════════════════════════"
 echo "  GITHUB ACTIONS + NETLIFY SETUP"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-# Load Stripe key from .env
-if [ -f ".env" ]; then
-    export $(grep -v '^#' .env | xargs)
-fi
-
-if [ -z "$STRIPE_SECRET_KEY" ]; then
-    echo -e "${RED}❌ STRIPE_SECRET_KEY not found in .env${NC}"
-    exit 1
-fi
-
-echo -e "${GREEN}✓ Stripe key loaded${NC}"
-
-# Check for gh CLI
-if ! command -v gh &> /dev/null; then
-    echo -e "${YELLOW}⚠️  GitHub CLI not found${NC}"
-    echo "   Install: https://cli.github.com/"
-    exit 1
-fi
-
-# Check for netlify CLI
-if ! command -v netlify &> /dev/null; then
-    echo -e "${YELLOW}⚠️  Netlify CLI not found${NC}"
-    echo "   Run: npm install -g netlify-cli@20"
-    exit 1
-fi
+# Load environment and validate
+load_env
+validate_stripe_key
+check_gh_auth
+check_netlify_auth
 
 echo ""
 echo "🔐 Checking GitHub authentication..."
-gh auth status || (echo "Run: gh auth login" && exit 1)
 
 echo ""
 echo "🌐 Creating Netlify site..."
