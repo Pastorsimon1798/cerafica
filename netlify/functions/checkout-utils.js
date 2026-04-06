@@ -29,8 +29,16 @@ function validateCart(cartItems, products) {
     return { valid: false, error: 'Cart is empty' };
   }
 
+  const MAX_QUANTITY = 10;
+  const MAX_CART_ITEMS = 20;
+
+  if (cartItems.length > MAX_CART_ITEMS) {
+    return { valid: false, error: `Cart cannot contain more than ${MAX_CART_ITEMS} items` };
+  }
+
   const validatedItems = [];
-  
+  const seenIds = new Set();
+
   for (const cartItem of cartItems) {
     // Skip undefined slots in sparse arrays
     if (cartItem === undefined) continue;
@@ -44,7 +52,13 @@ function validateCart(cartItems, products) {
     if (!cartItem.id || (typeof cartItem.id !== 'string' && typeof cartItem.id !== 'number')) {
       return { valid: false, error: 'Cart item missing ID' };
     }
-    
+
+    // Reject duplicate items
+    if (seenIds.has(String(cartItem.id))) {
+      return { valid: false, error: `Duplicate item in cart: ${cartItem.id}` };
+    }
+    seenIds.add(String(cartItem.id));
+
     // Find product in database
     const product = products.find(p => p.id === cartItem.id);
     
@@ -63,8 +77,8 @@ function validateCart(cartItems, products) {
       return { valid: false, error: `Invalid quantity for ${product.name}` };
     }
     const quantity = Number(rawQty);
-    if (!Number.isInteger(quantity) || quantity < 1) {
-      return { valid: false, error: `Invalid quantity for ${product.name}` };
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > MAX_QUANTITY) {
+      return { valid: false, error: `Invalid quantity for ${product.name} (max ${MAX_QUANTITY})` };
     }
     
     // One-of-one items can only have quantity 1

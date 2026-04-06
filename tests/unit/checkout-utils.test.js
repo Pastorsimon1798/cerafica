@@ -264,11 +264,11 @@ describe('validateCart()', () => {
     expect(result.items[0].price_data.product_data.name).toBe('🏺 Ceramic Vase 🎨');
   });
 
-  test('handles large quantity (stress test)', () => {
+  test('rejects large quantity exceeding max', () => {
     const cart = [{ id: '001', price: 60, quantity: 999999 }];
     const result = validateCart(cart, mockProducts);
-    expect(result.valid).toBe(true);
-    expect(result.items[0].quantity).toBe(999999);
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid quantity');
   });
 });
 

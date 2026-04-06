@@ -231,8 +231,8 @@ describe('🔴 RED TEAM: Cart Manipulation', () => {
       { id: 'normal', price: 50, quantity: 1 },
     ];
     const result = validateCart(cart, products);
-    expect(result.valid).toBe(true);
-    expect(result.items).toHaveLength(2); // Allows duplicates
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Duplicate item');
   });
 
   test('One-of-one duplicate attack (same item, qty 2)', () => {
@@ -250,10 +250,8 @@ describe('🔴 RED TEAM: Cart Manipulation', () => {
       { id: 'unique', price: 100, quantity: 1 },
     ];
     const result = validateCart(cart, products);
-    // Currently allows this - potential issue
-    expect(result.valid).toBe(true);
-    expect(result.items).toHaveLength(2);
-    // TODO: Add check for duplicate one-of-one items across cart
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Duplicate item');
   });
 
   test('Sold item bypass attempt', () => {
@@ -300,9 +298,8 @@ describe('🔴 RED TEAM: Cart Manipulation', () => {
   test('Massive quantity attack', () => {
     const cart = [{ id: 'normal', price: 50, quantity: 999999999 }];
     const result = validateCart(cart, products);
-    expect(result.valid).toBe(true);
-    expect(result.items[0].quantity).toBe(999999999);
-    // Potential DoS - consider adding max quantity limit
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid quantity');
   });
 
   test('Empty object in cart', () => {
@@ -371,7 +368,8 @@ describe('🔴 RED TEAM: Edge Cases & Fuzzing', () => {
     const cart = new Array(100);
     cart[50] = { id: 'safe', price: 50, quantity: 1 };
     const result = validateCart(cart, safeProducts);
-    expect(result.valid).toBe(true); // Ignores empty slots
+    expect(result.valid).toBe(false); // 100 slots exceeds MAX_CART_ITEMS
+    expect(result.error).toContain('more than');
   });
 
   test('Handles array-like object', () => {
