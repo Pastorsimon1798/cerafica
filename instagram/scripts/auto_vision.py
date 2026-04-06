@@ -201,20 +201,13 @@ def get_photo_id(filename: str) -> int:
         conn = sqlite3.connect(DB_PATH, timeout=30)
         c = conn.cursor()
 
-        c.execute('SELECT id FROM photos WHERE filename = ?', (filename,))
-        row = c.fetchone()
+        # INSERT OR IGNORE is atomic - avoids race between SELECT and INSERT
+        c.execute('INSERT OR IGNORE INTO photos (filename, status) VALUES (?, ?)',
+                  (filename, 'new'))
+        conn.commit()
 
-        if row:
-            photo_id = row[0]
-        else:
-            try:
-                c.execute('INSERT INTO photos (filename, status) VALUES (?, ?)',
-                          (filename, 'new'))
-                conn.commit()
-                photo_id = c.lastrowid
-            except sqlite3.IntegrityError:
-                c.execute('SELECT id FROM photos WHERE filename = ?', (filename,))
-                photo_id = c.fetchone()[0]
+        c.execute('SELECT id FROM photos WHERE filename = ?', (filename,))
+        photo_id = c.fetchone()[0]
 
         conn.close()
         return photo_id
