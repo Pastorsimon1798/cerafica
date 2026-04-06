@@ -419,11 +419,11 @@ class InstagramScheduler:
             # This is UI-dependent and complex
             # For now, we'll just click schedule and let user verify
 
-            print(f"\nVERIFY in the browser:")
+            print("\nVERIFY in the browser:")
             print(f"  - Photo uploaded: {Path(post.photo_path).name}")
             print(f"  - Schedule time: {post.schedule_time.strftime('%A %B %d at %I:%M %p')}")
-            print(f"  If anything looks wrong, fix it in the browser now.")
-            print(f"  The browser will stay open until you confirm.")
+            print("  If anything looks wrong, fix it in the browser now.")
+            print("  The browser will stay open until you confirm.")
             input("\n  Press Enter when everything looks good (browser will close)...")
 
             print("  Post scheduling confirmed!")
@@ -502,7 +502,7 @@ class InstagramScheduler:
             return False
 
         print(f"\n{'=' * 50}")
-        print(f"SCHEDULING REEL")
+        print("SCHEDULING REEL")
         print(f"{'=' * 50}")
         print(f"Video:  {Path(reel.video_path).name}")
         print(f"Size:   {Path(reel.video_path).stat().st_size / 1024 / 1024:.1f} MB")
@@ -536,13 +536,13 @@ class InstagramScheduler:
             print("[3/5] Adding caption...")
             caption_text = reel.caption
             print(f"  Caption ({len(caption_text)} chars):")
-            print(f"  ---")
+            print("  ---")
             # Print first 200 chars of caption
             for line in caption_text[:200].split('\n'):
                 print(f"    {line}")
             if len(caption_text) > 200:
                 print(f"    ... ({len(caption_text) - 200} more chars)")
-            print(f"  ---")
+            print("  ---")
 
             caption_selectors = [
                 'div[contenteditable="true"]',
@@ -585,12 +585,12 @@ class InstagramScheduler:
                     continue
 
             # Confirmation before closing
-            print(f"\n[5/5] VERIFY in the browser:")
+            print("\n[5/5] VERIFY in the browser:")
             print(f"  - Video uploaded: {Path(reel.video_path).name}")
-            print(f"  - Caption present (check above text)")
+            print("  - Caption present (check above text)")
             print(f"  - Schedule time: {reel.schedule_time.strftime('%A %B %d at %I:%M %p')}")
-            print(f"\n  If anything looks wrong, fix it in the browser now.")
-            print(f"  The browser will stay open until you confirm.")
+            print("\n  If anything looks wrong, fix it in the browser now.")
+            print("  The browser will stay open until you confirm.")
             input("\n  Press Enter when everything looks good (browser will close)...")
 
             print("  Reel scheduling confirmed!")

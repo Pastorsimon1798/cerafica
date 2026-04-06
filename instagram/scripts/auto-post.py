@@ -440,7 +440,7 @@ def run_workflow(
         max_items = 4
 
         if len(media_items) < min_items:
-            msg = f"No media in 'To Post' album"
+            msg = "No media in 'To Post' album"
             log(msg, level="WARNING")
             results["status"] = "skipped"
             results["message"] = msg
@@ -609,7 +609,7 @@ def run_workflow(
                 log(f"  Content destination: {destination}")
 
                 # Generate caption
-                log(f"  Generating caption...")
+                log("  Generating caption...")
                 is_reel = destination == "reel"
                 caption = generate_caption(analysis, is_reel=is_reel)
                 log(f"  Caption length: {len(caption.full_caption)} chars")
@@ -770,7 +770,7 @@ def show_status() -> None:
     if to_post_count >= 1:
         print(f"✅ Ready to post {min(to_post_count, 3)} photo(s)! Run: python auto-post.py")
         if to_post_count > 3:
-            print(f"   Note: Only first 3 photos will be processed this week")
+            print("   Note: Only first 3 photos will be processed this week")
     else:
         print("⚠️  Add at least 1 photo to 'To Post' album")
 
@@ -947,7 +947,7 @@ Examples:
         if force_type:
             print(f"Force Type: {force_type}")
         if args.carousel:
-            print(f"Carousel: Enabled")
+            print("Carousel: Enabled")
         print("=" * 60)
 
         results = run_workflow(
@@ -972,7 +972,7 @@ Examples:
             print(f"  - {Path(post['media_path']).name}: {orig} -> {dest}")
 
         if results['errors']:
-            print(f"\nErrors:")
+            print("\nErrors:")
             for error in results['errors']:
                 print(f"  - {error}")
 

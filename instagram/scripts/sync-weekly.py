@@ -268,7 +268,7 @@ def main():
         if result["new_posts"] == 0:
             print("\nNo new content to process this week.")
         else:
-            print(f"\n→ Next step: Run content planning in 02-planning")
+            print("\n→ Next step: Run content planning in 02-planning")
 
     except Exception as e:
         print(f"\nError: {e}")

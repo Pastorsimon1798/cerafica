@@ -525,7 +525,7 @@ class Handler(BaseHTTPRequestHandler):
                         caps = r.get('captions', {})
                         if caps and caps.get('hook') and not caps['hook'].startswith('=== STEP') and not caps['hook'].startswith('1. '):
                             captions_from_json[r['photo']] = caps
-                except:
+                except Exception:
                     pass
 
                 # Build caption map: filename -> {model: caption_data}
@@ -1436,12 +1436,12 @@ class Handler(BaseHTTPRequestHandler):
             return quoted_lines[0].strip(), '', ''
 
         # Fallback: return first non-header, non-empty line
-        lines = [l.strip() for l in text.split('\n')
-                 if l.strip()
-                 and not l.strip().startswith('===')
-                 and not l.strip().startswith('**STEP')
-                 and not l.strip().upper().startswith('**CAPTIONS')
-                 and not re.match(r'^\d+\.\s+\*\*', l.strip())]
+        lines = [ln.strip() for ln in text.split('\n')
+                 if ln.strip()
+                 and not ln.strip().startswith('===')
+                 and not ln.strip().startswith('**STEP')
+                 and not ln.strip().upper().startswith('**CAPTIONS')
+                 and not re.match(r'^\d+\.\s+\*\*', ln.strip())]
         if lines:
             hook = re.sub(r'^\*\*|\*\*$', '', lines[0]).strip()
             return hook, '', ''
