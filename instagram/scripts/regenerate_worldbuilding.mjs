@@ -7,6 +7,7 @@ import Database from 'better-sqlite3';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import vm from 'vm';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = join(__dirname, '..', 'human-door', 'feedback.db');
@@ -19,8 +20,16 @@ const scriptMatch = html.match(/<script>([\s\S]*?)<\/script>/);
 if (!scriptMatch) { console.error('Could not extract script from pipeline.html'); process.exit(1); }
 const jsCode = scriptMatch[1];
 
-// 2. Evaluate the JS (defines all functions in global scope)
-eval(jsCode);
+// 2. Evaluate JS in sandboxed context (no eval)
+const sandbox = { console, JSON, Math, String, Array, Object, Number, Boolean, Date };
+vm.createContext(sandbox);
+const script = new vm.Script(jsCode, { filename: 'pipeline.html' });
+script.runInContext(sandbox, { timeout: 10000 });
+const generateWorldbuilding = sandbox.generateWorldbuilding;
+if (typeof generateWorldbuilding !== 'function') {
+    console.error('generateWorldbuilding function not found in pipeline.html');
+    process.exit(1);
+}
 
 // 3. Load vision data from SQLite
 const db = new Database(DB_PATH, { readonly: true });
