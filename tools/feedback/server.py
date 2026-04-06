@@ -9,6 +9,8 @@ import sqlite3
 import os
 import mimetypes
 import sys
+import secrets
+import html as html_module
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs, urlparse
 from contextlib import contextmanager
@@ -24,6 +26,7 @@ DB_PATH = os.path.join(os.path.dirname(__file__), 'feedback.db')
 TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'test_data.json')
 PHOTOS_PATH = os.path.join(os.path.dirname(__file__), '..', 'output', 'ab_test_photos')
 FRAMED_PATH = os.path.join(os.path.dirname(__file__), '..', 'output', 'framed')
+FEEDBACK_AUTH_TOKEN = os.environ.get('FEEDBACK_AUTH_TOKEN', '')
 
 # Initialize database
 def init_db():
@@ -257,6 +260,17 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         parsed = urlparse(self.path)
         path = parsed.path
+
+        # Token auth for POST requests
+        if FEEDBACK_AUTH_TOKEN:
+            auth_header = self.headers.get('Authorization', '')
+            if not auth_header.startswith('Bearer '):
+                self.send_json({'error': 'Unauthorized'}, 401)
+                return
+            token = auth_header[7:]
+            if not secrets.compare_digest(token, FEEDBACK_AUTH_TOKEN):
+                self.send_json({'error': 'Unauthorized'}, 401)
+                return
 
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length).decode() if content_length else '{}'
@@ -843,14 +857,14 @@ class Handler(BaseHTTPRequestHandler):
                 VALUES (?, ?)
             ''', (
                 data.get('photo'),
-                data.get('seed_text')
+                html_module.escape(data.get('seed_text', ''))
             ))
             last_row_id = c.lastrowid
         self.send_json({'success': True, 'id': last_row_id})
 
     def update_idea_seed(self, seed_id, data):
         """Update an idea seed's text by ID"""
-        new_text = data.get('seed_text', '').strip()
+        new_text = html_module.escape(data.get('seed_text', '')).strip()
         if not new_text:
             self.send_json({'success': False, 'error': 'Empty text'}, 400)
             return
@@ -912,7 +926,7 @@ class Handler(BaseHTTPRequestHandler):
                 VALUES (?, ?, CURRENT_TIMESTAMP)
             ''', (
                 data.get('photo'),
-                data.get('direction_text')
+                html_module.escape(data.get('direction_text', ''))
             ))
             last_row_id = c.lastrowid
         self.send_json({'success': True, 'id': last_row_id})
@@ -952,9 +966,9 @@ class Handler(BaseHTTPRequestHandler):
                 INSERT INTO series (name, description, naming_system, frame_style)
                 VALUES (?, ?, ?, ?)
             ''', (
-                data.get('name'),
-                data.get('description'),
-                data.get('naming_system'),
+                html_module.escape(data.get('name', '')),
+                html_module.escape(data.get('description', '')),
+                html_module.escape(data.get('naming_system', '')),
                 data.get('frame_style', 'planetary')
             ))
             series_id = c.lastrowid
@@ -978,11 +992,11 @@ class Handler(BaseHTTPRequestHandler):
             ''', (
                 data.get('series_id'),
                 data.get('photo'),
-                data.get('planet_name'),
-                data.get('orbital_data'),
-                data.get('surface_geology'),
-                data.get('formation_history'),
-                data.get('inhabitants'),
+                html_module.escape(data.get('planet_name', '')),
+                html_module.escape(data.get('orbital_data', '')),
+                html_module.escape(data.get('surface_geology', '')),
+                html_module.escape(data.get('formation_history', '')),
+                html_module.escape(data.get('inhabitants', '')),
                 data.get('generated_caption'),
                 data.get('order_index', next_order)
             ))
