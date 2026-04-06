@@ -15,10 +15,13 @@ Security:
 import os
 import json
 import time
+import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -324,7 +327,8 @@ class InstagramScheduler:
                         print(f"Found scheduler via: {selector}")
                         time.sleep(3)
                         return True
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Selector '{selector}' failed: {e}")
                     continue
 
             print("Could not find scheduler. Please navigate manually.")
@@ -390,7 +394,8 @@ class InstagramScheduler:
                         caption_box.click()
                         caption_box.fill(post.caption)
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Caption selector '{selector}' failed: {e}")
                     continue
 
             # Select Instagram account
@@ -412,7 +417,8 @@ class InstagramScheduler:
                         element.click()
                         time.sleep(1)
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Schedule selector '{selector}' failed: {e}")
                     continue
 
             # Set date and time
@@ -460,7 +466,8 @@ class InstagramScheduler:
                         element.click()
                         time.sleep(1)
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Create selector '{selector}' failed: {e}")
                     continue
 
             # Look for Reel tab
@@ -477,7 +484,8 @@ class InstagramScheduler:
                         element.click()
                         time.sleep(1)
                         return True
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Reel selector '{selector}' failed: {e}")
                     continue
 
             print("Could not find Reels option. Please navigate manually.")
@@ -560,7 +568,8 @@ class InstagramScheduler:
                         caption_added = True
                         print("  Caption added to post.")
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Caption selector '{selector}' failed: {e}")
                     continue
 
             if not caption_added:
@@ -581,7 +590,8 @@ class InstagramScheduler:
                         time.sleep(1)
                         print("  Schedule button clicked.")
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Schedule selector '{selector}' failed: {e}")
                     continue
 
             # Confirmation before closing
@@ -628,7 +638,8 @@ class InstagramScheduler:
                         element.click()
                         time.sleep(1)
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Create selector '{selector}' failed: {e}")
                     continue
 
             # Look for Story tab
@@ -645,7 +656,8 @@ class InstagramScheduler:
                         element.click()
                         time.sleep(1)
                         return True
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Story selector '{selector}' failed: {e}")
                     continue
 
             print("Could not find Stories option. Please navigate manually.")
@@ -772,7 +784,8 @@ class InstagramScheduler:
                         caption_box.click()
                         caption_box.fill(carousel.caption)
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Caption selector '{selector}' failed: {e}")
                     continue
 
             # Schedule for later
@@ -789,7 +802,8 @@ class InstagramScheduler:
                         element.click()
                         time.sleep(1)
                         break
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Schedule selector '{selector}' failed: {e}")
                     continue
 
             print("Carousel uploaded and caption added!")

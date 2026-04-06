@@ -13,12 +13,15 @@ import json
 import os
 import tempfile
 import shutil
+import logging
 from pathlib import Path
 from datetime import datetime
 from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
+
+logger = logging.getLogger(__name__)
 
 
 class MediaType(Enum):
@@ -728,8 +731,8 @@ def get_video_info(video_path: str) -> dict:
                         "fps": float(Fraction(video_stream.get("r_frame_rate", "0/1"))),
                     }
                     return info
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Failed to get video info from ffprobe for {video_path}: {e}")
 
     # Fallback: macOS mdls (native, always available)
     if platform.system() == "Darwin" and Path(video_path).exists():
@@ -760,8 +763,8 @@ def get_video_info(video_path: str) -> dict:
                         match = re.search(r'=\s*(\d+)', line)
                         if match:
                             info["height"] = int(match.group(1))
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Failed to get video info from mdls for {video_path}: {e}")
 
     return info
 
