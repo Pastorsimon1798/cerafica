@@ -49,7 +49,7 @@ COLORS = {
 HEADER_HEIGHT = 100
 FOOTER_HEIGHT = 620  # Scaled for 1920px height: lore + stats + brand
 MARGIN = 40
-LOGO_PATH = Path("/Users/simongonzalezdecruz/Library/Mobile Documents/com~apple~CloudDocs/Cerafica Design/PNGs/CeraficaIcon Gradient@4x.png")
+LOGO_PATH = Path(os.environ.get("CERAFICA_LOGO_PATH", str(Path(__file__).parent.parent.parent.parent / "Cerafica Design" / "PNGs" / "CeraficaIcon Gradient@4x.png")))
 
 # Font paths — fallback chain: JetBrains Mono → Fira Code → Menlo → default
 _FONT_CANDIDATES = [

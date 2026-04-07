@@ -153,7 +153,7 @@ This combines my ceramics expertise with generative AI storytelling.
 ## Code Structure
 
 ```
-ceramics-instagram/
+cerafica/
 ├── scripts/
 │   ├── auto_vision.py         # Vision analysis pipeline
 │   ├── auto-post.py           # Full automation workflow
@@ -190,7 +190,7 @@ ceramics-instagram/
 
 ## Source Code
 
-Available on GitHub: [github.com/patorsimon1798/ceramics-instagram]
+Available on GitHub: [github.com/Pastorsimon1798/cerafica]
 
 ---
 

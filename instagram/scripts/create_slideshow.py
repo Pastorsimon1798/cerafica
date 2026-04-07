@@ -14,6 +14,7 @@ Usage:
 
 import argparse
 import json
+import os
 import sqlite3
 import random
 import subprocess
@@ -34,7 +35,7 @@ REPO_ROOT = Path(__file__).parent.parent.parent
 DB_PATH = REPO_ROOT / "tools" / "feedback.db"
 PRODUCTS_PATH = REPO_ROOT / "inventory" / "products.json"
 POSTING_PACKS_DIR = REPO_ROOT / "instagram" / "posting-packs"
-EXPORTS_DIR = Path("/Users/simongonzalezdecruz/Downloads/cerafica_exports")
+EXPORTS_DIR = Path(os.environ.get("CERAFICA_EXPORTS_DIR", str(Path.home() / "Downloads" / "cerafica_exports")))
 OUTPUT_DIR = REPO_ROOT / "output" / "slideshow"
 SHOP_URL = "cerafica.com/shop"
 

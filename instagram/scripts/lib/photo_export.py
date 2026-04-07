@@ -630,7 +630,7 @@ def get_photo_count(album_name: str) -> int:
 
 def get_temp_export_dir() -> str:
     """Get a temporary directory for photo exports."""
-    temp_dir = Path(tempfile.gettempdir()) / "ceramics_instagram_exports"
+    temp_dir = Path(tempfile.gettempdir()) / "cerafica_exports"
     temp_dir.mkdir(parents=True, exist_ok=True)
     return str(temp_dir)
 

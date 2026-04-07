@@ -1,4 +1,0 @@
-[submodule "ceramics-foundation"]
-	path = ceramics-foundation
-	# TODO: Update to proper GitHub URL when repo is created
-	url = https://github.com/Pastorsimon1798/ceramics-foundation.git

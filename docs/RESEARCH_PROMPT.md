@@ -2,7 +2,7 @@
 
 ## Context
 
-You are working on `ceramics-instagram`, an automated Instagram posting system for a ceramic artist. The system needs two AI capabilities:
+You are working on `cerafica`, an automated Instagram posting and e-commerce system for a ceramic artist. The system needs two AI capabilities:
 
 1. **Vision AI** - Analyze ceramic photos/videos to detect:
    - Piece type (bowl, mug, vase, plate, sculpture, etc.)
