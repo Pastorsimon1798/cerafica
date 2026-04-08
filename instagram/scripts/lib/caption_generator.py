@@ -360,7 +360,7 @@ Rules:
                         "stream": False,
                         "options": {"temperature": 0.9, "num_predict": 4000},
                     },
-                    timeout=120,
+                    timeout=300,
                 )
                 response.raise_for_status()
                 result = response.json()
@@ -2642,7 +2642,7 @@ def analyze_carousel(media_paths: list[str], use_ai: bool = True) -> CarouselAna
 
 _log = logging.getLogger(__name__)
 
-def _api_post_with_retry(url, json_data, timeout=120, max_retries=3):
+def _api_post_with_retry(url, json_data, timeout=300, max_retries=3):
     """POST with exponential backoff on transient failures."""
     last_exc = None
     for attempt in range(1, max_retries + 1):
@@ -2759,7 +2759,7 @@ This is ONE lens among many - still explore all possibilities in your hypotheses
                 "images": [image_b64],
                 "stream": False
             },
-            timeout=120
+            timeout=300
         )
 
         if response.status_code != 200:
@@ -3022,7 +3022,7 @@ CAPTIONS:
             "stream": False,
             "options": {"temperature": 0.9}
         },
-        timeout=120
+        timeout=300
     )
 
     if response.status_code != 200:
@@ -4084,8 +4084,31 @@ def generate_caption(
 
     # Videos with worldbuilding data get AI-generated captions (planetary lore)
     if is_video and getattr(analysis, 'worldbuilding', None):
+        # Override content type — this is a finished piece showcase, not process
+        analysis.content_type = ContentType.FINISHED_PIECE
+        if not analysis.piece_type:
+            analysis.piece_type = "vase"
+        if not analysis.technique:
+            analysis.technique = "wheel-thrown"
         try:
             result = generate_caption_with_ai(analysis, voice_rules)
+            result.hashtags = select_hashtags(analysis, is_reel=is_reel)
+            full_caption = result.full_caption
+            # Replace hashtags in assembled caption
+            if result.hashtags:
+                parts = full_caption.rsplit(".", 1)
+                if len(parts) == 2:
+                    full_caption = parts[0] + ".\n" + result.hashtags
+                else:
+                    full_caption = full_caption.rstrip() + "\n.\n" + result.hashtags
+                result = GeneratedCaption(
+                    hook=result.hook,
+                    body=result.body,
+                    cta=result.cta,
+                    hashtags=result.hashtags,
+                    full_caption=full_caption,
+                    alt_text=result.alt_text,
+                )
             validate_caption(result, analysis)
             return result
         except Exception as e:
