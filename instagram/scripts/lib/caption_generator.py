@@ -800,6 +800,8 @@ class VideoAnalysis:
     is_reel_suitable: bool  # True if < 90s and vertical/square
     aspect_ratio_category: str = "horizontal"
     duration_warning: Optional[str] = None
+    piece_type: Optional[str] = None
+    technique: Optional[str] = None
     # Worldbuilding (Glaze Exploration Series)
     worldbuilding: Optional[WorldbuildingData] = None
 
@@ -2894,10 +2896,12 @@ def generate_caption_with_ollama(
             brand_identity_block = build_brand_identity_block(identity_md)
 
     # Detect if this is a process shot (unfired or in-progress)
+    _firing_state = getattr(analysis, 'firing_state', None)
+    _glaze_type = getattr(analysis, 'glaze_type', None)
     is_process_shot = (
-        analysis.firing_state in ["greenware", "bisque"] or
-        analysis.content_type in [ContentType.PROCESS, ContentType.KILN_REVEAL, ContentType.STUDIO] or
-        (analysis.glaze_type is None and analysis.firing_state != "finished")
+        _firing_state in ["greenware", "bisque"] or
+        analysis.content_type in [ContentType.PROCESS, ContentType.KILN_REVEAL, ContentType.STUDIO, ContentType.PROCESS_VIDEO] or
+        (_glaze_type is None and _firing_state != "finished")
     )
 
     if is_process_shot:
@@ -2916,7 +2920,7 @@ def generate_caption_with_ollama(
 
 PIECE DETAILS:
 - Type: {analysis.piece_type}
-- Stage: {analysis.firing_state or 'work in progress'}
+- Stage: {getattr(analysis, 'firing_state', None) or 'work in progress'}
 - Colors: {', '.join(analysis.primary_colors)}
 - Technique: {analysis.technique or 'handmade'}
 - Mood: {analysis.mood}
@@ -3926,10 +3930,12 @@ def generate_caption_with_openrouter(
             brand_identity_block = build_brand_identity_block(identity_md)
 
     # Detect if this is a process shot (unfired or in-progress)
+    _firing_state = getattr(analysis, 'firing_state', None)
+    _glaze_type = getattr(analysis, 'glaze_type', None)
     is_process_shot = (
-        analysis.firing_state in ["greenware", "bisque"] or
-        analysis.content_type in [ContentType.PROCESS, ContentType.KILN_REVEAL, ContentType.STUDIO] or
-        (analysis.glaze_type is None and analysis.firing_state != "finished")
+        _firing_state in ["greenware", "bisque"] or
+        analysis.content_type in [ContentType.PROCESS, ContentType.KILN_REVEAL, ContentType.STUDIO, ContentType.PROCESS_VIDEO] or
+        (_glaze_type is None and _firing_state != "finished")
     )
 
     if is_process_shot:
@@ -3948,7 +3954,7 @@ def generate_caption_with_openrouter(
 
 PIECE DETAILS:
 - Type: {analysis.piece_type}
-- Stage: {analysis.firing_state or 'work in progress'}
+- Stage: {getattr(analysis, 'firing_state', None) or 'work in progress'}
 - Colors: {', '.join(analysis.primary_colors)}
 - Technique: {analysis.technique or 'handmade'}
 - Mood: {analysis.mood}
@@ -4075,6 +4081,15 @@ def generate_caption(
     """
     # Check if it's a video analysis
     is_video = isinstance(analysis, VideoAnalysis)
+
+    # Videos with worldbuilding data get AI-generated captions (planetary lore)
+    if is_video and getattr(analysis, 'worldbuilding', None):
+        try:
+            result = generate_caption_with_ai(analysis, voice_rules)
+            validate_caption(result, analysis)
+            return result
+        except Exception as e:
+            print(f"AI caption generation failed for worldbuilding video, using templates: {e}")
 
     if is_video:
         return generate_caption_for_video(analysis, voice_rules, include_cta, is_reel)

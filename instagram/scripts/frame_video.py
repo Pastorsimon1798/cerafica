@@ -673,8 +673,10 @@ Examples:
                         help="Manually specify loop frame")
     parser.add_argument("--output", default=None,
                         help="Output filename (without extension). Default: {planet_name}_rotating")
-    parser.add_argument("--no-loop-detect", action="store_true",
-                        help="Skip loop detection, use entire video")
+    parser.add_argument("--no-loop-detect", action="store_true", default=True,
+                        help="Skip loop detection, use entire video (default: True)")
+    parser.add_argument("--loop-detect", action="store_true",
+                        help="Enable loop detection (crossfade at loop point)")
     parser.add_argument("--no-animate", action="store_true",
                         help="Disable animated HUD effects (static overlay)")
     parser.add_argument("--no-sound", action="store_true",
@@ -927,15 +929,15 @@ Examples:
             print(f" {total_frames} frames ({total_duration:.1f}s at {fps}fps)")
 
             # Step 2: Detect loop point
+            # Default (--no-loop-detect is True): use all frames, no crossfade
+            # --loop-detect: run loop detection, maybe crossfade
+            # --loop-point N: manual loop frame
             use_crossfade = False
-            if args.no_loop_detect:
-                loop_point = total_frames
-                print(f"Using all {total_frames} frames (loop detection skipped)")
-            elif args.loop_point is not None:
+            if args.loop_point is not None:
                 loop_point = min(args.loop_point, total_frames)
                 use_crossfade = True
                 print(f"Using manual loop point: frame {loop_point}")
-            else:
+            elif args.loop_detect:
                 print("Detecting loop point...", end=" ", flush=True)
                 loop_idx, loop_mse = find_loop_point(all_frames, 1, total_frames)
                 if loop_mse < LOOP_MSE_THRESHOLD:
@@ -945,6 +947,9 @@ Examples:
                 else:
                     loop_point = total_frames
                     print(f"MSE: {loop_mse:.1f} — poor loop ({LOOP_MSE_THRESHOLD} threshold), using all {total_frames} frames")
+            else:
+                loop_point = total_frames
+                print(f"Using all {total_frames} frames (loop detection off by default)")
 
             anim_label = "animated" if animate else "static"
             print(f"Processing {loop_point} frames (zoom {args.zoom}x, output {output_fps}fps, {anim_label}, mask interval {args.mask_interval})")

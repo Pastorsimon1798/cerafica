@@ -977,14 +977,28 @@ class VideoFrameGenerator:
                 if len(selected) >= num_panels:
                     break
 
+        # Fallback: fill remaining panels with best available cells (even if lower score)
         if len(selected) < num_panels:
             for row, col, score in cell_scores:
-                if score == 0:
-                    break
                 if (row, col) not in selected:
                     selected.append((row, col))
                 if len(selected) >= num_panels:
                     break
+            # Last resort: pick center-ish regions if still not enough
+            if len(selected) < num_panels:
+                center_row = grid_rows // 2
+                center_col = grid_cols // 2
+                for dr in range(max(grid_rows, grid_cols)):
+                    for r in range(max(0, center_row - dr), min(grid_rows, center_row + dr + 1)):
+                        for c in range(max(0, center_col - dr), min(grid_cols, center_col + dr + 1)):
+                            if (r, c) not in selected:
+                                selected.append((r, c))
+                            if len(selected) >= num_panels:
+                                break
+                        if len(selected) >= num_panels:
+                            break
+                    if len(selected) >= num_panels:
+                        break
 
         crop_pixels = 100  # 150 / 1.5 = 1.5x zoom at 1x resolution
         regions = []
