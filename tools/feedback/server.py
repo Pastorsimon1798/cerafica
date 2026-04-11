@@ -261,16 +261,19 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
 
-        # Token auth for POST requests
-        if FEEDBACK_AUTH_TOKEN:
-            auth_header = self.headers.get('Authorization', '')
-            if not auth_header.startswith('Bearer '):
-                self.send_json({'error': 'Unauthorized'}, 401)
-                return
-            token = auth_header[7:]
-            if not secrets.compare_digest(token, FEEDBACK_AUTH_TOKEN):
-                self.send_json({'error': 'Unauthorized'}, 401)
-                return
+        # Token auth for POST requests - always required, fail closed if misconfigured
+        if not FEEDBACK_AUTH_TOKEN:
+            self.send_json({'error': 'Server misconfigured: authentication token not set'}, 500)
+            return
+
+        auth_header = self.headers.get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            self.send_json({'error': 'Unauthorized'}, 401)
+            return
+        token = auth_header[7:]
+        if not secrets.compare_digest(token, FEEDBACK_AUTH_TOKEN):
+            self.send_json({'error': 'Unauthorized'}, 401)
+            return
 
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length).decode() if content_length else '{}'
@@ -305,6 +308,20 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
 
+        # Token auth for DELETE requests - always required, fail closed if misconfigured
+        if not FEEDBACK_AUTH_TOKEN:
+            self.send_json({'error': 'Server misconfigured: authentication token not set'}, 500)
+            return
+
+        auth_header = self.headers.get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            self.send_json({'error': 'Unauthorized'}, 401)
+            return
+        token = auth_header[7:]
+        if not secrets.compare_digest(token, FEEDBACK_AUTH_TOKEN):
+            self.send_json({'error': 'Unauthorized'}, 401)
+            return
+
         # Handle DELETE /api/idea-seeds/<id>
         if path.startswith('/api/idea-seeds/'):
             seed_id = path.split('/')[-1]
@@ -319,6 +336,20 @@ class Handler(BaseHTTPRequestHandler):
     def do_PUT(self):
         parsed = urlparse(self.path)
         path = parsed.path
+
+        # Token auth for PUT requests - always required, fail closed if misconfigured
+        if not FEEDBACK_AUTH_TOKEN:
+            self.send_json({'error': 'Server misconfigured: authentication token not set'}, 500)
+            return
+
+        auth_header = self.headers.get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            self.send_json({'error': 'Unauthorized'}, 401)
+            return
+        token = auth_header[7:]
+        if not secrets.compare_digest(token, FEEDBACK_AUTH_TOKEN):
+            self.send_json({'error': 'Unauthorized'}, 401)
+            return
 
         if path.startswith('/api/idea-seeds/'):
             seed_id = path.split('/')[-1]
