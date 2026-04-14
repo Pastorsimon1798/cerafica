@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Cerafica journal — stories behind the vessels, process notes, and studio updates.">
+
+    <meta property="og:title" content="Journal — Cerafica">
+    <meta property="og:description" content="Stories behind the vessels, process notes, and studio updates.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cerafica.com/blog.html">
+    <meta property="og:site_name" content="Cerafica">
+
+    <title>Journal — Cerafica</title>
+    <link rel="canonical" href="https://cerafica.com/blog.html">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap">
+
+    <style>
+        .blog-page {
+            padding: 6rem 0 4rem;
+            min-height: 60vh;
+        }
+        .blog-page__header {
+            margin-bottom: 3rem;
+        }
+        .blog-page__title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .blog-page__subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        .blog-posts {
+            display: grid;
+            gap: 2rem;
+        }
+        .blog-card {
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 2rem;
+        }
+        .blog-card__title a {
+            text-decoration: none;
+            color: var(--text);
+        }
+        .blog-card__title a:hover {
+            color: var(--accent);
+        }
+        .blog-card__meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+        .blog-card__excerpt {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .blog-card__link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .blog-loading, .blog-empty, .blog-error {
+            color: var(--text-muted);
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <a href="index.html" class="nav__logo">CERAFICA<span class="nav__status-dot"></span></a>
+            <div class="nav__desktop">
+                <a href="links.html" class="nav__link">Links</a>
+                <a href="shop.html" class="nav__link">Shop</a>
+                <a href="about.html" class="nav__link">About</a>
+                <a href="blog.html" class="nav__link">Journal</a>
+                <a href="https://instagram.com/cerafica_design" target="_blank" rel="noopener" class="nav__link" aria-label="Follow on Instagram">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+            </div>
+            <button class="nav__mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="nav__mobile-menu">
+            <a href="links.html" class="nav__mobile-link">Links</a>
+            <a href="shop.html" class="nav__mobile-link">Shop</a>
+            <a href="about.html" class="nav__mobile-link">About</a>
+            <a href="blog.html" class="nav__mobile-link">Journal</a>
+            <a href="https://instagram.com/cerafica_design" target="_blank" rel="noopener" class="nav__mobile-link">Instagram</a>
+        </div>
+    </nav>
+
+    <main class="blog-page">
+        <div class="container">
+            <header class="blog-page__header">
+                <h1 class="blog-page__title">Journal</h1>
+                <p class="blog-page__subtitle">Notes from the studio. Process, materials, and the story behind each vessel.</p>
+            </header>
+            <div class="blog-posts">
+                <p class="blog-loading">Loading journal entries...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__top">
+                <span class="footer__logo">CERAFICA</span>
+                <nav class="footer__nav" aria-label="Footer navigation">
+                    <a href="links.html" class="footer__link">Links</a>
+                    <a href="shop.html" class="footer__link">Shop</a>
+                    <a href="about.html" class="footer__link">About</a>
+                    <a href="blog.html" class="footer__link">Journal</a>
+                    <a href="https://instagram.com/cerafica_design" target="_blank" rel="noopener" class="footer__link">Instagram</a>
+                </nav>
+            </div>
+            <div class="footer__signup">
+                <div class="footer__email-form">
+                    <span class="footer__email-prompt">></span>
+                    <input type="email" class="footer__email-input" placeholder="your@email.com" aria-label="Email address for mailing list">
+                    <button class="btn btn--outline btn--sm" onclick="window.open('https://forms.gle/i93i4Bx6ZgeyvfGXA', '_blank')">JOIN</button>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__location">SYS:ONLINE // CERAFICA v1.0 // LONG BEACH, CA</p>
+                <p class="footer__copyright">© 2026 Cerafica. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script src="js/cerafica-blog.js"></script>
+</body>
+</html>
